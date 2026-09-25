@@ -1,0 +1,15 @@
+app/
+dist/
+*.zip
+*.sha256
+logs/
+runs/
+state/
+profiles/user.yaml
+secrets/
+models/
+runtime/
+*.log
+*.py
+*.pyc
+__pycache__/
