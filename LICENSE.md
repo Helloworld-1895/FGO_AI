@@ -1,11 +1,30 @@
-# FGO AI Binary Distribution License
+# MIT License
 
-Copyright (c) 2026 Helloworld-1895
+Copyright (c) 2026 FGO AI contributors
 
-本文件只适用于 Helloworld-1895 拥有版权的新增文档、发布脚本、配置组织和专有编译部分。它不替代、覆盖或限制 THIRD_PARTY_NOTICES.md 中第三方组件的许可证。
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-在遵守本许可的前提下，版权方授予个人、非商业、非服务运营用途的有限、非排他、不可转让、不可再许可的使用权，仅用于在自己的 Windows 设备上运行本发布包。不得销售、出租、托管代运行、打包转售、重新发布或把本发布包作为其他产品的组成部分；不得使用它进行账号交易、欺诈、批量代练、绕过访问控制、破坏服务或规避游戏规则。对专有部分的反编译、反汇编或试图恢复源代码，仅在适用法律允许限制的范围内禁止；适用法律强制允许的行为不因本条被排除。
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-本软件按“现状”提供，不作任何明示或默示保证，包括适销性、特定用途适用性、准确性、不中断、无错误或不侵权保证。用户自行承担设备、账号、网络、数据和服务条款风险。在法律允许的最大范围内，版权方不对任何直接、间接、附带、特殊、惩罚性或后果性损失负责。
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 
-违反本许可的使用权自动终止。终止后必须停止运行并删除专有发布部分。第三方组件的独立许可和法定权利不因本许可终止。
+## Scope
+
+This license applies to the original code and documentation in this repository.
+Third-party code, dependencies, fonts, images, models, game content and other
+external materials remain under their own licenses and terms. See
+[NOTICE.md](NOTICE.md), [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md),
+and third_party_licenses/ before redistributing them.
+

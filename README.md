@@ -75,7 +75,7 @@ device:
 
 ## 许可证与归属
 
-新增发布内容适用 [LICENSE.md](LICENSE.md)。第三方组件、素材和上游项目的许可证见 [NOTICE.md](NOTICE.md)、[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) 和 `third_party_licenses/`。
+本项目原创代码和文档按 [MIT License](LICENSE.md) 发布，大家可以自由使用、修改和再发布。第三方组件、素材和上游项目不自动适用本项目许可证，具体来源和许可证见 [NOTICE.md](NOTICE.md)、[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) 和 `third_party_licenses/`。
 
 游戏名称、角色、界面、图像、文本、商标以及 MuMu 名称归各自权利人所有。本项目不主张拥有这些内容的权利。
 
@@ -85,7 +85,7 @@ device:
 - 桌面宠物图像素材来自 [timerring/codex-pet-naiwa](https://github.com/timerring/codex-pet-naiwa)，感谢原作者及贡献者。
 - 其他依赖和素材的来源、许可证及随包声明见 [NOTICE.md](NOTICE.md) 和 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
 
-如果你认为仓库中的代码、素材、名称或归属信息存在遗漏、误用或其他权利问题，请通过 [GitHub Issues](https://github.com/Helloworld-1895/FGO_AI/issues) 联系维护者，并提供相关文件路径、权利证明或原始来源链接。维护者会核查事实，在确认后补充署名、修正说明、替换或移除相关内容。
+如果发现来源、许可证或归属信息需要更正，请通过 [GitHub Issues](https://github.com/Helloworld-1895/FGO_AI/issues) 提供具体文件路径和原始来源链接，维护者会核查后更新说明。
 
 ## 反馈
 
