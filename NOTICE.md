@@ -1,14 +1,14 @@
 # 来源与归属
 
-## 直接借鉴和再分发
+## 项目来源
 
-- **zelovv/FGO-MuMu-Auto**：项目早期基线和部分设计思路，MIT License。公开发布保留其版权声明和许可证文本，见 third_party_licenses/FGO-MuMu-Auto-MIT.txt。
-- **timerring/codex-pet-naiwa**：桌面宠物图像素材，MIT License。保留原作者归属和许可证文本，见 third_party_licenses/codex-pet-naiwa-MIT.txt。
+本项目的部分早期设计和代码基线参考了 [zelovv/FGO-MuMu-Auto](https://github.com/zelovv/FGO-MuMu-Auto)，其 MIT 许可证文本保存在 [third_party_licenses/FGO-MuMu-Auto-MIT.txt](third_party_licenses/FGO-MuMu-Auto-MIT.txt)。
 
-## 游戏和产品名称
+桌面宠物图像素材来自 [timerring/codex-pet-naiwa](https://github.com/timerring/codex-pet-naiwa)，其 MIT 许可证文本保存在 [third_party_licenses/codex-pet-naiwa-MIT.txt](third_party_licenses/codex-pet-naiwa-MIT.txt)。
 
-“Fate/Grand Order”“FGO”、角色、界面、图像、文本、商标以及 MuMu 名称和产品归各自权利人所有。本项目只使用运行屏幕识别所需的最小化界面裁剪，不主张对这些内容拥有权利，也不代表官方立场。
+## 游戏与产品标识
 
-## 数据边界
+“Fate/Grand Order”“FGO”、角色名称、游戏界面、图像、文本、商标以及 MuMu 名称和标识归各自权利人所有。本项目不主张拥有这些内容的权利，也不代表相关权利人立场。
 
-未确认再分发权的 BBchannel 策略、掉落图标、原始 Wiki 抓取和开发比较材料不包含在首个公开发布包中。用户自行添加的素材必须由用户确认来源和授权。
+发布包只包含运行程序所需的配置和有限素材。用户自行添加的截图、模型、规则和数据，必须由用户确认来源及授权范围。
+
