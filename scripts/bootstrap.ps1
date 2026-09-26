@@ -25,8 +25,22 @@ function Write-SetupLog {
 }
 
 function Test-LocalApp {
-    return (Test-Path -LiteralPath $EntryPoint -PathType Leaf) -and
-        (Test-Path -LiteralPath $ProfilePath -PathType Leaf)
+    if (-not ((Test-Path -LiteralPath $EntryPoint -PathType Leaf) -and
+        (Test-Path -LiteralPath $ProfilePath -PathType Leaf))) { return $false }
+    if (-not (Test-Path -LiteralPath $ManifestPath -PathType Leaf)) { return $true }
+    try {
+        $manifest = Get-Content -LiteralPath $ManifestPath -Raw -Encoding UTF8 | ConvertFrom-Json
+        foreach ($required in @($manifest.required_files)) {
+            $relative = ([string]$required.path).Replace('/', '\')
+            $file = Join-Path $AppRoot $relative
+            if (-not (Test-Path -LiteralPath $file -PathType Leaf)) { return $false }
+            if ($required.sha256) {
+                $actual = (Get-FileHash -LiteralPath $file -Algorithm SHA256).Hash.ToLowerInvariant()
+                if ($actual -ne ([string]$required.sha256).ToLowerInvariant()) { return $false }
+            }
+        }
+        return $true
+    } catch { return $false }
 }
 
 function Invoke-App {
@@ -51,6 +65,10 @@ function Get-Manifest {
     $manifest = Get-Content -LiteralPath $ManifestPath -Raw -Encoding UTF8 | ConvertFrom-Json
     foreach ($name in @('version', 'archive_url', 'archive_sha256')) {
         if (-not $manifest.$name) { throw "发布清单缺少字段：$name" }
+    }
+    if (([uri]$manifest.archive_url).Scheme -ne 'https' -or
+        ([uri]$manifest.archive_url).Host -notin @('github.com', 'objects.githubusercontent.com')) {
+        throw '发布清单下载地址不是受支持的 HTTPS GitHub 地址'
     }
     if ($manifest.archive_sha256 -notmatch '^[0-9a-fA-F]{64}$') { throw '发布清单中的 SHA-256 无效' }
     return $manifest

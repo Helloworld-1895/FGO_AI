@@ -2,11 +2,11 @@
     "version":  "1.0.1",
     "entry_point":  "FGO_AI.exe",
     "archive_url":  "https://github.com/Helloworld-1895/FGO_AI/releases/download/v1.0.1/FGO_AI-v1.0.1-Windows-CPU.zip",
-    "archive_sha256":  "3ddf987094aad1df1b33d163976e5e2d05d62730e68abb8f24e0e50656ac4a8d",
+    "archive_sha256":  "429cf6013ae0050f951aba8596f9ef89b788e080b654e1fc0be7f8839e139eb4",
     "required_files":  [
                            {
                                "path":  "FGO_AI.exe",
-                               "sha256":  "02d6c8bba98c1e54660d12df3cc690380f7c37151f7801b6f6b76e2f7bdc9d54"
+                               "sha256":  "0b74f46a045837e7564e188d183beeb21bbd89574e76658c8555e3abdbf76413"
                            },
                            {
                                "path":  "profiles\\fgo_cn_1600x900.yaml",
