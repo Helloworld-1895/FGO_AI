@@ -79,6 +79,14 @@ device:
 
 游戏名称、角色、界面、图像、文本、商标以及 MuMu 名称归各自权利人所有。本项目不主张拥有这些内容的权利。
 
+## 参考项目与致谢
+
+- 项目早期设计和部分代码基线参考了 [zelovv/FGO-MuMu-Auto](https://github.com/zelovv/FGO-MuMu-Auto)，感谢原作者及贡献者。
+- 桌面宠物图像素材来自 [timerring/codex-pet-naiwa](https://github.com/timerring/codex-pet-naiwa)，感谢原作者及贡献者。
+- 其他依赖和素材的来源、许可证及随包声明见 [NOTICE.md](NOTICE.md) 和 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
+
+如果你认为仓库中的代码、素材、名称或归属信息存在遗漏、误用或其他权利问题，请通过 [GitHub Issues](https://github.com/Helloworld-1895/FGO_AI/issues) 联系维护者，并提供相关文件路径、权利证明或原始来源链接。维护者会核查事实，在确认后补充署名、修正说明、替换或移除相关内容。
+
 ## 反馈
 
 提交 Issue 前请删除 API key、账号信息、设备序列号、绝对路径、完整日志和含个人信息的截图。请提供版本号、Windows 版本、模拟器版本、复现步骤以及 CPU/GPU 模式。
