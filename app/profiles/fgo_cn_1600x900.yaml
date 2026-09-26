@@ -1,0 +1,2656 @@
+﻿device:
+  # 可选 generic ADB 后端；默认 mumu 保持兼容
+  backend: mumu
+  adb_path: ""
+  serial: ""
+  # backend=adb 时可选择：ldplayer（雷电）、nox（夜神）、memu（逍遥）。
+  emulator: ""
+  instance_index: 0
+  emulator_path: ""
+  # 留空时自动扫描常见安装目录；找不到时控制面板会提示手动选择。
+  manager_path:
+  vm_index: 0
+  package: com.bilibili.fatego
+  # 强重连：连接时若模拟器未就绪，自动启动（优先快捷方式，其次 MuMuNxMain.exe -p）。
+  auto_launch_emulator: true
+  launch_package: com.bilibili.fatego
+  # 可选：MuMu 桌面快捷方式路径；留 null 时从 MuMuManager 同目录派生 MuMuNxMain.exe。
+  launch_shortcut: "C:\\Users\\TX-4\\Desktop\\命运-冠位指定-MuMu安卓设备.lnk"
+screen:
+  base_width: 1600
+  base_height: 900
+# 未知界面卡住时供 AI 点击的三个关闭按钮区域（1600x900 规范坐标）。
+# default 为无 AI 矩形时的兜底矩形；allowed 为 AI 可输出的矩形范围上限。
+close_regions:
+  top_left:
+    default: [40, 10, 190, 100]
+    allowed: [0, 0, 300, 160]
+  top_right:
+    default: [1250, 20, 1580, 200]
+    allowed: [1100, 0, 1600, 300]
+  bottom_center:
+    default: [600, 780, 1000, 890]
+    allowed: [450, 720, 1150, 900]
+behavior:
+  story_mode: skip
+  story_advance_point:
+  - 1480
+  - 820
+  story_choice_before_skip: true
+  story_choice_scan_roi:
+  - 230
+  - 140
+  - 1370
+  - 560
+  story_choice_dark_value_max: 48
+  story_choice_min_dark_ratio: 0.65
+  story_choice_min_dark_run: 15
+  story_choice_text_gap: 45
+  story_choice_min_height: 55
+  story_choice_max_height: 145
+  story_choice_min_center_gap: 80
+  map_next_quest_tap_point: [1180, 230]
+  map_next_tap_mode: offset
+  map_node_roi: [500, 180, 1500, 700]
+  map_node_retry_attempts: 3
+  map_node_retry_wait_seconds: 0.8
+  map_node_change_threshold: 4.0
+  map_node_ocr_min_confidence: 0.62
+  # 地图误入可选“自由关卡”详情时，关闭并继续寻找主线“下一个”；
+  # 无限刷模式下该自动关闭逻辑会被忽略，自由关卡作为刷材料目标保留。
+  auto_close_free_quest: true
+  free_quest_header_roi:
+  - 770
+  - 135
+  - 1545
+  - 230
+  free_quest_header_hsv_lower:
+  - 35
+  - 60
+  - 45
+  free_quest_header_hsv_upper:
+  - 90
+  - 255
+  - 255
+  free_quest_header_min_green_ratio: 0.55
+  free_quest_header_min_component_area_ratio: 0.55
+  free_quest_header_min_component_width_ratio: 0.90
+  free_quest_header_dense_row_fill_ratio: 0.75
+  free_quest_header_min_dense_row_ratio: 0.40
+  free_quest_body_roi:
+  - 950
+  - 215
+  - 1515
+  - 310
+  free_quest_body_min_light_ratio: 0.30
+  free_quest_close_roi:
+  - 0
+  - 0
+  - 220
+  - 115
+  free_quest_close_min_light_ratio: 0.40
+  free_quest_close_min_blue_ratio: 0.015
+  free_quest_close_point:
+  - 115
+  - 55
+  free_quest_close_retry_attempts: 3
+  free_quest_close_retry_wait_seconds: 0.2
+  poll_seconds: 0.35
+  stable_frames: 2
+  smart_wait_enabled: true
+  smart_wait_max_cooldown: 0.8
+  smart_wait_change_threshold: 4.0
+  smart_wait_stable_frames: 1
+  smart_wait_poll_schedule:
+  - 0.12
+  - 0.18
+  - 0.25
+  # 模板匹配并行线程数：cv2 的 matchTemplate/cvtColor 会释放 GIL，多线程可并行
+  # 加速全规则扫描而不改变任何匹配结果。0 = 自动（min(12, CPU核数)）；1 = 纯串行。
+  matching_workers: 0
+  # GPU 加速匹配兼容开关：仅在未设置 matching_mode 的旧配置中生效；新模式统一使用
+  # OpenCV CPU/CUDA。matching_mode 优先级更高；hybrid 会让 CPU 线程池与 OpenCV CUDA
+  # 队列并行。无 CUDA 构建时自动回退 CPU。
+  matching_gpu: false
+  # 模板匹配后端：cpu / gpu / hybrid。hybrid 会把规则按预计工作量分成两组，
+  # CPU 线程池和单 GPU 队列同时运行；无 CUDA 时自动全部回退 CPU。
+  matching_mode: cpu
+  matching_source_cache_entries: 12
+  # 帧级 GPU 缓存条目数：同一帧上 (mode, 参数, ROI) 不同的预处理源各占一项，
+  # 超出时按 LRU 淘汰旧帧。hsv 各规则阈值各异无法共享，此项只影响灰度复用。
+  matching_gpu_cache_entries: 6
+  # OpenCV 原生 CUDA 匹配（cv2.cuda.matchTemplate）：true=GPU/hybrid 模式启用
+  # OpenCV CUDA 队列；false=即使选择 GPU/hybrid 也回退 OpenCV CPU。注意标准
+  # conda-forge / PyPI opencv 通常不带 CUDA，真正启用需使用 CUDA 构建版本。
+  matching_cv2_cuda: false
+  # 变尺寸 CUDA 批量 NCC：同一帧/同一预处理源的不同尺寸模板合并为一次 FFT。
+  matching_batch_cuda: false
+  # FFT 点数上限（不是字节数）；运行时还会按可用显存动态收紧
+  matching_batch_fft_area: 8000000
+  matching_cuda_batch_size: 256
+  matching_batch_gpu_fraction: 0.4
+  # find_first 并行分批大小：按配置优先级分批扫描，批内并行、批间保持"先到先得"。
+  matching_batch_size: 8
+  unknown_pause_seconds: 25
+  startup_unknown_pause_seconds: 120
+  unknown_stable_seconds: 4.0
+  transition_wait_seconds: 6.0
+  # 黑屏“加载中...”是网络/资源过渡，不应按普通未知画面 25 秒暂停。
+  loading_pause_seconds: 120
+  action_stuck_pause_seconds: 20
+  same_rule_screen_change_threshold: 8
+  same_rule_center_change_threshold: 35
+  foreground_check_seconds: 15
+  # 前台被切走时有限次拉回 FGO；连续失败才暂停，避免一闪而过的窗口
+  # 切换把主线状态机直接打断。
+  foreground_recovery_max_attempts: 3
+  foreground_recovery_cooldown_seconds: 1.0
+  foreground_recovery_wait_seconds: 2.0
+  max_actions: 500
+  snapshot_dir: ../runs
+  restricted_party_auto_formation_point:
+  - 370
+  - 850
+  restricted_party_start_point:
+  - 1467
+  - 840
+  restricted_party_filled_portrait_half_width: 110
+  restricted_party_filled_portrait_top: 180
+  restricted_party_filled_portrait_bottom_gap: 35
+  restricted_party_filled_min_saturation: 70
+  restricted_party_filled_min_value: 120
+  restricted_party_filled_min_bright_ratio: 0.15
+  restricted_party_filled_min_edge_ratio: 0.025
+support:
+  strategy_options:
+    search_level_90_plus: true
+    search_level_100_plus: true
+    search_level_110_plus: true
+    search_level_120: true
+    use_forced_support: true
+    exclude_guest_support: true
+    use_system_recommended_list: false
+    use_berserker_fallback: true
+    prefer_class_advantage: true
+    # 普通关卡先接受首屏可用的90级以上候选；120级仅作为加分项。
+    require_np5: true
+    prefer_aoe_np: true
+    require_aoe_np: false
+    prefer_registered_candidates: true
+    scroll_support_list: true
+    refresh_support_list: true
+    auto_send_friend_request: true
+  enemy_class_threshold: 0.86
+  candidate_threshold: 0.84
+  min_servant_level: 120
+  candidate_roi:
+  - 0
+  - 120
+  - 1600
+  - 850
+  refresh_point:
+  - 1450
+  - 110
+  friend_request_end_point:
+  - 412
+  - 770
+  max_refreshes: 1
+  max_model_refreshes: 1
+  # 助战列表两次刷新之间的最小间隔（秒），镜像 FGA SupportScreenRefresher，
+  # 避免连续刷新触发游戏冷却或加载卡顿。
+  refresh_min_interval_seconds: 10
+  # 视觉行定位（默认关闭）：开启后用每行确认按钮模板
+  # templates/support_row_confirm.png 定位每行真实中心（镜像 FGA
+  # SupportBoundsFinder），替代固定 y 中心；模板缺失时回退固定布局。
+  visual_row_detection: false
+  visual_row_min_score: 0.75
+  visual_row_min_gap_pixels: 40
+  unknown_enemy_class: berserker
+  class_filter_points:
+    all:
+    - 109
+    - 160
+    saber:
+    - 198
+    - 160
+    archer:
+    - 280
+    - 160
+    lancer:
+    - 369
+    - 160
+    rider:
+    - 454
+    - 160
+    caster:
+    - 540
+    - 160
+    assassin:
+    - 625
+    - 160
+    berserker:
+    - 707
+    - 160
+  system_recommended_filter_point:
+  - 31
+  - 160
+  selected_filter_hsv_lower:
+  - 85
+  - 120
+  - 140
+  selected_filter_hsv_upper:
+  - 110
+  - 255
+  - 255
+  selected_filter_border_strips:
+  - - -40
+    - 25
+    - 40
+    - 50
+  - - -42
+    - -50
+    - -28
+    - 45
+  - - 28
+    - -50
+    - 42
+    - 45
+  selected_filter_min_score: 0.3
+  selected_filter_min_margin: 0.06
+  system_recommended_marker_region:
+  - 135
+  - 115
+  - 735
+  - 150
+  system_recommended_marker_hsv_lower:
+  - 3
+  - 140
+  - 140
+  system_recommended_marker_hsv_upper:
+  - 28
+  - 255
+  - 255
+  system_recommended_marker_min_ratio: 0.01
+  system_recommended_marker_offset:
+  - -28
+  - -48
+  - 28
+  - -9
+  system_recommended_class_min_ratio: 0.03
+  enemy_tendency_region:
+  - 470
+  - 0
+  - 650
+  - 110
+  enemy_tendency_filter_icon_radius: 16
+  enemy_tendency_template_scale_min: 0.7
+  enemy_tendency_template_scale_max: 1.05
+  enemy_tendency_template_scale_steps: 8
+  enemy_tendency_class_threshold: 0.5
+  enemy_tendency_min_icon_spacing: 18
+  filter_settle_seconds: 1.8
+  max_scrolls: 10
+  scroll_start:
+  - 760
+  - 780
+  scroll_rows_per_page: 2
+  scroll_row_drag_ratio: 0.68
+  scroll_step_pixels: 340
+  scroll_step_min_pixels: 320
+  scroll_step_max_pixels: 380
+  scroll_end:
+  - 760
+  - 440
+  scroll_duration_ms: 650
+  scroll_retry_start:
+  - 760
+  - 780
+  scroll_retry_end:
+  - 760
+  - 440
+  scroll_retry_duration_ms: 650
+  scroll_settle_seconds: 0.25
+  scroll_list_region:
+  - 260
+  - 210
+  - 1510
+  - 875
+  scroll_min_visual_change: 4.0
+  max_scroll_stalls: 2
+  generic_level120_template: templates/support_level120.png
+  generic_np5_template: templates/support_np5.png
+  support_level_value_roi:
+  - 130
+  - 180
+  - 270
+  - 890
+  support_level_max_saturation: 100
+  support_level_min_value: 145
+  support_level_center_tolerance: 3.5
+  support_level_digit_min_confidence: 0.7
+  support_level_three_digit_slash_x: 193
+  support_level_slash_x_tolerance: 6
+  support_level_digit_min_gap: 9
+  support_level_digit_max_gap: 22
+  support_level_row_tolerance: 24
+  generic_level120_threshold: 0.84
+  generic_level120_gray_threshold: 0.75
+  generic_level120_band_fallback_threshold: 0.84
+  generic_level120_max_matches: 12
+  generic_level100_prefix_crop:
+  - 0
+  - 0
+  - 50
+  - 50
+  generic_level100_roi:
+  - 40
+  - 180
+  - 280
+  - 890
+  generic_level100_threshold: 0.74
+  generic_level100_max_matches: 12
+  generic_np5_threshold: 0.84
+  generic_np5_max_matches: 12
+  generic_level120_hsv_lower:
+  - 0
+  - 0
+  - 190
+  generic_level120_hsv_upper:
+  - 179
+  - 25
+  - 255
+  generic_np5_hsv_lower:
+  - 8
+  - 80
+  - 90
+  generic_np5_hsv_upper:
+  - 45
+  - 255
+  - 255
+  generic_row_marker_delta_y:
+  - 80
+  - 190
+  registered_level_marker_delta_y:
+  - 80
+  - 160
+  registered_np5_marker_delta_y:
+  - -20
+  - 80
+  generic_row_click_x: 700
+  generic_row_click_y_offset: -25
+  generic_party_slot: 3
+  guest_support_template: templates/support_forced.png
+  guest_support_threshold: 0.9
+  guest_support_marker_roi:
+  - 250
+  - 180
+  - 650
+  - 850
+  guest_support_row_y_offset:
+  - -30
+  - 230
+  guest_support_max_rows: 4
+  generic_np_target: unknown
+  generic_np_color: ''
+  forced_support_click_point:
+  - 750
+  - 350
+  forced_support_row_click_x: 750
+  normal_support_marker_roi:
+  - 1480
+  - 180
+  - 1520
+  - 890
+  normal_support_marker_hsv_lower:
+  - 15
+  - 80
+  - 100
+  normal_support_marker_hsv_upper:
+  - 45
+  - 255
+  - 255
+  normal_support_marker_min_ratio: 0.02
+  normal_support_marker_min_row_pixels: 3
+  normal_support_marker_max_row_gap: 3
+  normal_support_marker_min_row_height: 80
+  forced_support_empty_region:
+  - 250
+  - 500
+  - 1450
+  - 850
+  forced_support_max_edge_ratio: 0.02
+  forced_support_max_bright_ratio: 0.12
+  forced_support_profile:
+    id: quest_forced_support
+    name: 关卡限定助战
+    class: rider
+    party_slot: 3
+    np_target: aoe
+    np_color: ''
+    np_damage: true
+  counter_map:
+    saber:
+    - archer
+    archer:
+    - lancer
+    lancer:
+    - saber
+    rider:
+    - assassin
+    caster:
+    - rider
+    assassin:
+    - caster
+    berserker:
+    - foreigner
+    - berserker
+    ruler:
+    - avenger
+    avenger:
+    - moon_cancer
+    moon_cancer:
+    - ruler
+    alter_ego:
+    - pretender
+    pretender:
+    - foreigner
+    foreigner:
+    - alter_ego
+    shielder: []
+    beast: []
+    beast_draco:
+    - ruler
+    - avenger
+    - alter_ego
+    - moon_cancer
+    - foreigner
+    - pretender
+    beast_space_ereshkigal:
+    - avenger
+    unbeast:
+    - avenger
+    - berserker
+    - foreigner
+  enemy_class_templates:
+    saber: templates/enemy_classes/saber.png
+    archer: templates/enemy_classes/archer.png
+    lancer: templates/enemy_classes/lancer.png
+    rider: templates/enemy_classes/rider.png
+    caster: templates/enemy_classes/caster.png
+    assassin: templates/enemy_classes/assassin.png
+    berserker: templates/enemy_classes/berserker.png
+    ruler: templates/enemy_classes/ruler.png
+    avenger: templates/enemy_classes/avenger.png
+    moon_cancer: templates/enemy_classes/moon_cancer.png
+    alter_ego: templates/enemy_classes/alter_ego.png
+    pretender: templates/enemy_classes/pretender.png
+    foreigner: templates/enemy_classes/foreigner.png
+    shielder: templates/enemy_classes/shielder.png
+    beast: templates/enemy_classes/beast.png
+    unbeast: templates/enemy_classes/unbeast.png
+  candidates:
+  - id: morgan_lv120_np5_aoe
+    name: 摩根
+    class: berserker
+    level: 120
+    np_level: 5
+    np_target: aoe
+    np_color: buster
+    party_slot: 3
+    priority: 500
+    allow_unknown_enemy: true
+    enabled: true
+    threshold: 0.82
+    match_mode: hsv_mask
+    hsv_lower:
+    - 8
+    - 80
+    - 90
+    hsv_upper:
+    - 45
+    - 255
+    - 255
+    template: templates/supports/morgan_lv120_np5_aoe.png
+  - id: jeanne_archer_np5_aoe
+    name: 贞德（Archer）
+    class: archer
+    level: 120
+    np_level: 5
+    np_target: aoe
+    np_color: arts
+    party_slot: 3
+    priority: 450
+    allow_unknown_enemy: true
+    enabled: true
+    threshold: 0.82
+    match_mode: hsv_mask
+    hsv_lower:
+    - 8
+    - 80
+    - 90
+    hsv_upper:
+    - 45
+    - 255
+    - 255
+    template: templates/supports/jeanne_archer_np5_aoe.png
+    opening_steps: []
+  - id: archetype_earth_np5
+    name: Archetype：Earth
+    class: moon_cancer
+    level: 120
+    np_level: 5
+    np_target: aoe
+    np_color: buster
+    party_slot: 3
+    priority: 200
+    allow_unknown_enemy: true
+    enabled: true
+    threshold: 0.86
+    template: templates/supports/archetype_earth_np5.png
+    opening_steps: []
+  - id: story_jason_np5
+    name: 伊阿宋（剧情助战）
+    class: saber
+    level: 5
+    np_level: 5
+    np_target: aoe
+    np_color: arts
+    party_slot: 3
+    priority: 100
+    allow_unknown_enemy: true
+    enabled: true
+    threshold: 0.86
+    template: templates/supports/story_jason_np5.png
+    opening_steps: []
+servant_database: ../data/servants_full.json
+battle:
+  defeat_policy:
+    enabled: false
+    allowed_resources: []
+    priority: [command_seal, leyline_stone, saint_quartz]
+    max_uses:
+      command_seal: 0
+      leyline_stone: 0
+      saint_quartz: 0
+  servant_ids_by_slot: {}
+  animation_pause_seconds: 180
+  animation_recovery_after_seconds: 4
+  rule_options:
+    prefer_class_advantage: true
+    single_np_high_hp: true
+    prefer_imminent_charge: true
+    use_ready_np: true
+    use_support_nps: true
+    prefer_support_np_first: true
+    prefer_aoe_for_multiple: true
+    use_multiple_ready_nps: true
+    use_skills: true
+    use_all_frontline_skills: true
+    use_skill_groups: true
+    reuse_skills_after_cooldown: true
+    confirm_skill_use: true
+    accelerate_skill_animations: true
+    accelerate_np_animations: true
+    use_charge_skills: true
+    prioritize_charge_for_main: true
+    use_attack_buffs: true
+    use_evasion_skills: true
+    use_guts_skills: true
+    use_support_skills: true
+    use_replacement_skills: true
+    prefer_primary_output_cards: true
+    prefer_damage_role_over_class: true
+    prefer_card_class_advantage: true
+    prefer_same_servant_chain: true
+    prefer_same_color_chain: true
+    prefer_arts_chain: false
+    prefer_high_critical_cards: true
+    prefer_mighty_chain: true
+    prefer_np_charge_cards: true
+    continue_with_replacement: true
+  max_turns: 20
+  total_waves: 3
+  # 按面(波次)追踪：配置后每回合对 stage_count_region ROI 拍快照（镜像 FGA
+  # StageTracker），ROI 变化即进入下一面；未配置(0,0,0,0)时回退
+  # "回合数重置 + 敌方全满血"两个信号。需按 1600x900 校准后填写。
+  stage_count_region:
+  - 0
+  - 0
+  - 0
+  - 0
+  # 场次 X/Y 的 OCR 读取区域（战斗 UI 右上角、回合数 battle_turn_region 上方，
+  # FGO 显示 "当前面/总面数"）。默认关闭(0,0,0,0)：模型提示词已要求从截图
+  # 直接读出场次，本地 wave_tracker 做无模型时的兜底；仅当需要"本地逻辑也能
+  # 精确判面"时才校准并填写（FGA MasterLocations.stageCountRegion 换算初值约
+  # 1040,10,1170,60，需实测）。
+  stage_ocr_region:
+  - 0
+  - 0
+  - 0
+  - 0
+  # 每面策略：key 为面数("1"/"2"/"3")，值为该面的 prefer_* 覆盖
+  # （键名同 rule_options，另支持 brave_chain_behavior）。默认空 = 全部沿用全局。
+  wave_priorities: {}
+  # 勇敢链后处理：none 不重排；with_np 计划含宝具时把同从者卡对排到宝具前
+  # （best-effort，未校验宝具从者与卡对是否同一人）；avoid 交错避免同一从者连击。
+  brave_chain_behavior: none
+  # 指令卡颜色低置信度时降级为 unknown 继续出卡（不中断战斗，FGA 教训），
+  # 关闭则恢复原来的抛错重试。
+  card_unknown_on_low_confidence: true
+  # 首次战败始终免费撤退重打；第二次战败仅在 defeat_policy 有授权资源时续关，
+  # 否则安全暂停。以下两个点击点用于首次撤退（按 1600x900 校准）。
+  # 下方坐标源自 FGA 源码 Locations.kt（2560x1440 基准换算 1600x900，×0.625），
+  # 撤退按钮取 withdrawRegion 区域中心、确认按钮取 withdrawAcceptClick；
+  # FGO 各服 UI 布局一致，通常可直接用，个别版本需实测微调 ±20px。
+  retreat_on_defeat: false
+  # 无授权续关资源时的旧版自动处理上限；启用 defeat_policy 且仍有资源时，
+  # 以各资源 max_uses 为准。成功结算后连续战败计数清零。
+  max_defeats: 2
+  defeat_retreat_point:
+  - 804
+  - 500
+  defeat_retreat_confirm_point:
+  - 1103
+  - 450
+  # 资源按钮可能先播放确认弹窗入场动画；轮询约 8 秒，期间识别并点击“决定”。
+  defeat_resource_verify_attempts: 12
+  defeat_resource_verify_wait_seconds: 0.6
+  battle_turn_region:
+  - 1080
+  - 95
+  - 1152
+  - 138
+  battle_turn_max_saturation: 100
+  battle_turn_min_value: 170
+  battle_turn_min_digit_confidence: 0.72
+  support_slot: 3
+  # 当前御主礼装由 GUI 选择。下列 1600x900 坐标由 FGA 当前宽屏
+  # MasterLocations 换算；可按设备微调。技能面板每释放一个技能后会关闭，
+  # 执行器会在每项计划前重新打开并复核。
+  mystic_code: combat_uniform
+  mystic_code_level: 10
+  master_skill_max_per_turn: 3
+  master_skill_panel_point: [1490, 390]
+  master_skill_points:
+    '1': [1135, 390]
+    '2': [1245, 390]
+    '3': [1355, 390]
+  master_skill_target_points:
+    '1': [420, 470]
+    '2': [800, 470]
+    '3': [1180, 470]
+  skill_target_slot_points:
+    '1': [420, 470]
+    '2': [800, 470]
+    '3': [1180, 470]
+  master_skill_enemy_target_points:
+    '1': [190, 65]
+    '2': [500, 65]
+    '3': [810, 65]
+  master_order_change_points:
+    '1': [175, 438]
+    '2': [425, 438]
+    '3': [675, 438]
+    '4': [925, 438]
+    '5': [1175, 438]
+    '6': [1425, 438]
+  master_order_change_confirm_point: [800, 788]
+  master_skill_panel_wait_seconds: 1.5
+  master_skill_panel_open_attempts: 2
+  master_skill_panel_change_threshold: 4.0
+  master_skill_tap_wait_seconds: 0.35
+  master_order_change_wait_seconds: 1.0
+  support_np_color: arts
+  primary_damage_slot: 3
+  primary_output_is_support: true
+  pause_if_primary_damage_slot_inactive: false
+  damage_slot_priority:
+  - 3
+  - 1
+  - 2
+  damage_slot_classes:
+    '1': berserker
+    '2': lancer
+    '3': berserker
+  party_target_points:
+    '1':
+    - 350
+    - 470
+    '2':
+    - 800
+    - 470
+    '3':
+    - 1250
+    - 470
+  np_use_slots:
+  - 1
+  - 2
+  - 3
+  np_profiles:
+    '1':
+      target: single
+      color: buster
+      damage: true
+    '2':
+      target: support
+      color: arts
+      damage: false
+    '3':
+      target: aoe
+      color: buster
+      damage: true
+  fallback_np_profile:
+    target: single
+    color: ''
+    damage: true
+  card_wait_seconds: 0.0
+  # 单体敌人血条低于此比例时，优先普通卡收尾，不因NP已满强行释放。
+  low_hp_finish_ratio: 0.15
+  np_before_tap_recheck_seconds: 0.0
+  attack_tap_attempts: 3
+  attack_retry_seconds: 0.25
+  between_cards_seconds: 0.15
+  card_screen_attempts: 8
+  card_screen_retry_seconds: 0.25
+  # 指令卡页始终未出现时的 AI 接管：执行型恢复轮次上限（暂停票不占此额度，
+  # 由 model_advisor.pause_consensus_count 约束）；每轮之间的观察间隔。
+  card_recovery_max_executions: 3
+  card_recovery_wait_seconds: 1.0
+  card_top_up_max_attempts: 2
+  card_selection_probe_min_delta: 8.0
+  command_card_recovery_threshold: 0.7
+  after_skills_wait_seconds: 0.0
+  after_skill_group_wait_seconds: 0.2
+  post_skill_ready_timeout_seconds: 18.0
+  post_skill_ready_poll_seconds: 0.15
+  post_skill_ready_stable_frames: 2
+  # 技能等待不是无限状态：期间定期并行识别结算/掉落等结果页；即使模板未命中，
+  # 累计达到上限也交回主循环重新做全场景识别，避免把结算页永久当成技能动画。
+  post_skill_scene_probe_seconds: 0.8
+  post_skill_ready_max_wait_seconds: 45.0
+  skill_error_close_wait_seconds: 0.2
+  max_skill_groups_per_turn: 12
+  charge_skill_threshold_percent: 100
+  all_servant_charge_skill_threshold_percent: 100
+  survival_skill_hp_threshold: 0.65
+  survival_enemy_charge_threshold: 0.35
+  card_color_roi_offset:
+  - -125
+  - -35
+  - 125
+  - 105
+  card_portrait_roi_offset:
+  - -72
+  - -165
+  - 72
+  - -35
+  card_disabled_text_template: templates/card_disabled_text.png
+  card_action_disabled_text_template: templates/card_action_disabled_text.png
+  card_sleep_status_template: templates/card_sleep_status.png
+  np_card_error_text_template: templates/np_card_error_text.png
+  np_card_sealed_text_template: templates/np_card_sealed_text.png
+  card_disabled_roi_offset:
+  - -140
+  - -140
+  - 140
+  - 0
+  card_disabled_template_scales:
+  - 0.65
+  - 0.7
+  - 0.75
+  - 0.8
+  - 0.85
+  - 0.9
+  - 0.95
+  - 1.0
+  - 1.05
+  card_disabled_text_hsv_lower:
+  - 0
+  - 0
+  - 120
+  card_disabled_text_hsv_upper:
+  - 179
+  - 100
+  - 255
+  card_disabled_text_threshold: 0.75
+  card_action_disabled_text_threshold: 0.8
+  card_sleep_status_threshold: 0.68
+  support_card_marker_roi_offset:
+  - 0
+  - -180
+  - 145
+  - -125
+  support_card_marker_max_saturation: 60
+  support_card_marker_min_value: 170
+  support_card_marker_min_width_ratio: 0.6
+  support_card_marker_max_height_ratio: 0.75
+  support_card_marker_min_aspect_ratio: 2.5
+  support_card_marker_min_area_ratio: 0.14
+  primary_output_card_weight: 14.0
+  damage_role_card_weight: 24.0
+  primary_output_charge_color_weights:
+    arts: 12.0
+    quick: 4.0
+    buster: 0.0
+  damage_role_class_advantage_weight: 4.0
+  damage_role_class_disadvantage_penalty: 9.0
+  card_affinity_roi_offset:
+  - 55
+  - -210
+  - 135
+  - -150
+  card_affinity_marker_min_ratio: 0.12
+  card_color_min_confidence: 0.16
+  card_critical_roi_offset:
+  - -90
+  - -235
+  - 100
+  - -160
+  critical_saturation_attempts:
+  - 60
+  - 80
+  - 100
+  - 120
+  - 150
+  critical_value_attempts:
+  - 100
+  - 120
+  - 140
+  - 160
+  - 180
+  critical_digit_min_confidence: 0.76
+  critical_probability_tiebreak_weight: 0.0001
+  prefer_arts_chain_bonus: 10.0
+  same_owner_threshold: 0.6
+  active_hp_blue_ratio: 0.015
+  active_hp_regions:
+    '1':
+    - 190
+    - 790
+    - 390
+    - 820
+    '2':
+    - 590
+    - 790
+    - 790
+    - 820
+    '3':
+    - 990
+    - 790
+    - 1190
+    - 820
+  party_hp_fill_regions:
+    '1':
+    - 190
+    - 800
+    - 390
+    - 814
+    '2':
+    - 590
+    - 800
+    - 790
+    - 814
+    '3':
+    - 990
+    - 800
+    - 1190
+    - 814
+  party_hp_full_run_width: 170
+  party_hp_blue_column_ratio: 0.5
+  party_hp_color_column_ratio: 0.6
+  active_hp_min_run_width: 3
+  active_hp_max_run_ratio: 0.95
+  active_icon_foreground_ratio: 0.18
+  active_icon_white_ratio: 0.08
+  active_hud_edge_ratio: 0.04
+  active_icon_regions:
+    '1':
+    - 35
+    - 810
+    - 105
+    - 895
+    '2':
+    - 435
+    - 810
+    - 505
+    - 895
+    '3':
+    - 835
+    - 810
+    - 905
+    - 895
+  party_identity_regions:
+    '1':
+    - 135
+    - 845
+    - 395
+    - 900
+    '2':
+    - 535
+    - 845
+    - 795
+    - 900
+    '3':
+    - 935
+    - 845
+    - 1195
+    - 900
+  party_identity_feature_width: 96
+  party_identity_feature_height: 20
+  # 低于该相似度才判为「角色更换」；介于它与 update_threshold 之间视为
+  # 不确定（既不更新基准也不累计更换帧）。
+  party_identity_same_threshold: 0.9
+  # 只有相似度不低于该值时身份基准才会随帧漂移，避免短暂特效被吸进基准、
+  # 特效消失后反向触发误判。
+  party_identity_update_threshold: 0.97
+  expected_initial_party_count: 3
+  # 角色更换需连续 N 个不同帧的变更信号才进入确认（滤单帧噪声）
+  party_change_confirm_frames: 2
+  # AI 判定「未更换」后，该位置在此窗口内不再重复咨询（画面变化会被静默接受）
+  party_change_rescan_seconds: 30.0
+  enemy_hp_min_ratio: 0.025
+  # 六敌战斗使用上下两排紧凑 HUD。只有上下排都检测到至少两条
+  # 高置信度血条时才锁定此布局，避免普通三敌画面中的红色特效误判。
+  enemy_six_layout_detect_min_ratio: 0.25
+  enemy_six_layout_min_per_row: 2
+  enemy_six_layout_upper_slots:
+  - 1
+  - 2
+  - 3
+  enemy_six_layout_lower_slots:
+  - 4
+  - 5
+  - 6
+  enemy_class_match_threshold: 0.62
+  enemy_class_regions:
+    '1':
+    - 0
+    - 0
+    - 105
+    - 100
+    '2':
+    - 310
+    - 0
+    - 415
+    - 100
+    '3':
+    - 620
+    - 0
+    - 725
+    - 100
+  enemy_class_regions_six:
+    '1':
+    - 145
+    - 0
+    - 230
+    - 65
+    '2':
+    - 395
+    - 0
+    - 480
+    - 65
+    '3':
+    - 645
+    - 0
+    - 730
+    - 65
+    '4':
+    - 0
+    - 100
+    - 105
+    - 205
+    '5':
+    - 250
+    - 100
+    - 355
+    - 205
+    '6':
+    - 500
+    - 100
+    - 605
+    - 205
+  enemy_class_templates:
+    saber: templates/battle_classes/saber.png
+    rider: templates/battle_classes/rider.png
+    archer: templates/battle_classes/archer.png
+    lancer: templates/battle_classes/lancer.png
+    caster: templates/battle_classes/caster.png
+    assassin: templates/battle_classes/assassin.png
+    berserker: templates/battle_classes/berserker.png
+    ruler: templates/battle_classes/ruler.png
+    avenger: templates/battle_classes/avenger.png
+    moon_cancer: templates/battle_classes/moon_cancer.png
+    alter_ego: templates/battle_classes/alter_ego.png
+    foreigner: templates/battle_classes/foreigner.png
+    pretender: templates/battle_classes/pretender.png
+    shielder: templates/battle_classes/shielder.png
+    beast: templates/battle_classes/beast.png
+    unbeast: templates/battle_classes/unbeast.png
+  class_advantage_map:
+    saber:
+    - lancer
+    archer:
+    - saber
+    lancer:
+    - archer
+    rider:
+    - caster
+    caster:
+    - assassin
+    assassin:
+    - rider
+    berserker:
+    - saber
+    - archer
+    - lancer
+    - rider
+    - caster
+    - assassin
+    - berserker
+    - ruler
+    - avenger
+    - moon_cancer
+    - alter_ego
+    - pretender
+    ruler:
+    - moon_cancer
+    avenger:
+    - ruler
+    moon_cancer:
+    - avenger
+    alter_ego:
+    - rider
+    - caster
+    - assassin
+    - foreigner
+    foreigner:
+    - berserker
+    - foreigner
+    - pretender
+    pretender:
+    - saber
+    - archer
+    - lancer
+    - alter_ego
+    shielder: []
+    beast: []
+    beast_draco:
+    - saber
+    - archer
+    - lancer
+    - rider
+    - caster
+    - assassin
+    - berserker
+    beast_space_ereshkigal:
+    - ruler
+    - alter_ego
+    - moon_cancer
+    - foreigner
+    - pretender
+    unbeast:
+    - moon_cancer
+    - berserker
+    - foreigner
+  enemy_hp_regions:
+    '1':
+    - 95
+    - 48
+    - 290
+    - 70
+    '2':
+    - 405
+    - 48
+    - 600
+    - 70
+    '3':
+    - 715
+    - 48
+    - 910
+    - 70
+  enemy_hp_regions_six:
+    '1':
+    - 214
+    - 35
+    - 358
+    - 50
+    '2':
+    - 464
+    - 35
+    - 608
+    - 50
+    '3':
+    - 714
+    - 35
+    - 858
+    - 50
+    '4':
+    - 93
+    - 158
+    - 237
+    - 173
+    '5':
+    - 343
+    - 158
+    - 487
+    - 173
+    '6':
+    - 593
+    - 158
+    - 737
+    - 173
+  enemy_charge_tie_tolerance: 0.01
+  enemy_charge_regions:
+    '1':
+    - 195
+    - 80
+    - 315
+    - 115
+    '2':
+    - 505
+    - 80
+    - 625
+    - 115
+    '3':
+    - 815
+    - 80
+    - 935
+    - 115
+  enemy_charge_regions_six:
+    '1':
+    - 290
+    - 65
+    - 385
+    - 100
+    '2':
+    - 540
+    - 65
+    - 635
+    - 100
+    '3':
+    - 790
+    - 65
+    - 885
+    - 100
+    '4':
+    - 195
+    - 180
+    - 295
+    - 215
+    '5':
+    - 445
+    - 180
+    - 545
+    - 215
+    '6':
+    - 695
+    - 180
+    - 795
+    - 215
+  enemy_target_points:
+    '1':
+    - 190
+    - 65
+    '2':
+    - 500
+    - 65
+    '3':
+    - 810
+    - 65
+  enemy_target_points_six:
+    '1':
+    - 285
+    - 43
+    '2':
+    - 535
+    - 43
+    '3':
+    - 785
+    - 43
+    '4':
+    - 165
+    - 166
+    '5':
+    - 415
+    - 166
+    '6':
+    - 665
+    - 166
+  target_wait_seconds: 0.2
+  np_release_min_percent: 100
+  np_value_regions:
+    '1':
+    - 270
+    - 810
+    - 390
+    - 847
+    '2':
+    - 670
+    - 810
+    - 790
+    - 847
+    '3':
+    - 1070
+    - 810
+    - 1190
+    - 847
+  np_value_max_saturation: 100
+  # 暗色战场会把宝具百分比数字压暗；145 仍能保留数字结构，
+  # 同时继续依靠数字形状置信度拒绝背景噪声。
+  np_value_min_value: 145
+  np_value_min_digit_confidence: 0.56
+  np_gauge_full_extent_ratio: 0.97
+  np_ready_gold_ratio: 0.39
+  np_ready_min_gold_ratio: 0.3
+  np_ready_column_gold_ratio: 0.25
+  np_ready_fill_extent_ratio: 0.94
+  np_gauge_regions:
+    '1':
+    - 200
+    - 846
+    - 370
+    - 854
+    '2':
+    - 600
+    - 846
+    - 770
+    - 854
+    '3':
+    - 1000
+    - 846
+    - 1170
+    - 854
+  np_card_selectable_roi_offset:
+  - -100
+  - -100
+  - 100
+  - 150
+  np_card_selectable_bright_value: 160
+  np_card_selectable_dark_value: 90
+  np_card_selectable_min_bright_ratio: 0.42
+  np_card_selectable_max_dark_ratio: 0.5
+  np_card_selectable_saturated_value: 100
+  np_card_selectable_max_saturated_ratio: 0.65
+  np_card_selectable_min_edge_ratio: 0.12
+  # 可用宝具的卡面可能以黑色立绘为主；用彩色细节、白色遮罩与边缘联合兜底。
+  np_card_selectable_dark_art_min_bright_ratio: 0.25
+  np_card_selectable_dark_art_max_dark_ratio: 0.56
+  np_card_selectable_dark_art_max_saturated_ratio: 0.50
+  np_card_selectable_dark_art_color_value: 140
+  np_card_selectable_dark_art_color_saturation: 100
+  np_card_selectable_dark_art_min_colored_ratio: 0.18
+  np_card_selectable_dark_art_white_saturation: 80
+  np_card_selectable_dark_art_max_white_ratio: 0.15
+  np_card_selectable_dark_art_min_edge_ratio: 0.14
+  # 宝具卡中下部的红/绿/蓝放射形底图和中央宝具名称，比上半部头像稳定。
+  np_card_banner_roi_offset:
+  - -105
+  - 0
+  - 105
+  - 155
+  np_card_banner_min_color_ratio: 0.10
+  np_card_banner_max_color_ratio: 0.48
+  np_card_banner_min_component_area_ratio: 0.05
+  np_card_banner_max_component_area_ratio: 0.35
+  np_card_banner_min_component_width_ratio: 0.30
+  np_card_banner_max_component_width_ratio: 0.90
+  np_card_banner_min_text_ratio: 0.08
+  np_card_banner_min_edge_ratio: 0.14
+  np_card_banner_rescue_max_dark_ratio: 0.46
+  np_card_banner_rescue_max_saturated_ratio: 0.22
+  np_card_disabled_roi_offset:
+  - -150
+  - -50
+  - 150
+  - 90
+  np_card_disabled_text_threshold: 0.60
+  np_card_sleep_status_threshold: 0.68
+  np_card_error_text_threshold: 0.8
+  np_card_sealed_text_threshold: 0.78
+  skill_ready_roi_offset:
+  - -35
+  - -40
+  - 35
+  - 40
+  skill_ready_min_value: 140
+  skill_ready_bright_ratio: 0.48
+  skill_ready_dark_icon_top_fraction: 0.5
+  skill_ready_dark_icon_min_bright_ratio: 0.22
+  skill_confirm_point:
+  - 1050
+  - 530
+  skill_confirmation_probe_seconds: 0.12
+  skill_confirmation_after_tap_probe_seconds: 0.08
+  skill_confirmation_max_attempts: 2
+  after_skill_confirm_wait_seconds: 0.35
+  skill_target_recovery_threshold: 0.7
+  skill_target_select_attempts: 2
+  # 技能确认、选人和不可用弹窗全部消失后，仅在动画期单击一次。
+  skill_animation_tap_point:
+  - 80
+  - 430
+  np_animation_tap_point:
+  - 80
+  - 430
+  np_animation_tap_delay_seconds: 0.25
+  np_animation_tap_interval_seconds: 2.0
+  skill_animation_tap_start_delay_seconds: 0.08
+  skill_animation_after_target_tap_delay_seconds: 0.08
+  skill_confirm_button_region:
+  - 825
+  - 480
+  - 1275
+  - 575
+  skill_cancel_button_region:
+  - 325
+  - 480
+  - 735
+  - 575
+  skill_confirm_panel_region:
+  - 170
+  - 180
+  - 1430
+  - 600
+  skill_confirm_title_region:
+  - 600
+  - 185
+  - 1000
+  - 270
+  skill_confirm_white_max_saturation: 45
+  skill_confirm_white_min_value: 170
+  skill_confirm_dark_max_value: 80
+  skill_confirm_button_min_white_ratio: 0.55
+  skill_cancel_button_min_white_ratio: 0.55
+  skill_confirm_panel_min_dark_ratio: 0.6
+  skill_confirm_title_min_dark_ratio: 0.7
+  skill_target_layout_points:
+    '1':
+    - - 800
+      - 470
+    '2':
+    - - 610
+      - 470
+    - - 990
+      - 470
+    '3':
+    - - 420
+      - 470
+    - - 800
+      - 470
+    - - 1180
+      - 470
+  skill_target_portrait_roi_offset:
+  - -80
+  - -140
+  - 80
+  - 160
+  skill_target_min_bright_value: 130
+  skill_target_min_bright_ratio: 0.08
+  skill_target_min_edge_ratio: 0.04
+  frontline_skill_points:
+    '1':
+    - - 90
+      - 725
+    - - 200
+      - 725
+    - - 310
+      - 725
+    '2':
+    - - 485
+      - 725
+    - - 600
+      - 725
+    - - 710
+      - 725
+    '3':
+    - - 880
+      - 725
+    - - 1000
+      - 725
+    - - 1110
+      - 725
+  default_cards:
+  - card1
+  - card2
+  - card3
+  card_points:
+    np1:
+    - 430
+    - 245
+    np2:
+    - 800
+    - 245
+    np3:
+    - 1170
+    - 245
+    card1:
+    - 170
+    - 675
+    card2:
+    - 485
+    - 675
+    card3:
+    - 800
+    - 675
+    card4:
+    - 1115
+    - 675
+    card5:
+    - 1430
+    - 675
+  turns: {}
+model_advisor:
+  support_preferences: ''
+  unknown_enabled: true
+  support_enabled: true
+  card_enabled: true
+  battle_enabled: true
+  master_skill_plan_enabled: true
+  servant_identify_enabled: true
+  pause_consensus_count: 5
+  observation_only: false
+  unknown_after_seconds: 3.0
+  cooldown_seconds: 8.0
+  # 兼容旧配置字段；AI 关闭动作不再按模型置信度硬拒绝，执行层只检查
+  # 当前流程、区域白名单和当帧定位。圣晶石消耗仍由资源动作单独禁止。
+  risky_close_min_confidence: 0.88
+  battle_cooldown_seconds: 0.0
+  party_change_enabled: true
+  party_change_verify_enabled: true
+  party_change_cooldown_seconds: 8.0
+  party_change_min_confidence: 0.6
+  party_change_max_failures: 3
+  skill_release_enabled: true
+  skill_release_cooldown_seconds: 0.0
+  ocr_min_confidence: 0.8
+  ocr_cache_ttl_seconds: 2.0
+  # 非模板按钮候选：公开 EfficientSAM3-LiteText-S0-16 文本概念分割（约 550M 参数）。Unknown AI 先给出短
+  # 英文语义描述，再从本地掩码候选中选择 ID；AI 不提供坐标。GPU 默认 FP16，
+  # provider 可改 cpu（CPU 自动使用 FP32）。backend 改为 yolox 可继续使用旧后端。
+  visual_detector:
+    enabled: false
+    backend: sam3
+    runtime: efficientsam3
+    runtime_path: runtime/efficientsam3
+    model_path: ../models/efficientsam3/sam3_litetext/sam3_litetext-s0-16-fp16.pt
+    text_encoder_type: MobileCLIP-S0
+    text_context_length: 16
+    text_pos_embed_table_size: 77
+    interpolate_pos_embed: true
+    yolox_model_path: ../models/yolox_s_buttons.onnx
+    provider: cpu
+    fallback_to_cpu: true
+    precision: fp32
+    resolution: 1008
+    confidence_threshold: 0.45
+    default_prompts: ["close button", "confirm button", "automatic party formation button", "decision button"]
+    nms_threshold: 0.45
+    ocr_iou_threshold: 0.02
+    ocr_center_distance_threshold: 1.0
+    ocr_safety_min_confidence: 0.2
+    output_decoded: true
+    normalize_input: false
+    input_color_order: bgr
+    class_names: [button, icon_button]
+    max_candidates: 12
+    cache_ttl: 1.5
+    verify_timeout_seconds: 1.2
+    verify_change_threshold: 3.0
+    max_verification_failures: 3
+    failure_cooldown_seconds: 10
+    allowed_roi: [40, 40, 1560, 860]
+    excluded_regions: [[1320, 0, 1600, 220]]
+    blocked_ocr_labels: ["圣晶石", "购买", "召唤", "续关", "灵基修复", "宝具解放"]
+  notebook_enabled: true
+  notebook_runtime_injection_enabled: true
+  # Unknown-screen recovery is frame-local; do not resend its long history.
+  unknown_notebook_enabled: false
+  # Unknown AI may try non-paid OCR/menu actions; Saint Quartz remains blocked.
+  allow_nonpaid_unknown_actions: true
+  notebook_path: "" # 空 => <项目根>/state/ai_notebook/<mode>.md（每场景独立一份）
+  notebook_max_chars: 20000
+  notebook_append_max_chars: 2000
+  # card 模式每回合咨询是笔记本流水账的主要来源，拉长到 30 秒一次追加；
+  # 超限压缩不受此限制。0 = 不限（其它模式默认）。
+  notebook_card_append_cooldown_seconds: 30
+  # 后台总结：决策落定后把 before/after 截图 + 决策 + 回合内操作交给独立线程
+  # 提炼一条笔记写入该场景自己的笔记本。正常不阻塞主进程；仅当同场景下一次
+  # AI 咨询到达且该场景总结未完成时才等待。单次总结超时后放弃该次。
+  notebook_summary_enabled: false
+  notebook_summary_max_tokens: 32768
+  notebook_summary_timeout_seconds: 180
+  notebook_summary_wait_timeout_seconds: 180
+# AP 苹果管理（refill）：镜像 FGA 的苹果降级链。默认关闭 —— 关闭时
+# ap_refill 规则仍按"暂停"处理，不消耗任何苹果/圣晶石。开启后需补录
+# templates/ap_refill.png 激活规则；各点击点已填入 FGA 换算坐标（见下）。
+refill:
+  # 全局生效：主线后续关卡也需要体力，弹出体力不足窗口时自动按链消耗苹果。
+  # 多余的金苹果未被配置连时不会使用；需要圣晶石时可自行在链末添加 "sq"。
+  enabled: true
+  # true 表示取消全局本次运行上限；各资源仍按 resource_limits 中的数字执行。
+  unlimited: true
+  # 降级链：按 便宜→贵 排列（镜像 FGA RefillResourceEnum 的 ordinal 排序
+  # Copper→Bronze→Silver→Gold→SQ）。日常最优先用最便宜的铜苹果，金苹果留到最后。
+  # 例如 ["copper_apple","bronze_apple","silver_apple","gold_apple"]；
+  # 圣晶石（"sq"）可加在链末，但会消耗付费货币，请务必确认愿意消耗。
+  # 赤铜苹果在国服不可用，链从青铜开始；数量为 0 自动跳下一个，直到全部苹果用完。
+  resources:
+  - bronze_apple
+  - silver_apple
+  - gold_apple
+  # 每种资源的点击点。已按 2026-08-16 实测行动力回复弹窗校准（1600x900）：
+  # 回顶状态图标质心 圣晶石 470,206 / 金 473,383 / 银 467,570，与 FGA
+  # Locations.locate() 2560x1440 换算值吻合；青铜/赤铜在首屏外，需先下滑
+  # 一段面板（scroll: 1，配合下方 scroll_to_top 先回顶保证起点稳定），
+  # 下滑 1 段后实测质心 银 462,215 / 青铜 467,407 / 赤铜 472,592。
+  resource_points:
+    sq: [470, 206]
+    gold_apple: [473, 383]
+    silver_apple: [467, 570]
+    bronze_apple: {point: [467, 407], scroll: 1}
+    copper_apple: {point: [472, 592], scroll: 1}
+  # 点资源前先把列表滚回顶部（镜像 FGA Refill 的滚动条定位意图）。
+  # FGO 面板用滑动内容滚动、无独立滚动条，故用一次向下滑动等效，
+  # 保证上面首屏坐标稳定；false 则跳过（面板默认即顶部时不必要）。
+  scroll_to_top: true
+  # 确认框「决定」按钮 [x,y]。2026-08-16 实测决定按钮文字框中心（1049,730）；
+  # FGA staminaOkClick 换算值 1031,700 实测偏上约 30px，已校准。
+  ok_point: [1049, 730]
+  # 点资源后的短暂等待（秒），等「确认」按钮出现
+  refill_tap_wait_seconds: 0.6
+  # 链耗尽后等回体的秒数；>0 且配置了 close_point 时关闭面板并等待
+  wait_for_regen_seconds: 0
+  # 链耗尽时关闭体力不足面板的 [x,y]（FGA staminaCloseClick 换算）
+  close_point: [800, 775]
+  # unlimited=true 时，本字段仅作为兼容/回退值，不会限制有明确 resource_limits 的资源。
+  resource_limits:
+    gold_apple: 20
+    silver_apple: 20
+    bronze_apple: 20
+  # unlimited=false 且资源未配置单独数字时使用的全局回退上限。
+  max_refills_per_session: 20
+# 无限刷模式：打完一局回到同一关卡入口界面后，自动再次点击“开始”循环刷。
+# start_template 由控制面板【无限刷】粘贴截图生成。
+infinite_farm:
+  enabled: false
+  start_template: templates/infinite_farm_start.png
+  # 模板命中后用 OCR 做软位置/文字对齐；OCR 误识别或缺失不会单独阻断点击。
+  ocr_alignment_mode: soft
+  ocr_expected_labels: ["开始", "开 始", "start"]
+  ocr_search_roi: [0, 0, 1600, 900]
+  max_template_candidates: 6
+  candidate_threshold_margin: 0.08
+  candidate_ambiguity_margin: 0.06
+  recovery_repeat_limit: 3
+  recovery_max_steps: 8
+  recovery_no_progress_limit: 3
+  recovery_same_frame_distance: 2.5
+  recovery_cooldown_seconds: 12
+  recovery_success_cooldown_seconds: 1
+  # 体力不足时自动补充（全局体力补充已在 refill 段启用）
+  refill_ap: true
+
+# 结算页掉落/羁绊停止（默认关闭）。templates 的值可写相对本配置文件的路径。
+drop_stop:
+  enabled: false
+  mode: cumulative  # cumulative / any_hit
+  targets: {}
+  # 已复制 BBchannel 的素材图标到 profiles/templates/drop；按需填写 targets。
+  # 示例：targets: {凶骨: 30, 英雄之证: 20}
+  templates:
+    '凶骨': templates/drop/凶骨.png
+    '英雄之证': templates/drop/英雄之证.png
+    '虚影之尘': templates/drop/虚影之尘.png
+    '龙之牙': templates/drop/龙之牙.png
+    '世界树之种': templates/drop/世界树之种.png
+    '八连双晶': templates/drop/八连双晶.png
+    '凤凰羽毛': templates/drop/凤凰羽毛.png
+    '无间齿轮': templates/drop/无间齿轮.png
+    '禁断书页': templates/drop/禁断书页.png
+    '混沌之爪': templates/drop/混沌之爪.png
+    '蛮神心脏': templates/drop/蛮神心脏.png
+    '真理之卵': templates/drop/真理之卵.png
+    '煌星碎片': templates/drop/煌星碎片.png
+    '悠久果实': templates/drop/悠久果实.png
+    '鬼炎鬼灯': templates/drop/鬼炎鬼灯.png
+  bond_max_template: null
+
+rules:
+- name: ap_refill
+  template: templates/ap_refill.png
+  threshold: 0.88
+  action: refill
+  reason: 检测到体力回复界面；refill.enabled 关闭时保持暂停，不消耗任何资源
+- name: refill_confirm_decision
+  description: 体力补充时“是否执行消耗…？”确认框（含“决定”按钮）。仅用于 _refill_action 判断确认框已弹出，再点“确定”；数量为0或不可用的资源不会弹出该框，此时自动跳过换下一个；本规则本身不执行任何点击。
+  template: templates/refill_confirm_decision.png
+  # 该模板只有“决定”按钮，剧情/关卡确认框的“开始/确定”按钮外形相近；
+  # 只在体力确认按钮的下方区域匹配，并提高阈值，避免误识别剧情对话框。
+  threshold: 0.90
+  match_mode: gray
+  search_roi: [820, 660, 1280, 810]
+  template_scales: [0.9, 0.95, 1.0, 1.05, 1.1]
+  detect_only: true
+  action: refill_confirm_check
+  cooldown: 2
+- name: defeat_or_revive
+  description: 这是一个“续关”按钮，位于屏幕中央，显示红色“续关”大字及英文“Continue”，下方有提示文字询问是否消耗令咒、圣晶石或灵脉石，点击后消耗资源继续当前关卡。
+  template: templates/defeat_or_revive.png
+  threshold: 0.9
+  match_mode: hsv_mask
+  hsv_lower:
+  - 0
+  - 0
+  - 165
+  hsv_upper:
+  - 179
+  - 115
+  - 255
+  action: defeat
+  reset_battle: true
+  reset_quest: true
+  reason: 检测到战败/续关界面；首次免费撤退重打，后续仅使用 defeat_policy 明确授权的续关资源
+- name: special_formation
+  template: templates/special_formation.png
+  threshold: 0.88
+  action: pause
+  reason: 检测到强制编队或特殊关卡，等待人工处理
+- name: title_tap
+  description: 标题/初始画面提示：按钮文字为“点击屏幕”三字，白色配浅蓝光效。它不含“请点击游戏界面”字样、不含结算数值或背景图案；凡见“请点击游戏界面”或结算界面元素，必不是本控件。
+  template: templates/title_tap.png
+  threshold: 0.88
+  match_mode: hsv_mask
+  hsv_lower:
+  - 75
+  - 30
+  - 150
+  hsv_upper:
+  - 120
+  - 255
+  - 255
+  action: tap_match
+  cooldown: 8
+  unknown_pause_seconds: 60
+- name: title_tap_enter
+  description: 开机/标题画面中央的“点击屏幕”提示文字（白字浅蓝光效）。用于 title_tap 未匹配到的新版开机画面，点击后进入主界面。
+  template: templates/title_tap_enter.png
+  threshold: 0.8
+  stable_frames: 1
+  match_mode: hsv_mask
+  hsv_lower: [75, 30, 150]
+  hsv_upper: [120, 255, 255]
+  search_roi: [480, 560, 1160, 780]
+  template_scales: [0.9, 0.95, 1.0, 1.05]
+  action: tap_match
+  offset: [0, 0]
+  cooldown: 8
+  unknown_pause_seconds: 60
+  reset_battle: true
+  reset_quest: true
+
+- name: battle_resume_enter
+  description: 战斗中断后弹出的“是否继续之前战斗？”对话框右侧“进入”按钮。识别后点击回到战斗，避免误点左侧“不进入”。
+  template: templates/battle_resume_enter.png
+  threshold: 0.8
+  stable_frames: 1
+  match_mode: gray
+  search_roi: [850, 560, 1250, 800]
+  template_scales: [0.9, 0.95, 1.0, 1.05]
+  action: tap_match
+  offset: [0, 0]
+  cooldown: 5
+  reset_battle: true
+  reset_quest: true
+
+- name: special_quest_start
+  description: 按钮内文字为“开始”，背景为纯白渐变，边缘有金色细线装饰，整体呈圆角矩形，无其他文字或图标干扰。
+  template: templates/special_quest_start.png
+  threshold: 0.9
+  match_mode: gray
+  search_roi:
+  - 800
+  - 600
+  - 1300
+  - 800
+  template_scales:
+  - 0.95
+  - 1.0
+  - 1.05
+  action: tap_match
+  cooldown: 5
+  allow_repeat: true
+  unknown_pause_seconds: 60
+  reset_battle: true
+- name: quest_confirm_start
+  description: 按钮位于屏幕右下角，文字为“开始”，背景为白色渐变，上方有“是否开始关卡？”的提示文字，左侧有另一个空白按钮。
+  template: templates/quest_confirm_start.png
+  threshold: 0.88
+  match_mode: hsv_mask
+  hsv_lower:
+  - 0
+  - 0
+  - 170
+  hsv_upper:
+  - 179
+  - 100
+  - 255
+  action: tap_match
+  offset:
+  - 128
+  - 117
+  cooldown: 5
+- name: quest_no_battle_start
+  description: 按钮内文字为“任务开始”，背景为纯白渐变，边缘有金色细线装饰，整体呈圆角矩形，文字比“开始”多两个字。
+  template: templates/quest_no_battle_start.png
+  threshold: 0.95
+  match_mode: gray
+  search_roi:
+  - 800
+  - 600
+  - 1300
+  - 800
+  action: tap_match
+  cooldown: 5
+  reset_battle: true
+- name: home_main_next
+  description: 该控件包含“下一个”三个汉字，字体为黄色并带有黑色描边，下方配有一个指向下方的黄色V形箭头，整体位于蓝色背景之上。
+  template: templates/map_next.png
+  threshold: 0.55
+  match_mode: gray
+  search_roi:
+  - 700
+  - 60
+  - 1580
+  - 360
+  template_scales:
+  - 0.6
+  - 0.65
+  - 0.7
+  - 0.75
+  - 0.8
+  - 0.85
+  - 0.9
+  - 0.95
+  - 1.0
+  - 1.05
+  - 1.1
+  action: tap_match
+  offset:
+  - 0
+  - 110
+  cooldown: 4
+  reset_battle: true
+  reset_quest: true
+- name: home_next_tap
+  description: 主页/关卡列表底部中央的“下一个”黄色按钮（“下一个”文字+向下黄色 V 形箭头）。按钮贴底时 map_next 的 +110 偏移会把点击点推到屏幕外，本规则直接点击按钮中心。
+  template: templates/home_next_tap.png
+  threshold: 0.85
+  stable_frames: 1
+  match_mode: hsv_mask
+  hsv_lower: [15, 180, 110]
+  hsv_upper: [31, 255, 255]
+  search_roi: [700, 640, 1250, 900]
+  template_scales: [0.85, 0.9, 0.95, 1.0, 1.05, 1.1]
+  action: tap_match
+  offset: [0, 0]
+  cooldown: 4
+  reset_battle: true
+  reset_quest: true
+
+- name: map_next
+  description: 该控件包含“下一个”三个汉字，字体为黄色并带有黑色描边，下方配有一个指向下方的黄色V形箭头，整体位于蓝色背景之上。
+  template: templates/map_next.png
+  threshold: 0.86
+  stable_frames: 1
+  match_mode: hsv_mask
+  hsv_lower:
+  - 15
+  - 180
+  - 110
+  hsv_upper:
+  - 31
+  - 255
+  - 255
+  template_scales:
+  - 0.6
+  - 0.65
+  - 0.7
+  - 0.75
+  - 0.8
+  - 0.85
+  - 0.9
+  - 0.95
+  - 1.0
+  - 1.05
+  - 1.1
+  action: tap_match
+  offset:
+  - 0
+  - 110
+  cooldown: 4
+  reset_battle: true
+  reset_quest: true
+- name: map_next_arrow_fallback
+  description: 该控件仅显示一个黄色的V形箭头图标，无文字说明，背景为蓝色，形状与上方按钮下方的箭头一致。
+  template: templates/map_next_arrow.png
+  threshold: 0.9
+  stable_frames: 1
+  match_mode: hsv_mask
+  hsv_lower:
+  - 15
+  - 180
+  - 110
+  hsv_upper:
+  - 31
+  - 255
+  - 255
+  template_scales:
+  - 0.6
+  - 0.65
+  - 0.7
+  - 0.75
+  - 0.8
+  - 0.85
+  - 0.9
+  - 0.95
+  - 1.0
+  - 1.05
+  - 1.1
+  action: tap_match
+  offset:
+  - 0
+  - 110
+  cooldown: 4
+  reset_battle: true
+  reset_quest: true
+- name: map_next_gray_fallback
+  description: 该控件包含“下一个”三个汉字，字体为黄色并带有黑色描边，下方配有一个指向下方的黄色V形箭头，整体位于蓝色背景之上。
+  template: templates/map_next.png
+  threshold: 0.82
+  stable_frames: 1
+  match_mode: gray
+  template_scales:
+  - 0.6
+  - 0.65
+  - 0.7
+  - 0.75
+  - 0.8
+  - 0.85
+  - 0.9
+  - 0.95
+  - 1.0
+  - 1.05
+  - 1.1
+  action: tap_match
+  offset:
+  - 0
+  - 110
+  cooldown: 4
+  reset_battle: true
+  reset_quest: true
+- name: map_next_arrow_soft_center
+  description: 该控件仅显示一个黄色的V形箭头图标，无文字说明，背景为蓝色，形状与上方按钮下方的箭头一致。
+  template: templates/map_next_arrow.png
+  threshold: 0.65
+  stable_frames: 1
+  match_mode: hsv_mask
+  hsv_lower:
+  - 15
+  - 180
+  - 110
+  hsv_upper:
+  - 31
+  - 255
+  - 255
+  search_roi:
+  - 700
+  - 180
+  - 1100
+  - 450
+  template_scales:
+  - 0.6
+  - 0.65
+  - 0.7
+  - 0.75
+  - 0.8
+  - 0.85
+  - 0.9
+  - 0.95
+  - 1.0
+  - 1.05
+  - 1.1
+  action: tap_match
+  offset:
+  - 0
+  - 110
+  cooldown: 4
+  allow_repeat: true
+  reset_battle: true
+  reset_quest: true
+- name: quest_start
+  template: templates/quest_start.png
+  threshold: 0.88
+  action: quest_start
+  cooldown: 4
+- name: support_forced
+  description: 该控件显示白色文字“客将从者”，背景为带有光效的蓝色渐变，通常位于从者编成或召唤界面，点击后进入客从者（从者）的编成或确认界面。
+  template: templates/support_forced.png
+  threshold: 0.9
+  match_mode: gray
+  search_roi:
+  - 250
+  - 180
+  - 650
+  - 850
+  action: select_forced_support
+  cooldown: 5
+  allow_repeat: true
+- name: support_screen
+  description: 该控件显示“助战选择”及英文“Formation”，采用白色立体字体搭配浅蓝色背景。通常位于召唤或战斗准备界面，点击后进入从者助战选择界面。
+  template: templates/support_screen.png
+  threshold: 0.72
+  match_mode: edge
+  canny_lower: 80
+  canny_upper: 160
+  search_roi:
+  - 1200
+  - 0
+  - 1600
+  - 140
+  template_scales:
+  - 0.94
+  - 0.97
+  - 1.0
+  - 1.03
+  - 1.06
+  action: select_support
+  cooldown: 2
+  allow_repeat: true
+- name: support_unavailable
+  description: 这是一个位于界面底部的白色圆角矩形按钮，内部居中显示黑色的“退出”二字，背景为深蓝色几何渐变。
+  template: templates/support_unavailable.png
+  threshold: 0.9
+  match_mode: hsv_mask
+  hsv_lower:
+  - 0
+  - 0
+  - 165
+  hsv_upper:
+  - 179
+  - 115
+  - 255
+  action: support_unavailable
+  offset:
+  - 0
+  - 145
+  cooldown: 3
+  unknown_pause_seconds: 45
+- name: auto_formation_confirm
+  description: 该按钮背景呈现明显的灰白色渐变，上下边缘带有较宽的深色阴影，整体立体感较强，文字“自动编成”居中显示。
+  template: templates/auto_formation.png
+  threshold: 0.95
+  match_mode: gray
+  search_roi:
+  - 970
+  - 620
+  - 1350
+  - 830
+  template_scales:
+  - 0.96
+  - 0.98
+  - 1.0
+  - 1.02
+  - 1.04
+  action: tap_match
+  cooldown: 4
+  allow_repeat: true
+  unknown_pause_seconds: 45
+- name: auto_formation_confirm_simple
+  description: 该按钮背景为纯白色，上下边缘仅有一圈极细的深色线条，整体视觉更扁平简洁，文字“自动编成”居中显示。
+  template: templates/auto_formation_simple.png
+  threshold: 0.95
+  match_mode: gray
+  search_roi:
+  - 950
+  - 600
+  - 1370
+  - 800
+  template_scales:
+  - 0.96
+  - 0.98
+  - 1.0
+  - 1.02
+  - 1.04
+  action: tap_match
+  cooldown: 4
+  allow_repeat: true
+  unknown_pause_seconds: 45
+- name: auto_formation_decide
+  description: 这是一个带有蓝色边框和金色描边的白色箭头形按钮，中间显示深蓝色的“决定”二字，通常位于游戏对话框底部，点击用于确认选择或推进剧情。
+  template: templates/auto_formation_decide.png
+  threshold: 0.95
+  match_mode: gray
+  search_roi:
+  - 1300
+  - 740
+  - 1600
+  - 900
+  template_scales:
+  - 0.96
+  - 0.98
+  - 1.0
+  - 1.02
+  - 1.04
+  action: tap_match
+  cooldown: 6
+  unknown_pause_seconds: 60
+  reset_battle: true
+- name: quest_info_close
+  description: 这是一个位于界面底部的白色圆角矩形按钮，内部居中显示黑色的“关闭”二字，背景为深蓝色几何渐变。
+  template: templates/skill_unavailable_close.png
+  threshold: 0.95
+  match_mode: gray
+  search_roi:
+  - 600
+  - 620
+  - 1000
+  - 830
+  action: tap_match
+  cooldown: 2
+  allow_repeat: true
+  unknown_pause_seconds: 45
+- name: special_support_source_dialog
+  description: 这是一个白底圆角矩形按钮，显示黑色文字“从助战中编队”。通常位于召唤或从者编成界面，点击后允许玩家使用助战从者进行编队。
+  template: templates/special_support_source_button.png
+  threshold: 0.95
+  match_mode: gray
+  search_roi:
+  - 780
+  - 520
+  - 1300
+  - 680
+  template_scales:
+  - 0.96
+  - 0.98
+  - 1.0
+  - 1.02
+  - 1.04
+  action: tap_match
+  cooldown: 2
+  allow_repeat: true
+  unknown_pause_seconds: 45
+- name: restricted_party_select_marker
+  description: 该控件显示白色文字“选择”，背景为灰色，字体清晰醒目。通常位于游戏界面的菜单或列表区域，点击后用于确认选项或进入下一级选择界面。
+  template: templates/restricted_party_select_label.png
+  threshold: 0.95
+  match_mode: gray
+  search_roi:
+  - 250
+  - 150
+  - 1580
+  - 800
+  template_scales:
+  - 0.96
+  - 0.98
+  - 1.0
+  - 1.02
+  - 1.04
+  action: detect_only
+  detect_only: true
+- name: restricted_party_filled_marker
+  description: 深灰色六边形横幅背景，中央显示醒目的黄色描边中文“编队限制”字样，整体呈横向长条状，具有明显的UI按钮特征。
+  template: templates/restricted_party_filled_banner.png
+  threshold: 0.95
+  match_mode: gray
+  search_roi:
+  - 20
+  - 150
+  - 1580
+  - 800
+  template_scales:
+  - 0.96
+  - 0.98
+  - 1.0
+  - 1.02
+  - 1.04
+  action: detect_only
+  detect_only: true
+- name: special_support_restriction_slot
+  description: 深灰色矩形背景，中央显示黄色中文“编队限制”字样，上方隐约可见模糊的英文文本，整体呈紧凑的矩形标签样式。
+  template: templates/special_support_restriction_label.png
+  threshold: 0.9
+  match_mode: hsv_mask
+  hsv_lower:
+  - 18
+  - 180
+  - 110
+  hsv_upper:
+  - 35
+  - 255
+  - 255
+  search_roi:
+  - 20
+  - 150
+  - 1580
+  - 800
+  template_scales:
+  - 0.96
+  - 0.98
+  - 1.0
+  - 1.02
+  - 1.04
+  action: restricted_party_setup
+  cooldown: 2
+  allow_repeat: true
+  unknown_pause_seconds: 45
+- name: party_start
+  description: 这是一个带有蓝色光效边框的箭头形按钮，中间显示“战斗开始”四个黑色汉字，通常位于关卡选择或剧情界面底部，点击后进入战斗场景。
+  template: templates/party_start.png
+  threshold: 0.88
+  action: tap_match
+  cooldown: 6
+  unknown_pause_seconds: 45
+- name: loading_tap
+  description: 纯黑背景，文字呈高亮青白色，无其他图案或装饰，视觉最为简洁。
+  template: templates/loading_tap.png
+  threshold: 0.88
+  match_mode: hsv_mask
+  hsv_lower:
+  - 80
+  - 45
+  - 150
+  hsv_upper:
+  - 115
+  - 255
+  - 255
+  action: tap_match
+  cooldown: 4
+  unknown_pause_seconds: 45
+- name: skip_confirm
+  description: 这是一个白底黑字的圆角矩形按钮，中央显示汉字“是”。通常位于游戏对话框或确认弹窗中，点击后用于确认操作或选择肯定选项。
+  template: templates/skip_confirm.png
+  threshold: 0.95
+  match_mode: gray
+  search_roi:
+  - 800
+  - 600
+  - 1300
+  - 800
+  action: tap_match
+  cooldown: 5
+  unknown_pause_seconds: 60
+- name: story_skip
+  description: 这是一个白底黑字的“跳过”按钮，右侧带有播放箭头图标，通常位于剧情对话或动画播放界面的右下角，点击可跳过当前剧情。
+  template: templates/story_skip.png
+  threshold: 0.65
+  match_mode: hsv_mask
+  hsv_lower:
+  - 0
+  - 0
+  - 200
+  hsv_upper:
+  - 179
+  - 25
+  - 255
+  search_roi:
+  - 1380
+  - 0
+  - 1600
+  - 110
+  action: story
+  cooldown: 2
+- name: story_skip_light_background
+  description: 这是一个白底黑字的“跳过”按钮，右侧带有播放箭头图标，通常位于剧情对话或动画播放界面的右下角，点击可跳过当前剧情。
+  template: templates/story_skip.png
+  threshold: 0.7
+  match_mode: hsv_mask
+  hsv_lower:
+  - 0
+  - 0
+  - 200
+  hsv_upper:
+  - 179
+  - 25
+  - 255
+  template_crop:
+  - 38
+  - 16
+  - 179
+  - 71
+  search_roi:
+  - 1420
+  - 5
+  - 1600
+  - 105
+  template_scales:
+  - 0.96
+  - 0.98
+  - 1.0
+  - 1.02
+  - 1.04
+  action: story
+  cooldown: 2
+- name: story_skip_gray_text_fallback
+  description: 这是一个白底黑字的“跳过”按钮，右侧带有播放箭头图标，通常位于剧情对话或动画播放界面的右下角，点击可跳过当前剧情。
+  template: templates/story_skip.png
+  threshold: 0.68
+  match_mode: gray
+  template_crop:
+  - 48
+  - 23
+  - 178
+  - 68
+  search_roi:
+  - 1420
+  - 10
+  - 1600
+  - 100
+  template_scales:
+  - 0.96
+  - 0.98
+  - 1.0
+  - 1.02
+  - 1.04
+  action: story
+  cooldown: 2
+- name: command_cards
+  description: 战斗指令卡界面左上角的“返回”箭头按钮：蓝色圆角矩形，白色左箭头与“返回”文字；识别到它说明当前已打开指令卡界面（战斗状态），此控件仅用于识别，不实际点击返回。
+  template: templates/command_cards.png
+  threshold: 0.88
+  match_mode: hsv_mask
+  hsv_lower:
+  - 80
+  - 70
+  - 70
+  hsv_upper:
+  - 115
+  - 255
+  - 255
+  # 只匹配蓝色“返回”按钮本体，忽略普通/特殊战场不同的木纹或黑色背景。
+  template_crop:
+  - 20
+  - 19
+  - 163
+  - 60
+  search_roi:
+  - 1360
+  - 760
+  - 1600
+  - 900
+  template_scales:
+  - 0.88
+  - 0.9
+  - 0.92
+  - 0.94
+  - 0.96
+  - 0.98
+  - 1.0
+  - 1.02
+  action: battle
+  cooldown: 2
+  unknown_pause_seconds: 90
+- name: skill_unavailable_close
+  description: 这是一个位于界面底部的白色圆角矩形按钮，内部居中显示黑色的“关闭”二字，背景为深蓝色几何渐变。
+  template: templates/skill_unavailable_close.png
+  threshold: 0.9
+  match_mode: gray
+  search_roi:
+  - 600
+  - 620
+  - 1000
+  - 780
+  action: tap_match
+  cooldown: 1
+  allow_repeat: true
+  unknown_pause_seconds: 45
+- name: battle_detail_close
+  description: 这是一个位于界面右上角的方形关闭按钮，背景为白色菱形，中心有一个深蓝色的“X”符号，带有金色边框。
+  template: templates/battle_detail_close.png
+  threshold: 0.9
+  match_mode: hsv_mask
+  hsv_lower:
+  - 0
+  - 0
+  - 165
+  hsv_upper:
+  - 179
+  - 110
+  - 255
+  search_roi:
+  - 1250
+  - 0
+  - 1480
+  - 180
+  action: tap_match_until_gone
+  retry_attempts: 3
+  retry_wait_seconds: 0.8
+  cooldown: 2
+  unknown_pause_seconds: 45
+# 右上角控件仅提供给 unknown AI 结合截图判断；本地状态机禁止自动点击，
+# 因为同一位置可能是令咒入口或战斗菜单。
+- name: top_right_close
+  description: 这是一个位于屏幕右上角的通用关闭按钮：米白色/浅奶油色的菱形（旋转45°的正方形），内部有一个深蓝色的粗线“X”叉号，外围一圈深色细边框。与战斗详情关闭钮同风格但更通用，对浅色/深色对话框上的叉号都较宽容。仅作为模型可见控件（detect_only），匹配时点其中心关闭弹窗。
+  template: templates/top_right_close.png
+  threshold: 0.5
+  match_mode: gray
+  template_scales:
+  - 0.75
+  - 0.8
+  - 0.85
+  - 0.9
+  - 0.95
+  - 1.0
+  - 1.05
+  - 1.1
+  - 1.2
+  search_roi:
+  - 1150
+  - 0
+  - 1600
+  - 300
+  action: tap_match
+  detect_only: true
+  cooldown: 2
+  unknown_pause_seconds: 45
+- name: notice_close
+  description: 这是一个位于屏幕右上角的方形关闭按钮：深蓝色（接近黑色）的正方形背景，金色描边，中心是一个白色的粗体“X”叉号。常见于活动公告/公告类弹窗的右上角，风格硬朗扁平，与菱形关闭钮（battle_detail_close/top_right_close）明显不同（方形 vs 菱形，白叉 vs 深蓝叉）。仅作为模型可见控件（detect_only），匹配时点其中心关闭公告弹窗。
+  template: templates/notice_close.png
+  threshold: 0.5
+  match_mode: gray
+  template_scales:
+  - 0.8
+  - 0.9
+  - 1.0
+  - 1.1
+  - 1.2
+  search_roi:
+  - 1400
+  - 0
+  - 1600
+  - 220
+  action: tap_match
+  detect_only: true
+  cooldown: 2
+  unknown_pause_seconds: 45
+- name: skill_target_support
+  description: 这是一个白字深底按钮，显示“请选择对象”文字，通常位于游戏战斗或技能释放界面，用于让玩家选择技能或宝具的目标。
+  template: templates/skill_target_support.png
+  threshold: 0.9
+  match_mode: hsv_mask
+  hsv_lower:
+  - 0
+  - 0
+  - 170
+  hsv_upper:
+  - 179
+  - 105
+  - 255
+  action: target_damage_dealer
+  cooldown: 2
+  unknown_pause_seconds: 45
+- name: battle_attack
+  description: 该控件为蓝色圆形按钮，显示白色“攻击”汉字及英文“Next Phase”，带有金属质感边框和箭头图标，通常位于战斗界面右下角，点击后进入下一战斗阶段。
+  template: templates/battle_attack.png
+  threshold: 0.86
+  match_mode: hsv_mask
+  hsv_lower:
+  - 80
+  - 80
+  - 80
+  hsv_upper:
+  - 115
+  - 255
+  - 255
+  action: battle
+  cooldown: 7
+  unknown_pause_seconds: 90
+- name: friend_request
+  description: 这是一个白底圆角按钮，左侧有绿色握手图标，中间显示黑色文字“申请好友”，通常位于社交界面，点击可发送好友申请。
+  template: templates/friend_request.png
+  threshold: 0.9
+  match_mode: gray
+  search_roi:
+  - 500
+  - 650
+  - 1500
+  - 860
+  template_scales:
+  - 0.95
+  - 1.0
+  - 1.05
+  action: friend_request
+  cooldown: 4
+  unknown_pause_seconds: 60
+  reset_battle: true
+- name: post_battle_tap
+  description: 背景左侧有橙红色火焰特效，右侧可见部分金色装饰，文字呈青白色。
+  template: templates/post_battle_tap.png
+  threshold: 0.88
+  match_mode: hsv_mask
+  hsv_lower:
+  - 80
+  - 35
+  - 145
+  hsv_upper:
+  - 115
+  - 255
+  - 255
+  search_roi:
+  - 500
+  - 700
+  - 1100
+  - 900
+  template_scales:
+  - 0.9
+  - 0.95
+  - 1.0
+  - 1.05
+  - 1.1
+  action: tap_match
+  cooldown: 3
+  allow_repeat: true
+  unknown_pause_seconds: 60
+  reset_battle: true
+- name: post_battle_tap_friend_request
+  description: 好友申请弹窗底部左侧的“结束”按钮（白底圆角大按钮，中央黑色“结束”文字），点击后关闭好友申请弹窗并继续结算。
+  template: templates/post_battle_tap_friend_request.png
+  threshold: 0.85
+  match_mode: gray
+  search_roi:
+  - 80
+  - 700
+  - 500
+  - 860
+  template_scales:
+  - 0.9
+  - 0.95
+  - 1.0
+  - 1.05
+  - 1.1
+  action: tap_match
+  cooldown: 3
+  allow_repeat: true
+  unknown_pause_seconds: 60
+  reset_battle: true
+- name: post_battle_tap_bright
+  description: 背景为紫色调，可见部分金色装饰，文字亮度较高，呈青白色。
+  template: templates/post_battle_tap_bright.png
+  threshold: 0.88
+  match_mode: hsv_mask
+  hsv_lower:
+  - 80
+  - 35
+  - 145
+  hsv_upper:
+  - 115
+  - 255
+  - 255
+  search_roi:
+  - 500
+  - 700
+  - 1100
+  - 900
+  template_scales:
+  - 0.9
+  - 0.95
+  - 1.0
+  - 1.05
+  - 1.1
+  action: tap_match
+  cooldown: 3
+  allow_repeat: true
+  unknown_pause_seconds: 60
+  reset_battle: true
+- name: post_battle_tap_glow
+  description: 背景可见游戏结算界面元素，包含-1.7%数值与金色装饰，文字呈青白色。
+  template: templates/post_battle_tap_glow.png
+  threshold: 0.62
+  match_mode: hsv_mask
+  hsv_lower:
+  - 80
+  - 35
+  - 145
+  hsv_upper:
+  - 115
+  - 255
+  - 255
+  search_roi:
+  - 550
+  - 740
+  - 1050
+  - 860
+  template_scales:
+  - 0.9
+  - 0.95
+  - 1.0
+  - 1.05
+  - 1.1
+  action: tap_match
+  cooldown: 3
+  allow_repeat: true
+  unknown_pause_seconds: 60
+  reset_battle: true
+- name: post_battle_tap_glow_wide
+  description: 背景左侧有橙红色火焰特效，右侧可见部分金色装饰，文字呈青白色。
+  template: templates/post_battle_tap_glow_wide.png
+  threshold: 0.72
+  match_mode: hsv_mask
+  hsv_lower:
+  - 80
+  - 35
+  - 145
+  hsv_upper:
+  - 115
+  - 255
+  - 255
+  search_roi:
+  - 550
+  - 740
+  - 1050
+  - 860
+  template_scales:
+  - 0.9
+  - 0.95
+  - 1.0
+  - 1.05
+  - 1.1
+  action: tap_match
+  cooldown: 3
+  allow_repeat: true
+  unknown_pause_seconds: 60
+  reset_battle: true
+- name: post_battle_tap_occluded
+  description: 背景为紫色调，可见部分金色装饰，文字亮度较高，呈青白色。
+  template: templates/post_battle_tap_bright.png
+  threshold: 0.52
+  match_mode: hsv_mask
+  hsv_lower:
+  - 80
+  - 35
+  - 145
+  hsv_upper:
+  - 115
+  - 255
+  - 255
+  search_roi:
+  - 600
+  - 740
+  - 1000
+  - 870
+  template_scales:
+  - 0.9
+  - 0.95
+  - 1.0
+  - 1.05
+  - 1.1
+  action: tap_match
+  cooldown: 3
+  allow_repeat: true
+  unknown_pause_seconds: 60
+  reset_battle: true
+- name: post_battle_tap_white_text
+  description: 背景左侧有橙红色火焰特效，右侧可见部分金色装饰，文字呈青白色。
+  # 新版纯蓝背景会污染旧的青色掩码；只匹配文字最亮的白色核心。
+  template: templates/post_battle_tap.png
+  template_crop:
+  - 0
+  - 10
+  - 350
+  - 55
+  threshold: 0.72
+  match_mode: hsv_mask
+  hsv_lower:
+  - 0
+  - 0
+  - 215
+  hsv_upper:
+  - 179
+  - 40
+  - 255
+  search_roi:
+  - 500
+  - 760
+  - 1100
+  - 890
+  template_scales:
+  - 0.8
+  - 0.85
+  - 0.9
+  - 0.95
+  - 1.0
+  - 1.05
+  - 1.1
+  - 1.15
+  action: tap_match
+  cooldown: 3
+  allow_repeat: true
+  unknown_pause_seconds: 60
+  reset_battle: true
+- name: result_next
+  description: 背景可见游戏结算界面元素，包含40.7%数值与金色装饰，文字呈青白色。
+  template: templates/result_next.png
+  threshold: 0.86
+  match_mode: hsv_mask
+  hsv_lower:
+  - 0
+  - 0
+  - 170
+  hsv_upper:
+  - 179
+  - 125
+  - 255
+  action: tap_match
+  cooldown: 3
+  reset_battle: true
+- name: loot_next
+  description: 这是一个白底金边的圆角矩形按钮，中央印有深蓝色的“下一步”文字及向右箭头图标，通常位于剧情或活动流程界面底部，点击后推进剧情或进入下一环节。
+  template: templates/loot_next.png
+  threshold: 0.88
+  action: tap_match
+  cooldown: 4
+- name: dialog_ok
+  template: templates/dialog_ok.png
+  threshold: 0.9
+  action: tap_match
+  cooldown: 3
+
