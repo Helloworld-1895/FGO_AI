@@ -1,10 +1,9 @@
 @echo off
 setlocal
 cd /d "%~dp0"
-if exist "%~dp0app\FGO_AI.exe" (
-  start "FGO AI" "%~dp0app\FGO_AI.exe"
-  exit /b 0
+if /i "%~1"=="--self-test" (
+  powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -File "%~dp0scripts\bootstrap.ps1" %*
+  exit /b %ERRORLEVEL%
 )
-echo 未找到 app\FGO_AI.exe，请从 GitHub Releases 下载并完整解压发布包。
-pause
-exit /b 1
+wscript.exe "%~dp0launcher_hidden.vbs" %*
+exit /b 0
