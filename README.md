@@ -21,7 +21,7 @@ Windows x64 上运行的《命运-冠位指定》MuMu/ADB 屏幕自动化工具�
 
 当前 Windows CPU 发布包：
 
-- [FGO_AI-v1.0.1-Windows-CPU.zip](https://github.com/Helloworld-1895/FGO_AI/releases/tag/v1.0.1)
+- [FGO_AI-v1.0.2-Windows-CPU.zip](https://github.com/Helloworld-1895/FGO_AI/releases/tag/v1.0.2)
 - 同一 Release 中的 SHA-256 校验文件
 - 仓库中的 [release-manifest.json](release-manifest.json)
 
