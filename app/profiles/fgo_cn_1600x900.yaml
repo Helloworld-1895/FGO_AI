@@ -163,19 +163,14 @@ behavior:
   restricted_party_filled_min_edge_ratio: 0.025
 support:
   strategy_options:
-    search_level_90_plus: true
-    search_level_100_plus: true
-    search_level_110_plus: true
-    search_level_120: true
+    preferred_start_level: '120'
+    preferred_np_level: '5'
+    preferred_np_type: aoe
     use_forced_support: true
     exclude_guest_support: true
     use_system_recommended_list: false
     use_berserker_fallback: true
     prefer_class_advantage: true
-    # 普通关卡先接受首屏可用的90级以上候选；120级仅作为加分项。
-    require_np5: true
-    prefer_aoe_np: true
-    require_aoe_np: false
     prefer_registered_candidates: true
     scroll_support_list: true
     refresh_support_list: true
@@ -651,7 +646,7 @@ battle:
   - 500
   defeat_retreat_confirm_point:
   - 1103
-  - 450
+  - 490
   # 资源按钮可能先播放确认弹窗入场动画；轮询约 8 秒，期间识别并点击“决定”。
   defeat_resource_verify_attempts: 12
   defeat_resource_verify_wait_seconds: 0.6

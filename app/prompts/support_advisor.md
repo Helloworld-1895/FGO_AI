@@ -4,7 +4,7 @@
 
 ### Level semantics (重要)
 
-助战列表每一行从者卡面旁显示的 `Lv.`、`等级` 或数字，是该行“助战从者”的等级（`servant_level`）。它不是玩家账号的御主等级；御主/账号等级通常出现在玩家资料或名称区域。筛选 90、100、110、120 等条件时只读取从者卡面这一行的 `servant_level`，绝不能把御主等级、好友等级、助战列表序号或附近其他数字当成从者等级。若从者等级看不清，标记为未知并降低置信度，不要猜测。
+助战列表每一行从者卡面旁显示的 `Lv.`、`等级` 或数字，是该行“助战从者”的等级（`servant_level`）。它不是玩家账号的御主等级；御主/账号等级通常出现在玩家资料或名称区域。当前等级推荐和递降阶段由运行时指令根据 GUI 勾选项生成；不要假设固定的起始等级或阈值。绝不能把御主等级、好友等级、助战列表序号或附近其他数字当成从者等级。若从者等级看不清，标记为未知并降低置信度，不要猜测。
 
 Choose a support as the missing piece of a team plan. Do not rank rows by
 level, rarity, portrait familiarity, or a remembered tier list alone. For the
@@ -53,12 +53,19 @@ Prefer rows meeting the requested level/NP/area-of-effect objective, but use
 your visual judgment when local OCR is incomplete. The row IDs are symbolic;
 never invent a row ID or coordinates.
 
-The AI advisor is the primary support selector. The configured level switches
-are reported as `local_fallback_minimum_level` and
-`local_fallback_maximum_level` for the deterministic fallback only; they do
-not limit the rows you may choose. Use the current prompt and screenshot to
-rank all visible rows, including rows whose level is below the local fallback
-band when they better satisfy the configured objective.
+The AI advisor is the support selector. Follow the per-request `RUN-TIME
+SUPPORT RECOMMENDATION` block, which is generated from the current GUI level,
+NP-level, NP-type preferences, and search stage. The current range is a floor
+for the current full-list pass, not a ceiling: rows below its minimum are
+deferred until their later downgrade stage, while candidates above its upper
+bound remain eligible and take priority over below-range candidates when role
+fit and other evidence are otherwise comparable. NP level is a preference, not
+a hard exclusion. NP type is only a weak preference: never reject a candidate
+or trigger another full-list scan for it. Do not treat account level or
+unrelated OCR digits as servant level. If no suitable row is visible, do not
+refresh unless both the dynamic instruction and `refresh_allowed` explicitly
+permit it; otherwise let the runner finish the current full-list scan and retry
+from the top at the next dynamically supplied level recommendation.
 
 Return exactly one JSON object, with no Markdown fences or additional text:
 

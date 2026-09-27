@@ -49,7 +49,7 @@ or button on the same unchanged frame.
 Never spend or open the 令咒 (command-seal) interface during normal play. In
 particular, while `flow` is `battle` or `battle_recovery`, never select
 `top_right_close`, `notice_close`, a `tap_close_button` with `region` equal to
-`top_right`, or any other top-right/menu/令咒 entry. A high model confidence or
+`top_right_close`, or any other top-right/menu/令咒 entry. A high model confidence or
 a relaxed local candidate does not override this rule; the runner rejects these
 actions in the battle flows. Only a clearly confirmed `defeat_or_revive`
 template on a real defeat/continue screen is eligible for defeat handling, and
@@ -108,19 +108,24 @@ Some close "X" / dismiss buttons are visible but match no template. You may tap
 them with `tap_close_button` only when the screenshot clearly shows a dialog
 close X. The top-right region is high risk: it can be the 令咒/menu entry, so
 never infer a close button from position alone. The `close_regions` facts enumerate three areas
-where such buttons appear, each with its `allowed` rectangle in 1600x900
-coordinates:
+where such buttons appear, with their default and allowed rectangles in
+1600x900 coordinates:
 
-- `top_left` — a close/X near the top-left corner.
-- `top_right` — a close/X near the top-right corner.
+- `top_left_close` — the AI-selected close region at the top-left corner.
+- `top_right_close` — the AI-selected close region at the top-right corner.
 - `bottom_center` — a cancel/close button near the bottom-center.
 
-Choose the `region` whose position matches where you actually see the button in
-the screenshot. Optionally supply the button's rectangle `x1`/`y1`/`x2`/`y2` to
-adjust for positional variance; the tap lands in the rectangle's center, and any
-point inside it works. The rectangle MUST lie entirely within that region's
-`allowed` bounds listed in `close_regions`; if you are unsure about the exact
-position, omit the rectangle and the default center for that region is used.
+For the `tap_close_button` action, choose `top_left_close` or
+`top_right_close` only after visually deciding the
+visible X is a close control, not a menu or command-seal entry. The
+`close_regions` facts include each region's `default` point and `allowed`
+rectangles. These region names are arguments only for `tap_close_button`; they do not
+rename template control IDs. In particular, `top_right_close` as a region
+argument is distinct from the `top_right_close` template selected by
+`tap_known_control` and its `control_id` argument.
+Supply a tight `x1`/`y1`/`x2`/`y2` rectangle when the default does not
+cover the visible button; the tap lands at its center, and the rectangle MUST
+stay inside `allowed`.
 This is the ONLY action that accepts coordinates, and only these bounded
 rectangles: never return `x`/`y`/points for any other action, and never pick a
 `region` you cannot see a close button in.
@@ -128,7 +133,7 @@ rectangles: never return `x`/`y`/points for any other action, and never pick a
 Example:
 
 ```json
-{"action":"tap_close_button","arguments":{"region":"top_right","x1":1300,"y1":20,"x2":1400,"y2":100},"confidence":0.8,"reason":"关闭技能详情覆盖层"}
+{"action":"tap_close_button","arguments":{"region":"top_right_close","x1":1300,"y1":20,"x2":1400,"y2":100},"confidence":0.8,"reason":"关闭技能详情覆盖层"}
 ```
 
 When you give a rectangle, make it the TIGHTEST box that contains the visible
@@ -193,8 +198,10 @@ Pick `refill` instead of `tap_text_button` whenever this dialog is visible.
 (no whitelist filtering).
 Each entry is `{"label": "<button text>", "conf": 0.0-1.0, "box": [x1, y1, x2,
 y2]}` in 1600x900 coordinates; `label` is the exact button text OCR found, and
-`box` is where it sits. When the screen shows a 关闭/退出/取消 (or similar
-dismissal) text button, return `tap_text_button` with that exact `label`.
+`box` is where it sits. When dismissing a dialog is the chosen intent and the
+screen shows a 关闭/退出/取消 (or similar dismissal) text button, return
+`tap_text_button` with that exact `label`. Merely seeing a close label does not
+make dismissal the correct intent.
 
 When no registered template reliably matches but the screenshot clearly shows
 an actionable button whose label is readable, prefer `tap_text_button` with the
@@ -212,13 +219,16 @@ those labels may consume command seals or other paid resources.
 ```
 
 The click coordinates come from the local OCR box — never invent a `label`
-that is not in `ocr_texts`, and never return coordinates yourself. When a
-clear OCR text button is visible, prefer it over a template control or a
-close-region tap.
+that is not in `ocr_texts`, and never return coordinates yourself. When the
+chosen intent is dismissing a dialog, prefer an OCR-detected close-text
+button over unrelated weak template candidates or a close-region tap. Do not
+prefer a close-text button when another flow action is correct.
 
-Prefer a matched template close control (`tap_known_control`) when one matches;
-use `tap_close_button` only when a visible close button matches no template but
-sits in one of the three `close_regions`.
+For a close intent, use `tap_known_control` only when a high-confidence template
+position visibly identifies the same close button. A weak or misplaced relaxed
+candidate is not proof that it matches. Otherwise use OCR's exact close label,
+or `tap_close_button` for a clearly visible icon-only X in the
+`top_left_close` / `top_right_close` region.
 
 ## Reading the facts: find the actual screen
 
@@ -292,9 +302,12 @@ The most common cause of a stuck screen is an unhandled dismiss control — a
 close "X", a skip button, an End/next-step button, or a text dismiss button.
 When the screen is unrecognized, decide in this order:
 
-0. If `ocr_texts` lists a visible actionable text button and no reliable
-   template identifies the same button, return `tap_text_button` with its
-   exact `label` (for a confirmed resume dialog this is `进入`).
+0. First determine the intended action. If it is to dismiss a dialog and
+   `ocr_texts` lists its visible close/exit/cancel button, return
+   `tap_text_button` with the exact `label`, even if unrelated relaxed template
+   candidates are positioned. Do not apply this dismiss preference to AP refill,
+   battle choices, or another required flow action. A confirmed resume dialog may
+   require its `进入` label instead.
    For AI recovery, do not reject a control solely because `matched` is false:
    that flag only means the normal template threshold was missed. A control
    with a non-null position is a relaxed candidate; use the screenshot and its
@@ -310,9 +323,10 @@ When the screen is unrecognized, decide in this order:
    or the "Next" marker that returns from the home page to the main quest line
    (`post_battle_tap`, `result_next`, `loot_next`, `map_next`, `home_main_next`, ...).
 
-If no positioned candidate exists but you clearly see a close "X" in a
-non-ambiguous region, use `tap_close_button` for that region (described above).
-For `top_right`, verify the icon is a dialog X rather than 令咒 or a menu
+If no high-confidence, position-aligned candidate exists but you clearly see a
+close "X" in a non-ambiguous region, use `tap_close_button` for that region
+(described above).
+For `top_right_close`, verify the icon is a dialog X rather than 令咒 or a menu
 control. Model confidence is advisory only; it is not an execution veto when
 the local candidate and flow safety checks pass.
 
