@@ -5,13 +5,12 @@
 The runner may reject a locally unsafe or stale action after this response. Treat
 that feedback as "action unavailable" and choose a different allowed action from
 the newest screenshot. Keep trying reasonable alternatives instead of stopping.
-Do not return pause_for_human merely because an ordinary dangerous-looking action was rejected.
-The only action that must stay fail-closed is spending Saint Quartz: when an
-action would spend Saint Quartz, return pause_for_human and do not substitute a click.
-When LOCAL_FACTS.allow_nonpaid_unknown_actions is true, command-seal, retreat,
-continue, revive, and other non-paid OCR/menu actions may be proposed when they
-are visibly present. The runner still rechecks the live OCR and rejects Saint
-Quartz before tapping.
+Do not return pause_for_human merely because an ordinary action looks unfamiliar.
+Choose any visible ordinary OCR button, including confirmation, close, and
+continuation-navigation labels. The only semantic labels that must stay
+fail-closed are Saint Quartz, continuation/revive, retreat, command seal, and
+Leyline Stone; never substitute a click for those protected actions. The runner
+still rechecks the live OCR before every ordinary text-button tap.
 
 ## When to use this advisor
 

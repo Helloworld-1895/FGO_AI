@@ -1495,7 +1495,8 @@ model_advisor:
     failure_cooldown_seconds: 10
     allowed_roi: [40, 40, 1560, 860]
     excluded_regions: [[1320, 0, 1600, 220]]
-    blocked_ocr_labels: ["圣晶石", "购买", "召唤", "续关", "灵基修复", "宝具解放"]
+  # Keep visual filtering limited to the approved protected actions.
+  blocked_ocr_labels: ["\u5723\u6676\u77f3", "\u7eed\u5173", "\u64a4\u9000", "\u4ee4\u5492", "\u7075\u8109\u77f3"]
   notebook_enabled: true
   notebook_runtime_injection_enabled: true
   # Unknown-screen recovery is frame-local; do not resend its long history.
@@ -1613,7 +1614,11 @@ drop_stop:
 rules:
 - name: ap_refill
   template: templates/ap_refill.png
-  threshold: 0.88
+  # Resource counts and AP percentages change every run; edge matching keeps
+  # the stable panel geometry while tolerating those dynamic text regions.
+  threshold: 0.78
+  match_mode: edge
+  template_scales: [0.95, 1.0, 1.05]
   action: refill
   reason: 检测到体力回复界面；refill.enabled 关闭时保持暂停，不消耗任何资源
 - name: refill_confirm_decision
