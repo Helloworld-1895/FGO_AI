@@ -1443,6 +1443,7 @@ model_advisor:
   master_skill_plan_enabled: true
   servant_identify_enabled: true
   pause_consensus_count: 5
+  repeated_instruction_threshold: 5
   observation_only: false
   unknown_after_seconds: 3.0
   cooldown_seconds: 8.0

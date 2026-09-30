@@ -12,6 +12,16 @@ fail-closed are Saint Quartz, continuation/revive, retreat, command seal, and
 Leyline Stone; never substitute a click for those protected actions. The runner
 still rechecks the live OCR before every ordinary text-button tap.
 
+## Breaking a repeated instruction loop
+
+When LOCAL_FACTS.loop_break_request is true, the instruction in
+LOCAL_FACTS.stuck_instruction has already been issued repeatedly against an
+effectively unchanged screenshot. Re-read the current screenshot and choose a
+different action-and-arguments pair; never repeat that exact instruction. Use
+only controls and visual/OCR candidates listed in LOCAL_FACTS and keep all
+existing paid-resource and flow protections. If no safe alternative is visible,
+return wait_for_transition or pause_for_human rather than guessing.
+
 ## When to use this advisor
 
 Called when NO template cleared its matching threshold on the current frame —
