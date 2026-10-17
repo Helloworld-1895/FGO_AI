@@ -272,9 +272,11 @@ existing note is dropped by the system anyway — do not try to force one.
   much closer to acting than the rest, return its id as `target_enemy` so the
   whole chain concentrates on it. Only do this when you have a real reason —
   do not spam a target that the code already focuses.
-- `target_enemy` is optional and only valid when at least two enemies are alive.
-  The code still applies its own class/charge/HP priority target; your override
-  is applied only when it differs.
+- When at least two enemies are alive, `target_enemy` is required in the same
+  `play_cards` response as the three card IDs. Choose one current enemy ID;
+  never leave the attack target implicit. When one enemy is alive, the field is
+  optional because the game has no alternative target. The code still applies
+  the returned target only when it differs from the current focus.
 
 Return exactly one JSON object, with no Markdown fences or additional text.
 Use `play_cards` for normal planning and `append_cards` only when
@@ -298,3 +300,6 @@ tap points, or arbitrary actions. Use `pause_for_human` only after genuinely
 exhausting the available cards and the local objective; you will be consulted
 again on later frames, so when the evidence is thin prefer the most reasonable
 valid card plan over pausing unless the battle state is genuinely unsafe.
+`locally_detected_disabled` on a face card is only a noisy local hint; inspect
+the screenshot yourself and do not reject an otherwise visible card solely
+because that hint is true.

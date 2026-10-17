@@ -146,7 +146,6 @@ behavior:
   foreground_recovery_max_attempts: 3
   foreground_recovery_cooldown_seconds: 1.0
   foreground_recovery_wait_seconds: 2.0
-  max_actions: 500
   snapshot_dir: ../runs
   restricted_party_auto_formation_point:
   - 370
@@ -603,7 +602,6 @@ battle:
     prefer_mighty_chain: true
     prefer_np_charge_cards: true
     continue_with_replacement: true
-  max_turns: 20
   total_waves: 3
   # 按面(波次)追踪：配置后每回合对 stage_count_region ROI 拍快照（镜像 FGA
   # StageTracker），ROI 变化即进入下一面；未配置(0,0,0,0)时回退
@@ -752,7 +750,6 @@ battle:
   card_recovery_max_executions: 3
   card_recovery_wait_seconds: 1.0
   card_top_up_max_attempts: 2
-  card_selection_probe_min_delta: 8.0
   command_card_recovery_threshold: 0.7
   after_skills_wait_seconds: 0.0
   after_skill_group_wait_seconds: 0.2
@@ -1587,6 +1584,10 @@ infinite_farm:
   # 体力不足时自动补充（全局体力补充已在 refill 段启用）
   refill_ap: true
 
+# 自由关卡识别开关；启用后由控制面板将 bundled 模板规则加入匹配器。
+free_quest:
+  enabled: false
+
 # 结算页掉落/羁绊停止（默认关闭）。templates 的值可写相对本配置文件的路径。
 drop_stop:
   enabled: false
@@ -1651,6 +1652,17 @@ rules:
   reset_battle: true
   reset_quest: true
   reason: 检测到战败/续关界面；首次免费撤退重打，后续仅使用 defeat_policy 明确授权的续关资源
+- name: defeat_or_revive_live
+  description: 现场变体的战败续关弹窗，包含“续关”标题、资源按钮和“撤退”按钮；仅用于识别并转交标准战败处理。
+  template: templates/defeat_or_revive_live.png
+  threshold: 0.78
+  match_mode: gray
+  search_roi: [180, 80, 1420, 620]
+  template_scales: [0.9, 0.95, 1.0, 1.05, 1.1]
+  action: defeat
+  reset_battle: true
+  reset_quest: true
+  reason: 检测到现场变体战败/续关界面；转交标准战败处理
 - name: special_formation
   template: templates/special_formation.png
   threshold: 0.88
@@ -1798,6 +1810,22 @@ rules:
   reset_battle: true
   reset_quest: true
 
+- name: free_quest
+  enabled: false
+  description: 主线记录中的自由关卡入口；点击绿色文字下方的箭头位置即可进入任意一个自由关卡。
+  template: templates/free_quest.png
+  threshold: 0.78
+  stable_frames: 1
+  match_mode: hsv_mask
+  hsv_lower: [35, 60, 45]
+  hsv_upper: [90, 255, 255]
+  search_roi: [760, 90, 1510, 900]
+  template_scales: [0.9, 0.95, 1.0, 1.05, 1.1]
+  action: tap_match
+  offset: [0, 55]
+  cooldown: 4
+  reset_battle: true
+  reset_quest: true
 - name: map_next
   description: 该控件包含“下一个”三个汉字，字体为黄色并带有黑色描边，下方配有一个指向下方的黄色V形箭头，整体位于蓝色背景之上。
   template: templates/map_next.png

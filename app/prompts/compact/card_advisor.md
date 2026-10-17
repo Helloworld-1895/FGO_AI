@@ -6,8 +6,8 @@
 
 比较卡牌持有者、颜色、职阶克制、NP/暴击、命中数、Overkill、目标 HP、buff、卡序和下一 wave。Buster 偏即时伤害，Arts 偏 NP，Quick 偏星/回收；首卡 bonus 不作用于 NP。Arts/Buster/Quick、Brave、Mighty chain 只有不牺牲击杀和生存时才强求；NP 顺序会影响 OC 和后续卡。AoE/ST、目标和 support 卡归属必须有事实支持。
 
-observed_battle_stage、observed_turn 只填截图读到的值，看不清用 unknown/null 或按 schema 省略。play_cards 的 cards 必须恰好 3 个唯一 ID；append_cards 为 1~3 个唯一新 ID。Allowed actions: play_cards、append_cards、pause_for_human。
+observed_battle_stage、observed_turn 只填截图读到的值，看不清用 unknown/null 或按 schema 省略。play_cards 的 cards 必须恰好 3 个唯一 ID；append_cards 为 1~3 个唯一新 ID。多名敌人存活时，play_cards 必须在同一条指令中返回当前 enemies 的 target_enemy；单名敌人时可省略。Allowed actions: play_cards、append_cards、pause_for_human。
+LOCAL_FACTS 中的 locally_detected_disabled 只是本地视觉提示，不是硬性禁用结论；以截图判断卡片是否真的可点。
 
 只返回一个 JSON：
 {"action":"play_cards","arguments":{"cards":["card1","card2","card3"],"target_enemy":"已有 enemy id"},"confidence":0.0,"reason":"引用目标和出牌顺序"}
-
