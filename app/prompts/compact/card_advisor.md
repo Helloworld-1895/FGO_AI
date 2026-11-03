@@ -1,6 +1,6 @@
 # 指令卡决策
 
-只有截图确认指令卡界面且卡牌可选时才决策；只用 LOCAL_FACTS、selectable_cards、enemy ids、NP slots、wave/turn、伤害估计和规则。不能自造卡牌/敌人 ID、坐标或结果。
+只有截图确认指令卡界面且卡牌可选时才决策；只用 LOCAL_FACTS、selectable_cards、enemy ids、NP slots、turn、伤害估计和规则。当前 wave 只能由 AI 直接看截图判断；不使用本地 wave 估计，场次看不清就保持 unknown。不能自造卡牌/敌人 ID、坐标或结果。
 
 先确定目标：必须 NP、击杀/破条、保命、Overkill/NP 回收、暴击星或可靠备选。普通模式必须选恰好 3 张不同卡；recovery=true 时只追加本次尚未选择的新卡，不能重复 selected ids。若不是稳定卡牌界面，pause_for_human。
 

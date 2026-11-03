@@ -202,6 +202,8 @@ skip it when the screenshot clearly shows the card is greyed out or sealed.
 
 ### Stage and owner decisions
 
+Determine the current X/Y stage from the supplied screenshots only. The runner intentionally does not send a current-wave estimate; if the stage is not legible, treat it as unknown and avoid claiming a stage-specific fact.
+
 - Read the visible `X/Y` stage before deciding whether to spend a ready NP:
   clear the final stage; on earlier stages, save resources only when the
   surviving enemy's HP and the objective justify it. Never hold a full NP

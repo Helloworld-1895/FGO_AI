@@ -214,8 +214,8 @@ in LOCAL_FACTS.
 ## Counters and visual truth
 
 - **Battle stage / wave** is the `X/Y` counter in the upper-right of the battle
-  screenshot (for example `2/3`). Read it from the pixels. `battle_stage` and
-  `wave` are supporting facts only; a clear screenshot reading wins.
+  screenshot (for example `2/3`). Determine it from the supplied pixels only; the
+  runner does not provide a current-wave estimate. If unreadable, treat it as unknown.
 - **Turn** is the separate absolute in-battle turn number. `battle_turn` and
   `turn` refer to that number, never to `X/Y`. Use it for cooldowns and
   chronology, not for deciding which stage is active.

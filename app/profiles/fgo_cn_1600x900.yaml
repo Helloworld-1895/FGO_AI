@@ -51,19 +51,23 @@ behavior:
   story_choice_min_center_gap: 80
   map_next_quest_tap_point: [1180, 230]
   map_next_tap_mode: offset
-  map_node_roi: [500, 180, 1500, 700]
+  # 地图节点识别范围：左到右覆盖地图节点区，y 上限 690 排除底部 HUD
+  # （周常任务/礼物/邮件红点角标，误识别为节点会误点）。
+  map_node_roi: [0, 120, 1180, 690]
   map_node_retry_attempts: 3
   map_node_retry_wait_seconds: 0.8
-  map_node_change_threshold: 4.0
+  # 点击确认阈值：真节点开卡动画会带来大指纹变化；7-8 以下多是地图
+  # 装饰/动画误动（10:13-10:16 GUI 日志：确认 7.9/6.6/7.0 后并未开卡）。
+  map_node_change_threshold: 8.0
   map_node_ocr_min_confidence: 0.62
   # 地图误入可选“自由关卡”详情时，关闭并继续寻找主线“下一个”；
   # 无限刷模式下该自动关闭逻辑会被忽略，自由关卡作为刷材料目标保留。
   auto_close_free_quest: true
   free_quest_header_roi:
-  - 770
-  - 135
-  - 1545
-  - 230
+  - 600
+  - 80
+  - 1590
+  - 780
   free_quest_header_hsv_lower:
   - 35
   - 60
@@ -77,11 +81,8 @@ behavior:
   free_quest_header_min_component_width_ratio: 0.90
   free_quest_header_dense_row_fill_ratio: 0.75
   free_quest_header_min_dense_row_ratio: 0.40
-  free_quest_body_roi:
-  - 950
-  - 215
-  - 1515
-  - 310
+  # Derived from the detected green row; cards may appear at different heights.
+  free_quest_body_roi: null
   free_quest_body_min_light_ratio: 0.30
   free_quest_close_roi:
   - 0
@@ -102,9 +103,9 @@ behavior:
   smart_wait_change_threshold: 4.0
   smart_wait_stable_frames: 1
   smart_wait_poll_schedule:
-  - 0.12
+  - 0.10
+  - 0.14
   - 0.18
-  - 0.25
   # 模板匹配并行线程数：cv2 的 matchTemplate/cvtColor 会释放 GIL，多线程可并行
   # 加速全规则扫描而不改变任何匹配结果。0 = 自动（min(12, CPU核数)）；1 = 纯串行。
   matching_workers: 0
@@ -607,16 +608,6 @@ battle:
   # StageTracker），ROI 变化即进入下一面；未配置(0,0,0,0)时回退
   # "回合数重置 + 敌方全满血"两个信号。需按 1600x900 校准后填写。
   stage_count_region:
-  - 0
-  - 0
-  - 0
-  - 0
-  # 场次 X/Y 的 OCR 读取区域（战斗 UI 右上角、回合数 battle_turn_region 上方，
-  # FGO 显示 "当前面/总面数"）。默认关闭(0,0,0,0)：模型提示词已要求从截图
-  # 直接读出场次，本地 wave_tracker 做无模型时的兜底；仅当需要"本地逻辑也能
-  # 精确判面"时才校准并填写（FGA MasterLocations.stageCountRegion 换算初值约
-  # 1040,10,1170,60，需实测）。
-  stage_ocr_region:
   - 0
   - 0
   - 0
@@ -1587,6 +1578,23 @@ infinite_farm:
 # 自由关卡识别开关；启用后由控制面板将 bundled 模板规则加入匹配器。
 free_quest:
   enabled: false
+  start_chapter: fuyuki
+  model_assist: false
+  explorer:
+    enabled: true
+    chapter_scroll_distance: 170
+    chapter_scroll_x: 1040
+    chapter_scroll_start_y: 760
+    card_list_swipe_distance: 170
+    map_swipe_distance: 260
+    view_stall_limit: 2
+    # Fallback only; runtime detection narrows this to the live green row.
+    card_roi: [650, 100, 1580, 700]
+    card_tap_point: [1120, 182]
+    reward_roi: null
+    reward_bright_ratio: 0.18
+    main_record_point: [300, 820]
+    back_to_chapters_point: [65, 45]
 
 # 结算页掉落/羁绊停止（默认关闭）。templates 的值可写相对本配置文件的路径。
 drop_stop:
@@ -2399,6 +2407,23 @@ rules:
   - 220
   action: tap_match
   detect_only: true
+  cooldown: 2
+  unknown_pause_seconds: 45
+- name: popup_close_top_right
+  description: 活动/公告弹窗右上角的白色粗体“X”关闭按钮（深色底、白叉，位置约屏幕右上的 940-990, 5-80，比 notice_close 更靠内）。自动点击关闭弹窗，避免反复进入 unknown/AI 流程。
+  template: templates/popup_close_top_right.png
+  threshold: 0.7
+  match_mode: gray
+  template_scales:
+  - 0.9
+  - 1.0
+  - 1.1
+  search_roi:
+  - 900
+  - 0
+  - 1000
+  - 100
+  action: tap_match
   cooldown: 2
   unknown_pause_seconds: 45
 - name: skill_target_support

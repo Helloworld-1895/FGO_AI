@@ -45,6 +45,8 @@ Also inspect `panel_state.visible_texts` and the screenshot for 御主技能封�
 
 根据截图与本地提供的战场事实，为本回合制定一份完整、按执行顺序排列的御主技能计划。只有在技能当前 ready、目标合法且确实有明确收益时才使用；不要因为按钮存在就释放。无法确定时返回 skip。
 
+当前场次只能由你直接查看本次战斗截图判断。运行器不会提供波次 OCR 或本地波次结论；场次看不清时按 unknown 处理，不得根据回合数或敌人血量历史猜测。
+
 `master_code` 和 `master_skill_catalog` 已经只包含 GUI 所选礼装、所选等级对应的 3 个技能资料。
 `ready` 根据上次成功释放回合与该等级冷却计算；`used` 只表示本场曾用过，
 冷却结束后可能同时 `used:true, ready:true`，此时可以再次使用。

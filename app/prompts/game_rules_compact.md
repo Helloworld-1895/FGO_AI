@@ -16,6 +16,7 @@
 - 不要根据头像、流行排名或记忆猜从者名、技能效果、等级、职阶、敌人特性、血量或 break 行为；必须有截图文字、LOCAL_FACTS 或本地候选。
 - Servant 技能和 Master/Mystic Code 技能是两个域：不能把 master_skill id 当 servant skill，也不能反向使用。技能目标必须来自当前合法目标列表。
 - 观察字段（如 observed_battle_stage、observed_turn）只填截图亲自读到的值；看不清用 unknown/null 或按任务省略，不能把 LOCAL_FACTS 复制成“观察值”。
+- 当前战斗场次只能由 AI 从当前截图判断；运行器不提供波次 OCR 或本地波次结论。场次不可读时保持 unknown，不得从回合数或敌人血量变化推断成确定场次。
 
 ## 战斗与技能
 

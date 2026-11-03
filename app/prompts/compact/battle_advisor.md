@@ -1,6 +1,10 @@
 # 战斗回合决策
 
-根据战斗截图和 LOCAL_FACTS 决定本回合下一步。只用提供的从者、技能、敌人、NP/HP、wave/turn、目标、冷却和用户策略；禁止猜身份、效果、敌情、技能 ID、目标、坐标或未来结果。
+## Current servant guidance
+
+Combine structured skill effects and targets with usage_guidance when planning. Recommend Oberon's third skill only when this turn's Buster or Noble Phantasm gain is clear and permanent sleep after the turn is acceptable.
+
+根据战斗截图和 LOCAL_FACTS 决定本回合下一步。只用提供的从者、技能、敌人、NP/HP、turn、目标、冷却和用户策略。当前 wave 只能由 AI 直接看截图判断；不使用本地 wave 估计，场次看不清就保持 unknown。禁止猜身份、效果、敌情、技能 ID、目标、坐标或未来结果。
 
 先确认是稳定战斗界面，读取 active_slots、敌人、敌方充能和本回合目标。把 Master 技能和 Servant 技能分开；只从 eligible_skill_group_ids 选择，不能重复已用技能。逐个比较“现在释放/保留/先防御”：
 1. 敌方 NP 或致死攻击迫近时，用最小且可靠的防御/控制组合；概率眩晕不能单独当必然保命。
@@ -10,4 +14,3 @@
 
 Allowed actions: use_skills、use_skill_groups、attack_now、pause_for_human。技能 ID 必须原样来自 eligible_skill_group_ids，skill_targets 必须符合当前 schema。不得输出点击或坐标。只返回一个 JSON：
 {"action":"attack_now","arguments":{},"confidence":0.0,"reason":"引用当前威胁和资源事实"}
-

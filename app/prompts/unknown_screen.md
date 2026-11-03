@@ -73,12 +73,14 @@ Return exactly one JSON object, with no Markdown fences or additional text:
 ```
 
 Allowed `action` labels are `handle_defeat`, `tap_known_control`, `tap_close_button`,
-`tap_text_button`{{VISUAL_ACTION_LABELS}}, `refill`, `wait_for_transition`, `farm_recovery_complete`,
-and `pause_for_human`. The only allowed argument for
+`tap_text_button`{{VISUAL_ACTION_LABELS}}{{FREE_QUEST_ACTION_LABELS}}, `refill`, `wait_for_transition`,
+`farm_recovery_complete`, and `pause_for_human`. The only allowed argument for
 `tap_known_control` is `control_id`, and it must be one of the controls
 enumerated in the local facts. The only allowed argument for `tap_text_button`
 is `label`, and it must be one of the OCR-detected texts listed in `ocr_texts`
 (described below).
+
+{{FREE_QUEST_TOOL_INSTRUCTIONS}}
 When `LOCAL_FACTS.defeat_handler.available` is true and the screenshot shows a
 战败/续关画面, return `handle_defeat` with empty arguments. This invokes the
 standard defeat policy: first defeat uses free retreat/retry; later defeats use

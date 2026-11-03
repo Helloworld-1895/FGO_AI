@@ -18350,7 +18350,7 @@
               "duration": "1回合"
             },
             {
-              "tag": "np_damage_up",
+              "tag": "np_damage_up_boost",
               "value": "100%",
               "target": "己方单体",
               "duration": "1回合"
@@ -18359,24 +18359,25 @@
               "tag": "remove_buff",
               "value": "100%",
               "target": "己方单体",
-              "duration": "1次"
+              "duration": "回合结束"
             },
             {
-              "tag": "other",
+              "tag": "permanent_sleep",
               "value": "永久睡眠",
               "target": "己方单体",
-              "duration": "1次"
+              "duration": "永久"
             },
             {
               "tag": "taunt",
               "value": "300%",
-              "target": "敌方全体",
+              "target": "己方单体",
               "duration": "3回合"
             }
           ],
           "target": "己方单体",
           "duration": "1回合",
-          "cooldown": "10"
+          "cooldown": "10",
+          "usage_guidance": "仅当目标能在本回合利用 Buster 或宝具增益并产生明确收益，且回合结束后的永久睡眠代价可以接受时才建议使用；目标可以是奥伯龙本人，应按其本回合是否能出手和是否能接受永久睡眠判断。"
         }
       ],
       "noble_phantasm": {
