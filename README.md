@@ -18,7 +18,7 @@ Windows x64 上运行的《命运-冠位指定》MuMu/ADB 屏幕自动化工具�
 - 可选的 OpenAI-compatible 接口或 Ollama 模型顾问
 - CPU 默认运行；CUDA 包支持 OpenCV CUDA/混合匹配，源码另有可选语义检测接口
 
-项目不包含游戏客户端、账号数据、云端 API key、第三方模型权重，也不提供绕过服务限制或修改游戏数据的功能。
+项目不包含游戏客户端、账号数据、云端 API key 或可选视觉模型权重。发布包内含 OCR 运行必需的三份 PaddleOCR ONNX 模型；其来源和许可见 [第三方组件说明](THIRD_PARTY_NOTICES.md)。
 
 ## 下载
 

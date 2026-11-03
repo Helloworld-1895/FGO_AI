@@ -11,8 +11,9 @@
 | PyYAML | 配置解析 | MIT |
 | Pillow | 图像处理与界面资源 | HPND/MIT，随包声明 |
 | RapidOCR / ONNX Runtime | OCR 与推理 | 各自许可证，随包声明 |
+| PaddleOCR PP-OCRv4 检测/识别与方向分类 ONNX 模型 | 内置 CPU OCR | Apache-2.0；模型源自 [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR)，随包置于 app/rapidocr_onnxruntime/ |
 | Shapely / pyclipper | 几何处理 | 各自许可证 |
 | HTTPX 及传递依赖 | 可选网络接口 | 各自许可证 |
 
-完整声明位于发布包 app/licenses/ 和仓库 third_party_licenses/。CUDA 版本另外包含 NVIDIA NPP、cuBLAS、cuFFT 与 cuDNN 运行库组件，适用 NVIDIA 许可证，不适用本项目 MIT 许可证；相应许可文本放在 CUDA 包的 app/licenses/。CPU 包不包含这些 NVIDIA DLL。两个包均不包含 Torch、TorchVision、Triton、SAM runtime 或其模型权重。
+完整声明位于发布包 app/licenses/ 和仓库 third_party_licenses/。发布包仅内置上述 OCR ONNX 模型；不包含 Torch、TorchVision、Triton、SAM runtime、SAM/YOLOX 等可选模型权重。CUDA 版本另外包含 NVIDIA NPP、cuBLAS、cuFFT 与 cuDNN 运行库组件，适用 NVIDIA 许可证，不适用本项目 MIT 许可证；相应许可文本放在 CUDA 包的 app/licenses/。CPU 包不包含这些 NVIDIA DLL。
 
