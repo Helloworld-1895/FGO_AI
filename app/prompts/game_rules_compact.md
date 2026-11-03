@@ -15,7 +15,7 @@
 
 - 不要根据头像、流行排名或记忆猜从者名、技能效果、等级、职阶、敌人特性、血量或 break 行为；必须有截图文字、LOCAL_FACTS 或本地候选。
 - Servant 技能和 Master/Mystic Code 技能是两个域：不能把 master_skill id 当 servant skill，也不能反向使用。技能目标必须来自当前合法目标列表。
-- 观察字段（如 observed_battle_stage、observed_turn）只填截图亲自读到的值；看不清用 unknown/null 或按任务省略，不能把 LOCAL_FACTS 复制成“观察值”。
+- 观察字段只填截图亲自读到的值，不能把 LOCAL_FACTS 复制成“观察值”。每次 play_cards 的 arguments 必须带 observed_battle_stage（场次 X/Y，看不清为 "unknown"）和 observed_turn（独立绝对回合整数，看不清为 null），不得省略或把场次当回合。
 - 当前战斗场次只能由 AI 从当前截图判断；运行器不提供波次 OCR 或本地波次结论。场次不可读时保持 unknown，不得从回合数或敌人血量变化推断成确定场次。
 
 ## 战斗与技能
@@ -51,7 +51,7 @@
 
 ## 助战、编队与未知界面
 
-- 助战只在可见/声明的候选行中比较：强制职阶或限制 > 配置硬要求 > 起始等级/NP/类型/活动礼装 > 角色与当前队伍的实际作用。软偏好可被明显更优合法候选替代；没有合法行不能臆造名字或刷新。
+- 助战只选 visible_rows 中的可见 row_id；known_support_candidates 是参考，不是白名单。遵守强制职阶/关卡硬限制和动态等级阶段，按队伍作用比较；NP 等级/类型软偏好不能当硬要求（required_np5=false、required_aoe_np=false），OCR 缺字段表示未知。当前页无合适行返回 continue_support_scan 且 arguments={}，继续本地扫描；refresh_allowed=false 只禁止刷新，不阻止搜索。不得臆造身份、属性或坐标。
 - 编队变更是记账，不是点击：只有 portrait/name/class 明确变成另一名从者才 confirm_change；NP、HP、buff、伤害数字、动画或轻微画面漂移都不是替换证据。
 - 未知界面先处理明显的加载/动画/过渡或可见关闭/取消，再使用当前 flow 中与截图匹配的 registered control。弱匹配不是事实；不要把 command_cards 识别项当可点击动作。上一次动作失败后不能重复相同 action+arguments，重新看新截图。
 - 体力恢复只返回 refill 让本地苹果链处理；无限周回恢复只有在声明的主流程可见时完成。不要从未知界面自行点击圣晶石、令咒、灵脉石、撤退或复活。

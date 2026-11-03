@@ -1,12 +1,12 @@
 # GPU 配置（高级、自行维护）
 
-`FGO_AI-v1.1.0-Windows-CPU.zip` 使用 CPU OpenCV。即使电脑装有 NVIDIA 显卡、驱动和 CUDA Toolkit，这个 CPU 编译包也不会自动获得 CUDA 模板匹配能力；在 GUI 选择 GPU 时会回退 CPU。
+`FGO_AI-v1.1.1-Windows-CPU.zip` 使用 CPU OpenCV。即使电脑装有 NVIDIA 显卡、驱动和 CUDA Toolkit，这个 CPU 编译包也不会自动获得 CUDA 模板匹配能力；在 GUI 选择 GPU 时会回退 CPU。
 
-v1.1.0 同时提供 **`FGO_AI-v1.1.0-Windows-CUDA.zip`**，使用带 CUDA 的 OpenCV，随包提供模板匹配所需的 CUDA/cuDNN DLL。用户不需要安装 Python、Conda 或 CUDA Toolkit，仍需兼容的 NVIDIA GPU 和驱动。不能仅凭“有 NVIDIA 显卡”保证所有机器可用。
+v1.1.1 同时提供 **`FGO_AI-v1.1.1-Windows-CUDA.zip`**，使用带 CUDA 的 OpenCV，随包提供模板匹配所需的 CUDA/cuDNN DLL。用户不需要安装 Python、Conda 或 CUDA Toolkit，仍需兼容的 NVIDIA GPU 和驱动。不能仅凭“有 NVIDIA 显卡”保证所有机器可用。
 
 本页先解释编译包边界，再给出源码 GPU 环境的高级配置。CPU ZIP 不读取外部 Conda 环境，不会自动安装驱动。
 
-## v1.1.0 CUDA 包使用方法
+## v1.1.1 CUDA 包使用方法
 
 1. 下载 CUDA ZIP 和同名 `.sha256`，校验后解压到独立目录，勿覆盖 CPU 包或旧版目录。
 2. 使用 NVIDIA 官方驱动，建议 Windows 驱动版本不低于 `570.65`，更新后再自检。此包 OpenCV 4.11 构建信息为 CUDA 12.8，携带的是已经实际匹配验证的 CUDA 12.6 系列数学运行库；不需要用户另装 Toolkit。低于建议版本的兼容模式不作为本发布包承诺。
@@ -40,7 +40,7 @@ CUDA 模板匹配加速的是本地图像匹配，**不会让云端模型调用�
 4. 带 CUDA 编译的 OpenCV。PyPI 的 opencv-python 通常不带 CUDA，必须使用自己编译或可信的 CUDA 构建，不能与另一份 OpenCV 混装。
 5. 可选 EfficientSAM3-LiteText runtime、checkpoint，或已有的 YOLOX ONNX 模型。模型按上游许可证下载，不要提交到 GitHub。
 
-以下配置应在源码仓库目录中完成；v1.1.0 Windows CPU ZIP 只负责 CPU 编译包，不能用安装 Conda 的方式替换其内部 OpenCV。源码目录建议如下：
+以下配置应在源码仓库目录中完成；v1.1.1 Windows CPU ZIP 只负责 CPU 编译包，不能用安装 Conda 的方式替换其内部 OpenCV。源码目录建议如下：
 
     FGO_Auto_Optimized_improved - Copy/
       models/

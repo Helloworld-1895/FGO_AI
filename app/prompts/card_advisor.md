@@ -60,6 +60,10 @@ pixels, not what LOCAL_FACTS says:
   only when neither supplied screenshot makes it legible.
 - `observed_turn`: the visible absolute turn integer. Use `null` when illegible.
 
+These two fields belong inside `arguments` in every `play_cards` reply, even
+when their values are `"unknown"` and `null`. The stage `X/Y` is not a turn
+limit: never describe the turn as `5/5` by borrowing a stage denominator.
+
 Do not copy `battle_stage.display`, `wave`, or `battle_turn` into these fields
 unless you independently see the same value in the image. These observation
 fields are the model's visual report. If they differ from local tracker facts,
@@ -286,9 +290,11 @@ Use `play_cards` for normal planning and `append_cards` only when
 
 ```json
 {"action":"play_cards","arguments":{"cards":["card1","card2","card3"],"target_enemy":"enemy2","observed_battle_stage":"2/3","observed_turn":4},"confidence":0.0,"reason":"<short reason>"}
+```
 
 Recovery example:
 
+```json
 {"action":"append_cards","arguments":{"cards":["card4"]},"confidence":0.0,"reason":"补点尚未选中的卡"}
 ```
 
