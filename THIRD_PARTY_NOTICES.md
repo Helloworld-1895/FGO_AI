@@ -14,5 +14,5 @@
 | Shapely / pyclipper | 几何处理 | 各自许可证 |
 | HTTPX 及传递依赖 | 可选网络接口 | 各自许可证 |
 
-完整声明位于发布包 app/licenses/ 和仓库 third_party_licenses/。GPU 环境中的 Torch、TorchVision、CUDA、Triton、SAM runtime 及模型权重不包含在 CPU 发布包内，使用者必须分别阅读并接受其许可证。
+完整声明位于发布包 app/licenses/ 和仓库 third_party_licenses/。CUDA 版本另外包含 NVIDIA NPP、cuBLAS、cuFFT 与 cuDNN 运行库组件，适用 NVIDIA 许可证，不适用本项目 MIT 许可证；相应许可文本放在 CUDA 包的 app/licenses/。CPU 包不包含这些 NVIDIA DLL。两个包均不包含 Torch、TorchVision、Triton、SAM runtime 或其模型权重。
 

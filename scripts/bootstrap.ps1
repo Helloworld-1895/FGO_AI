@@ -50,7 +50,7 @@ function Invoke-App {
     } else {
         $process = Start-Process -FilePath $EntryPoint -WorkingDirectory $AppRoot -PassThru
     }
-    if ($Arguments -contains '--self-test') {
+    if (($Arguments -contains '--self-test') -or ($Arguments -contains '--self-test-cuda')) {
         $process.WaitForExit()
         return $process.ExitCode
     }
@@ -63,6 +63,18 @@ function Get-Manifest {
         Invoke-WebRequest -UseBasicParsing -Uri $ManifestUrl -OutFile $ManifestPath -TimeoutSec 30
     }
     $manifest = Get-Content -LiteralPath $ManifestPath -Raw -Encoding UTF8 | ConvertFrom-Json
+    if (-not $manifest.archive_sha256 -and $manifest.version) {
+        $localVersion = [string]$manifest.version
+        if ($localVersion -notmatch '^\d+\.\d+\.\d+$') { throw 'Invalid local release version' }
+        $pinnedManifestUrl = $ManifestUrl.Replace('/main/', ('/v' + $localVersion + '/'))
+        if ($manifest.variant -eq 'CUDA') { $pinnedManifestUrl = $pinnedManifestUrl.Replace('release-manifest.json', 'release-manifest-cuda.json') }
+        Write-SetupLog ('正在获取同版本修复清单：v' + $localVersion)
+        $response = Invoke-WebRequest -UseBasicParsing -Uri $pinnedManifestUrl -TimeoutSec 30
+        $pinnedManifest = $response.Content | ConvertFrom-Json
+        if ([string]$pinnedManifest.version -ne $localVersion) { throw 'Repair manifest version mismatch' }
+        if ($manifest.variant -and ([string]$pinnedManifest.variant -ne [string]$manifest.variant)) { throw 'Repair manifest variant mismatch' }
+        $manifest = $pinnedManifest
+    }
     foreach ($name in @('version', 'archive_url', 'archive_sha256')) {
         if (-not $manifest.$name) { throw "发布清单缺少字段：$name" }
     }
@@ -71,6 +83,7 @@ function Get-Manifest {
         throw '发布清单下载地址不是受支持的 HTTPS GitHub 地址'
     }
     if ($manifest.archive_sha256 -notmatch '^[0-9a-fA-F]{64}$') { throw '发布清单中的 SHA-256 无效' }
+    $manifest | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $ManifestPath -Encoding UTF8
     return $manifest
 }
 
@@ -93,6 +106,8 @@ function Repair-App {
         $stagedApp = $candidate.Directory.FullName
         $stagedProfile = Join-Path $stagedApp 'profiles\fgo_cn_1600x900.yaml'
         if (-not (Test-Path -LiteralPath $stagedProfile -PathType Leaf)) { throw '修复包缺少默认配置' }
+        $userProfile = Join-Path $AppRoot 'profiles\user.yaml'
+        if (Test-Path -LiteralPath $userProfile -PathType Leaf) { Copy-Item -LiteralPath $userProfile -Destination (Join-Path $stagedApp 'profiles\user.yaml') -Force }
         $backup = $null
         if (Test-Path -LiteralPath $AppRoot) {
             $backup = Join-Path $ProjectRoot ('.app-backup-' + [guid]::NewGuid().ToString('N'))
