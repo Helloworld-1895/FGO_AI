@@ -5,6 +5,9 @@ logs/
 runs/
 state/
 profiles/user.yaml
+app/profiles/user.yaml
+.app-backup-*/
+.repair/
 secrets/
 models/
 runtime/

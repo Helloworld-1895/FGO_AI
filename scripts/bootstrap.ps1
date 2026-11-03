@@ -45,14 +45,17 @@ function Test-LocalApp {
 
 function Invoke-App {
     param([string[]]$Arguments)
+    if (($Arguments -contains '--self-test') -or ($Arguments -contains '--self-test-cuda')) {
+        Push-Location -LiteralPath $AppRoot
+        try {
+            & $EntryPoint @Arguments | Out-Host
+            return $LASTEXITCODE
+        } finally { Pop-Location }
+    }
     if ($Arguments) {
         $process = Start-Process -FilePath $EntryPoint -ArgumentList $Arguments -WorkingDirectory $AppRoot -PassThru
     } else {
         $process = Start-Process -FilePath $EntryPoint -WorkingDirectory $AppRoot -PassThru
-    }
-    if (($Arguments -contains '--self-test') -or ($Arguments -contains '--self-test-cuda')) {
-        $process.WaitForExit()
-        return $process.ExitCode
     }
     return 0
 }
@@ -108,6 +111,8 @@ function Repair-App {
         if (-not (Test-Path -LiteralPath $stagedProfile -PathType Leaf)) { throw '修复包缺少默认配置' }
         $userProfile = Join-Path $AppRoot 'profiles\user.yaml'
         if (Test-Path -LiteralPath $userProfile -PathType Leaf) { Copy-Item -LiteralPath $userProfile -Destination (Join-Path $stagedApp 'profiles\user.yaml') -Force }
+        $userSecrets = Join-Path $AppRoot 'secrets'
+        if (Test-Path -LiteralPath $userSecrets -PathType Container) { Copy-Item -LiteralPath $userSecrets -Destination $stagedApp -Recurse -Force }
         $backup = $null
         if (Test-Path -LiteralPath $AppRoot) {
             $backup = Join-Path $ProjectRoot ('.app-backup-' + [guid]::NewGuid().ToString('N'))
@@ -120,7 +125,7 @@ function Repair-App {
             if ($backup -and (Test-Path -LiteralPath $backup)) { Move-Item -LiteralPath $backup -Destination $AppRoot }
             throw
         }
-        if ($backup -and (Test-Path -LiteralPath $backup)) { Remove-Item -LiteralPath $backup -Recurse -Force }
+        if ($backup -and (Test-Path -LiteralPath $backup)) { Write-SetupLog ('已保留旧 app 备份（含自定义模板等本地数据），确认迁移后可手动清理：' + $backup) }
         Write-SetupLog '修复包安装完成'
     }
     finally {

@@ -36,7 +36,7 @@ CUDA 模板匹配加速的是本地图像匹配，**不会让云端模型调用�
 
 1. NVIDIA 官方 Windows 驱动，并确认 nvidia-smi 能显示显卡。
 2. Miniconda/Anaconda，用于创建独立 GPU 环境。
-3. 与驱动匹配的 PyTorch CUDA wheel（从 PyTorch 安装选择器复制命令）。
+3. 可选：与驱动匹配的 PyTorch CUDA wheel，仅在使用 Torch 批量匹配或 SAM 等可选模型时需要；OpenCV CUDA 模板匹配本身不要求 PyTorch。
 4. 带 CUDA 编译的 OpenCV。PyPI 的 opencv-python 通常不带 CUDA，必须使用自己编译或可信的 CUDA 构建，不能与另一份 OpenCV 混装。
 5. 可选 EfficientSAM3-LiteText runtime、checkpoint，或已有的 YOLOX ONNX 模型。模型按上游许可证下载，不要提交到 GitHub。
 
@@ -55,7 +55,7 @@ CUDA 模板匹配加速的是本地图像匹配，**不会让云端模型调用�
     conda create -n fgo-gpu python=3.12 -y
     conda activate fgo-gpu
     python -m pip install --upgrade pip
-    # 按 pytorch.org 选择器选择命令；下面仅为 CUDA 12.4 示例：
+    # 仅在需要 Torch/SAM 时执行；按 pytorch.org 选择器选择命令，下面是 CUDA 12.4 示例：
     python -m pip install torch torchvision --index-url https://download.pytorch.org/whl/cu124
     python -m pip install -r requirements.txt
 
@@ -65,7 +65,7 @@ CUDA 模板匹配加速的是本地图像匹配，**不会让云端模型调用�
 
     conda activate fgo-gpu
     nvidia-smi
-    python -c "import sys,cv2,torch,numpy,yaml; print(sys.version); print('cv2',cv2.__version__); print('cuda devices',cv2.cuda.getCudaEnabledDeviceCount()); print('torch',torch.__version__,torch.version.cuda,torch.cuda.is_available()); print('opencv cuda', 'NVIDIA CUDA' in cv2.getBuildInformation()); cv2.cuda.createTemplateMatching(cv2.CV_8U, cv2.TM_CCOEFF_NORMED); print('CUDA_API_OK')"
+    python -c "import sys,cv2,numpy,yaml; print(sys.version); print('cv2',cv2.__version__); print('cuda devices',cv2.cuda.getCudaEnabledDeviceCount()); cv2.cuda.createTemplateMatching(cv2.CV_8U, cv2.TM_CCOEFF_NORMED); print('CUDA_API_OK')"
     python scripts/probe_cv2_cuda_streams.py
 
 必须同时满足：nvidia-smi 能看到显卡、OpenCV CUDA 设备数大于 0、CUDA 模板匹配接口可调用；只有使用 SAM3 时才额外要求 torch.cuda.is_available() 为 True。任一项失败都先使用 CPU。
@@ -122,7 +122,7 @@ CPU 运行时把 provider 改为 cpu、precision 改为 fp32。YOLOX 兼容接�
     powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\bootstrap.ps1 -GpuCondaEnv fgo-gpu -CheckOnly
     powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\bootstrap.ps1 -GpuCondaEnv fgo-gpu
 
-也可以双击源码目录的 启动控制面板-GPU.bat。公开 ZIP 中的 启动FGO_AI.bat 只启动 CPU 编译包，不读取外部 Conda 环境。GPU 出错时恢复：
+也可以双击源码目录的 启动控制面板-GPU.bat。公开 ZIP 中的 启动FGO_AI.bat 只启动同一包内的 app，不读取外部 Conda 环境；CPU 包和 CUDA 包由下载的 ZIP 决定。GPU 出错时恢复：
 
     behavior:
       matching_mode: cpu
