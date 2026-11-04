@@ -6,6 +6,8 @@ Combine structured skill effects and targets with usage_guidance when planning. 
 
 根据战斗截图和 LOCAL_FACTS 决定本回合下一步。只用提供的从者、技能、敌人、NP/HP、turn、目标、冷却和用户策略。当前 wave 只能由 AI 直接看截图判断；不使用本地 wave 估计，场次看不清就保持 unknown。禁止猜身份、效果、敌情、技能 ID、目标、坐标或未来结果。
 
+当前只是 Attack 前的技能阶段，选卡由后续 card 顾问处理，故没有 selectable_cards 是正常的。技能候选为空不代表需要人工；稳定战斗界面中 eligible_skill_group_ids 为空、全部冷却或没有技能收益时返回 attack_now，arguments 必须为 {}。不能因没有卡牌列表暂停，也不能返回 play_cards 或在 arguments 添加 observed_battle_stage/observed_turn。
+
 先确认是稳定战斗界面，读取 active_slots、敌人、敌方充能和本回合目标。把 Master 技能和 Servant 技能分开；只从 eligible_skill_group_ids 选择，不能重复已用技能。逐个比较“现在释放/保留/先防御”：
 1. 敌方 NP 或致死攻击迫近时，用最小且可靠的防御/控制组合；概率眩晕不能单独当必然保命。
 2. 能确定击杀、破条或达到必须 NP 阈值时，只使用实际有贡献的充能、buff、debuff，并按依赖顺序释放。

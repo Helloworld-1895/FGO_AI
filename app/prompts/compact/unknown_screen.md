@@ -2,6 +2,8 @@
 
 普通模板未达到阈值。根据截图、OCR、当前 flow 和 LOCAL_FACTS 中已定位的控件选择一个恢复动作；禁止猜控件、坐标、OCR 文本或界面状态。
 
+必须重新看截图，不能照抄末尾 pause_for_human 示例。宝具卡名称不是宝具动画；五张普通卡、暴击率和右下角“返回”仍可见时属于选卡页，不能仅凭上方宝具名字断言宝具正在播放。command_cards 只用于识别，不能当作 Attack 点击。
+
 顺序：
 1. defeat/continue 已明确且 defeat_handler.available=true 时只返回 handle_defeat，不在这里猜复活/资源按钮。
 2. 明确是 loading、动画或 transition 时返回 wait_for_transition，并使用 state=loading/animation/transition。

@@ -6,8 +6,17 @@ Called on the command-card screen, after the skill phase: the screenshot should
 show the five face command cards and any ready Noble Phantasms as selectable.
 Plan cards only when this is genuinely the command-card screen; if the
 screenshot shows no selectable cards (no command-card row, no Attack entry), do
-not invent a card plan — prefer `pause_for_human` over guessing card choices
-into a non-battle screen.
+not invent a card plan. For an actual loading, attack/NP animation, or scene
+transition, return `wait_for_transition` with `state` set to `loading`,
+`animation`, or `transition`. Reserve `pause_for_human` for a genuine unsafe
+or blocked state that cannot be resolved by observing a fresh frame.
+
+宝具卡名称不是宝具动画。 Printed NP names such as “虚缈的夏日啊” or
+“白鹭城百鬼八天堂大人” appear on selectable NP cards. If the bottom row
+contains five face cards, their Buster/Arts/Quick colors and critical percentages,
+and the bottom-right return button, that is a command-card selection page.
+Plan cards from that page; do not declare an NP animation just because NP names
+are visible above the five-card row. LOCAL_FACTS alone do not prove the page.
 
 On a normal command-card screen, plan exactly three cards and return their IDs
 in play order. During a recovery consultation, LOCAL_FACTS contains
@@ -230,7 +239,10 @@ the first is `command_card_screen_after_attack` (the command-card screen after
 Attack was pressed, with cards to select); the second is
 `battle_screen_before_attack` (the battle screen captured before Attack was
 pressed, where the whole enemy row is visible). These labels are also present
-in LOCAL_FACTS. Use the second image
+in LOCAL_FACTS and immediately before each image. The first image is the
+current decision frame; the second is REFERENCE ONLY, not the current screen.
+Do not request a pause because the second image shows Attack instead of cards.
+Resumed card-page consultations have only the first image. Use the second image
 to read enemy HP bars, which Servant each enemy faces, and which enemies are
 about to act — the live card page can crop or obscure part of that information.
 `enemy_health` and `enemies` are measured from the card screen and may lag the
@@ -298,8 +310,11 @@ Recovery example:
 {"action":"append_cards","arguments":{"cards":["card4"]},"confidence":0.0,"reason":"补点尚未选中的卡"}
 ```
 
-Allowed `action` labels are `play_cards`, `append_cards`, and
+Allowed `action` labels are `play_cards`, `append_cards`, `wait_for_transition`, and
 `pause_for_human`. `play_cards` requires exactly three unique IDs.
+`wait_for_transition` requires exactly `arguments: {"state":"animation"}`
+(or `loading` / `transition`), with no cards or coordinates. It waits without
+clicking and lets the runner inspect a fresh frame. It is not a human pause.
 `append_cards` requires one to three unique IDs and is valid only when
 `card_recovery` is true. Every card ID must be unique, present in the local
 facts, and selectable; an NP ID must also

@@ -14,6 +14,13 @@ still rechecks the live OCR before every ordinary text-button tap.
 
 ## Breaking a repeated instruction loop
 
+Re-inspect the screenshot rather than copying a generic pause example.
+宝具卡名称不是宝具动画。 A five-card row with critical percentages and a
+bottom-right return button is a command-card page even when the selectable NP
+cards display NP names. Names alone do not prove an animation. Inspect the
+listed recovery controls and actual blocking evidence; `command_cards` is
+recognition-only and must never be tapped as if it were Attack.
+
 When LOCAL_FACTS.loop_break_request is true, the instruction in
 LOCAL_FACTS.stuck_instruction has already been issued repeatedly against an
 effectively unchanged screenshot. Re-read the current screenshot and choose a

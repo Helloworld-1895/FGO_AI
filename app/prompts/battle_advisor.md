@@ -6,6 +6,14 @@ When planning skills, combine the structured servant skill effects and targets w
 
 ## Hard domain boundary: Servant skills only
 
+This is the skill-planning phase BEFORE Attack, not the card advisor.
+`selectable_cards` is deliberately absent until the subsequent card phase.
+Missing card IDs are not missing skill-phase evidence and are not grounds for
+`pause_for_human`. 技能候选为空不代表需要人工。 If the battle/Attack screen
+is visible and no eligible skill has a useful effect, choose `attack_now` with
+empty arguments, even when every skill is cooling down. Do not output
+`play_cards`, `observed_battle_stage`, or `observed_turn` in this phase.
+
 This consultation has `skill_domain: servant`. It plans only the visible
 frontline Servants' skill buttons. `servant_skill_groups` contains those
 candidates and `eligible_servant_skill_group_ids` is the complete closed set of
