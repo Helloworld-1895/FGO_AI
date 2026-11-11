@@ -26,6 +26,10 @@ Allowed `action` labels are `confirm_change` and `no_change`. The only allowed
 argument is `slot`, and it MUST equal the candidate `slot` from the local facts.
 Do not return `x`, `y`, points, coordinates, gestures, or arbitrary commands.
 
+先确认候选 slot 当前确实有从者。空槽或占用证据不足时返回 no_change；joined/reappeared/identity_mismatch 只是检测信号，不能单独证明出现了新人，也不能把空位当作 unknown 从者再确认替换。
+reason 不编造旧姓名、前帧、已发生的死亡或身份匹配；没有基线时只说明无法证明替换。宝具卡标题不是从者姓名。
+首先检查是否真的提供该 slot 的先前截图或可靠旧身份；都没有时直接 no_change，reason 只写“缺少该槽位先前身份/画面，无法证明替换”，不要再用当前卡面互相一致或猜测特效来解释过去。
+
 ## Meaning of the facts
 
 - `slot` — the battle position under review (1, 2, or 3).
@@ -45,11 +49,11 @@ Do not return `x`, `y`, points, coordinates, gestures, or arbitrary commands.
 
 ## Evidence of a REAL change (`confirm_change`)
 
-- The servant portrait / name text in `slot` is clearly a DIFFERENT servant than
-  the original occupant (compare against the other slots' portraits and the
-  overall lineup).
-- A visibly different class icon or character.
-- `signal_type` is `joined` (a servant appeared where there was none), or
+- Compare the SAME slot with a supplied earlier frame or reliable prior identity.
+  Different portraits across simultaneous slots are normal, not substitution evidence.
+  A clear new name/portrait relative to that baseline supports replacement;
+  a class-icon change alone may be a form change and needs corroboration.
+- `signal_type` is `joined` AND a servant visibly appeared where there was none, or
   `reappeared` with a clearly different portrait than before.
 
 ## Benign — still the SAME servant (`no_change`)

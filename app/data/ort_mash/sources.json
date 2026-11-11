@@ -1,0 +1,759 @@
+{
+  "servant_id": 800100,
+  "retrieved_at": "2026-11-07T16:31:52.760059+00:00",
+  "source": "Atlas Academy API and extracted FGO game assets",
+  "copyright": "Fate/Grand Order game artwork belongs to its respective rights holders.",
+  "scope": "All ascension and costume faces, narrow portraits and card art indexed for CN/JP; excludes story sprites.",
+  "assets": [
+    {
+      "region": "CN",
+      "kind": "faces",
+      "group": "ascension",
+      "variant": "1",
+      "url": "https://static.atlasacademy.io/CN/Faces/f_8001000.png",
+      "api": "https://api.atlasacademy.io/nice/CN/servant/800100",
+      "sha256": "1b9bf5aa5d262a75975351cf42ba9d8d43fad3560021c34e4d65d45f12606baf",
+      "file": "1b9bf5aa5d262a75975351cf42ba9d8d43fad3560021c34e4d65d45f12606baf.png"
+    },
+    {
+      "region": "CN",
+      "kind": "faces",
+      "group": "ascension",
+      "variant": "2",
+      "url": "https://static.atlasacademy.io/CN/Faces/f_8001001.png",
+      "api": "https://api.atlasacademy.io/nice/CN/servant/800100",
+      "sha256": "4ef08e1b4011ee97111a17e7daca122a05bd5c0283a3da2d3fb5e637b96ec870",
+      "file": "4ef08e1b4011ee97111a17e7daca122a05bd5c0283a3da2d3fb5e637b96ec870.png"
+    },
+    {
+      "region": "CN",
+      "kind": "faces",
+      "group": "ascension",
+      "variant": "3",
+      "url": "https://static.atlasacademy.io/CN/Faces/f_8001002.png",
+      "api": "https://api.atlasacademy.io/nice/CN/servant/800100",
+      "sha256": "a1fb1b4158ca05add71b51d890bc5600778e04e0bda4fec7ac02c79c92aef924",
+      "file": "a1fb1b4158ca05add71b51d890bc5600778e04e0bda4fec7ac02c79c92aef924.png"
+    },
+    {
+      "region": "CN",
+      "kind": "faces",
+      "group": "ascension",
+      "variant": "4",
+      "url": "https://static.atlasacademy.io/CN/Faces/f_8001003.png",
+      "api": "https://api.atlasacademy.io/nice/CN/servant/800100",
+      "sha256": "c37d88b2755db619bf82bb1869e644322dc9f1ac0311aa8af321844ca7d188f7",
+      "file": "c37d88b2755db619bf82bb1869e644322dc9f1ac0311aa8af321844ca7d188f7.png"
+    },
+    {
+      "region": "CN",
+      "kind": "faces",
+      "group": "costume",
+      "variant": "800130",
+      "url": "https://static.atlasacademy.io/CN/Faces/f_8001300.png",
+      "api": "https://api.atlasacademy.io/nice/CN/servant/800100",
+      "sha256": "c6ff6219acae2d6130cf2c25a17fd541529fe35f2156c48fe81d728ec3a7615a",
+      "file": "c6ff6219acae2d6130cf2c25a17fd541529fe35f2156c48fe81d728ec3a7615a.png"
+    },
+    {
+      "region": "CN",
+      "kind": "faces",
+      "group": "costume",
+      "variant": "800140",
+      "url": "https://static.atlasacademy.io/CN/Faces/f_8001400.png",
+      "api": "https://api.atlasacademy.io/nice/CN/servant/800100",
+      "sha256": "8e77da34af870133157c4458886ccbc38dea368cb31d90b58eb439372a6f7ef5",
+      "file": "8e77da34af870133157c4458886ccbc38dea368cb31d90b58eb439372a6f7ef5.png"
+    },
+    {
+      "region": "CN",
+      "kind": "faces",
+      "group": "costume",
+      "variant": "800150",
+      "url": "https://static.atlasacademy.io/CN/Faces/f_8001500.png",
+      "api": "https://api.atlasacademy.io/nice/CN/servant/800100",
+      "sha256": "018113150fd7e2315bfe1728f57d549e6d52f7eee1e9d79578e5f32b5ca50c38",
+      "file": "018113150fd7e2315bfe1728f57d549e6d52f7eee1e9d79578e5f32b5ca50c38.png"
+    },
+    {
+      "region": "CN",
+      "kind": "faces",
+      "group": "costume",
+      "variant": "800160",
+      "url": "https://static.atlasacademy.io/CN/Faces/f_8001600.png",
+      "api": "https://api.atlasacademy.io/nice/CN/servant/800100",
+      "sha256": "5305b55f431a61474874836186880489eb30b0d8c3ae3e70de23cf5f9e40eddb",
+      "file": "5305b55f431a61474874836186880489eb30b0d8c3ae3e70de23cf5f9e40eddb.png"
+    },
+    {
+      "region": "CN",
+      "kind": "faces",
+      "group": "costume",
+      "variant": "800170",
+      "url": "https://static.atlasacademy.io/CN/Faces/f_8001700.png",
+      "api": "https://api.atlasacademy.io/nice/CN/servant/800100",
+      "sha256": "c0692c38c7b7220a6d0425910ada5c28914dbe9166bd68b8f1010fd65f617088",
+      "file": "c0692c38c7b7220a6d0425910ada5c28914dbe9166bd68b8f1010fd65f617088.png"
+    },
+    {
+      "region": "CN",
+      "kind": "faces",
+      "group": "costume",
+      "variant": "800190",
+      "url": "https://static.atlasacademy.io/CN/Faces/f_8001900.png",
+      "api": "https://api.atlasacademy.io/nice/CN/servant/800100",
+      "sha256": "fae8a9fc5c7728dba9e7929560220e527a670424c7a286d6037f9ab8887e01e1",
+      "file": "fae8a9fc5c7728dba9e7929560220e527a670424c7a286d6037f9ab8887e01e1.png"
+    },
+    {
+      "region": "CN",
+      "kind": "faces",
+      "group": "costume",
+      "variant": "800151",
+      "url": "https://static.atlasacademy.io/CN/Faces/f_8001510.png",
+      "api": "https://api.atlasacademy.io/nice/CN/servant/800100",
+      "sha256": "ed43b60f8ad67c33d7577320b9dec509788f1275af5d406a6610ebbc9daa35d7",
+      "file": "ed43b60f8ad67c33d7577320b9dec509788f1275af5d406a6610ebbc9daa35d7.png"
+    },
+    {
+      "region": "CN",
+      "kind": "faces",
+      "group": "costume",
+      "variant": "800200",
+      "url": "https://static.atlasacademy.io/CN/Faces/f_8002000.png",
+      "api": "https://api.atlasacademy.io/nice/CN/servant/800100",
+      "sha256": "6f8904d60077dcad458ef5cacd2756b261f142a0efff39d7452880a5b5a869b9",
+      "file": "6f8904d60077dcad458ef5cacd2756b261f142a0efff39d7452880a5b5a869b9.png"
+    },
+    {
+      "region": "CN",
+      "kind": "narrowFigure",
+      "group": "ascension",
+      "variant": "1",
+      "url": "https://static.atlasacademy.io/CN/NarrowFigure/800100/800100@0.png",
+      "api": "https://api.atlasacademy.io/nice/CN/servant/800100",
+      "sha256": "2c08cd119678249562f2687650d7dbbd29e1ff0333001b327b6a9bc5302bfb15",
+      "file": "2c08cd119678249562f2687650d7dbbd29e1ff0333001b327b6a9bc5302bfb15.png"
+    },
+    {
+      "region": "CN",
+      "kind": "narrowFigure",
+      "group": "ascension",
+      "variant": "2",
+      "url": "https://static.atlasacademy.io/CN/NarrowFigure/800100/800100@1.png",
+      "api": "https://api.atlasacademy.io/nice/CN/servant/800100",
+      "sha256": "d02d1a49977a2de30eac3b46e3d55b7cca11afcb20c3f2afdbf71d19adeff214",
+      "file": "d02d1a49977a2de30eac3b46e3d55b7cca11afcb20c3f2afdbf71d19adeff214.png"
+    },
+    {
+      "region": "CN",
+      "kind": "narrowFigure",
+      "group": "ascension",
+      "variant": "3",
+      "url": "https://static.atlasacademy.io/CN/NarrowFigure/800100/800100@2.png",
+      "api": "https://api.atlasacademy.io/nice/CN/servant/800100",
+      "sha256": "3897097e7a7694cad49b2369d7363a80a698f8fbffb0668d1d1981deedf26a11",
+      "file": "3897097e7a7694cad49b2369d7363a80a698f8fbffb0668d1d1981deedf26a11.png"
+    },
+    {
+      "region": "CN",
+      "kind": "narrowFigure",
+      "group": "ascension",
+      "variant": "4",
+      "url": "https://static.atlasacademy.io/CN/NarrowFigure/800100/800100_2@0.png",
+      "api": "https://api.atlasacademy.io/nice/CN/servant/800100",
+      "sha256": "2b12ff1573cf3e8bba1eb0c6894ff2761d17f22a83aa1719ae6fc7fe707c8140",
+      "file": "2b12ff1573cf3e8bba1eb0c6894ff2761d17f22a83aa1719ae6fc7fe707c8140.png"
+    },
+    {
+      "region": "CN",
+      "kind": "narrowFigure",
+      "group": "costume",
+      "variant": "800130",
+      "url": "https://static.atlasacademy.io/CN/NarrowFigure/800130/800130@0.png",
+      "api": "https://api.atlasacademy.io/nice/CN/servant/800100",
+      "sha256": "0ea060d97f722214240432a96c5ac5964b6bf69fa29a38a3b19e32af9c9c59bb",
+      "file": "0ea060d97f722214240432a96c5ac5964b6bf69fa29a38a3b19e32af9c9c59bb.png"
+    },
+    {
+      "region": "CN",
+      "kind": "narrowFigure",
+      "group": "costume",
+      "variant": "800140",
+      "url": "https://static.atlasacademy.io/CN/NarrowFigure/800140/800140@0.png",
+      "api": "https://api.atlasacademy.io/nice/CN/servant/800100",
+      "sha256": "820ecb8a9baf546da712679fcd06e67284c3e4a1906d09fca21bd1ac785c9a59",
+      "file": "820ecb8a9baf546da712679fcd06e67284c3e4a1906d09fca21bd1ac785c9a59.png"
+    },
+    {
+      "region": "CN",
+      "kind": "narrowFigure",
+      "group": "costume",
+      "variant": "800150",
+      "url": "https://static.atlasacademy.io/CN/NarrowFigure/800150/800150@0.png",
+      "api": "https://api.atlasacademy.io/nice/CN/servant/800100",
+      "sha256": "a81194fa24c64272001ac47bc353292224add075583b8b80ce23385c2dc86d41",
+      "file": "a81194fa24c64272001ac47bc353292224add075583b8b80ce23385c2dc86d41.png"
+    },
+    {
+      "region": "CN",
+      "kind": "narrowFigure",
+      "group": "costume",
+      "variant": "800160",
+      "url": "https://static.atlasacademy.io/CN/NarrowFigure/800160/800160@0.png",
+      "api": "https://api.atlasacademy.io/nice/CN/servant/800100",
+      "sha256": "dac72fc8ae246edecc3059231ca1e8ee71cf63fde63affff01d3a7a3c41e4fb5",
+      "file": "dac72fc8ae246edecc3059231ca1e8ee71cf63fde63affff01d3a7a3c41e4fb5.png"
+    },
+    {
+      "region": "CN",
+      "kind": "narrowFigure",
+      "group": "costume",
+      "variant": "800170",
+      "url": "https://static.atlasacademy.io/CN/NarrowFigure/800170/800170@0.png",
+      "api": "https://api.atlasacademy.io/nice/CN/servant/800100",
+      "sha256": "2836e304d7c49e6b86d3d1fe02fbbfa732c25b8d9a226a70a58b323a9e7f6525",
+      "file": "2836e304d7c49e6b86d3d1fe02fbbfa732c25b8d9a226a70a58b323a9e7f6525.png"
+    },
+    {
+      "region": "CN",
+      "kind": "narrowFigure",
+      "group": "costume",
+      "variant": "800190",
+      "url": "https://static.atlasacademy.io/CN/NarrowFigure/800190/800190@0.png",
+      "api": "https://api.atlasacademy.io/nice/CN/servant/800100",
+      "sha256": "1349aa6db14c5143f1d0343e2ab9349dc1e76133a83cf37d197c6e5c18e68b89",
+      "file": "1349aa6db14c5143f1d0343e2ab9349dc1e76133a83cf37d197c6e5c18e68b89.png"
+    },
+    {
+      "region": "CN",
+      "kind": "narrowFigure",
+      "group": "costume",
+      "variant": "800151",
+      "url": "https://static.atlasacademy.io/CN/NarrowFigure/800151/800151@0.png",
+      "api": "https://api.atlasacademy.io/nice/CN/servant/800100",
+      "sha256": "a81194fa24c64272001ac47bc353292224add075583b8b80ce23385c2dc86d41",
+      "file": "a81194fa24c64272001ac47bc353292224add075583b8b80ce23385c2dc86d41.png"
+    },
+    {
+      "region": "CN",
+      "kind": "narrowFigure",
+      "group": "costume",
+      "variant": "800200",
+      "url": "https://static.atlasacademy.io/CN/NarrowFigure/800200/800200@0.png",
+      "api": "https://api.atlasacademy.io/nice/CN/servant/800100",
+      "sha256": "face785557960b80bbcd79699bc2cfceef18274a1076e970a5a65a7507a933aa",
+      "file": "face785557960b80bbcd79699bc2cfceef18274a1076e970a5a65a7507a933aa.png"
+    },
+    {
+      "region": "CN",
+      "kind": "charaGraph",
+      "group": "ascension",
+      "variant": "1",
+      "url": "https://static.atlasacademy.io/CN/CharaGraph/800100/800100a@1.png",
+      "api": "https://api.atlasacademy.io/nice/CN/servant/800100",
+      "sha256": "b5c9562df05682ec72a2ef313cfb5ba2f026fe5f4db682fc6ba2216b89a4454c",
+      "file": "b5c9562df05682ec72a2ef313cfb5ba2f026fe5f4db682fc6ba2216b89a4454c.png"
+    },
+    {
+      "region": "CN",
+      "kind": "charaGraph",
+      "group": "ascension",
+      "variant": "2",
+      "url": "https://static.atlasacademy.io/CN/CharaGraph/800100/800100a@2.png",
+      "api": "https://api.atlasacademy.io/nice/CN/servant/800100",
+      "sha256": "e5ac505ead3a31a8cd997b09d99ebf29c257eb5b83c8160fe2f2e0538c378973",
+      "file": "e5ac505ead3a31a8cd997b09d99ebf29c257eb5b83c8160fe2f2e0538c378973.png"
+    },
+    {
+      "region": "CN",
+      "kind": "charaGraph",
+      "group": "ascension",
+      "variant": "3",
+      "url": "https://static.atlasacademy.io/CN/CharaGraph/800100/800100b@1.png",
+      "api": "https://api.atlasacademy.io/nice/CN/servant/800100",
+      "sha256": "7a947b1b2848af2654601c62caa120af66b70c3a3d793e80ac45bedea9a77343",
+      "file": "7a947b1b2848af2654601c62caa120af66b70c3a3d793e80ac45bedea9a77343.png"
+    },
+    {
+      "region": "CN",
+      "kind": "charaGraph",
+      "group": "ascension",
+      "variant": "4",
+      "url": "https://static.atlasacademy.io/CN/CharaGraph/800100/800100b@2.png",
+      "api": "https://api.atlasacademy.io/nice/CN/servant/800100",
+      "sha256": "2fe221a3c5f7e06ab74f52e24dfb5ae412df4875d83507817ee4a3071ce5fc09",
+      "file": "2fe221a3c5f7e06ab74f52e24dfb5ae412df4875d83507817ee4a3071ce5fc09.png"
+    },
+    {
+      "region": "CN",
+      "kind": "charaGraph",
+      "group": "costume",
+      "variant": "800130",
+      "url": "https://static.atlasacademy.io/CN/CharaGraph/800130/800130a.png",
+      "api": "https://api.atlasacademy.io/nice/CN/servant/800100",
+      "sha256": "a0961813511740c861fc768239a4285d8bcf2ba5e61cd68e69fb21d6dfece5a6",
+      "file": "a0961813511740c861fc768239a4285d8bcf2ba5e61cd68e69fb21d6dfece5a6.png"
+    },
+    {
+      "region": "CN",
+      "kind": "charaGraph",
+      "group": "costume",
+      "variant": "800140",
+      "url": "https://static.atlasacademy.io/CN/CharaGraph/800140/800140a.png",
+      "api": "https://api.atlasacademy.io/nice/CN/servant/800100",
+      "sha256": "77985a17e31c7203c908a429f7dce85f3118efe742c58ea022737939180c58f6",
+      "file": "77985a17e31c7203c908a429f7dce85f3118efe742c58ea022737939180c58f6.png"
+    },
+    {
+      "region": "CN",
+      "kind": "charaGraph",
+      "group": "costume",
+      "variant": "800150",
+      "url": "https://static.atlasacademy.io/CN/CharaGraph/800150/800150a.png",
+      "api": "https://api.atlasacademy.io/nice/CN/servant/800100",
+      "sha256": "2a4644e8f2781b84e41aee984e6e13ca3987a0b2b01ffb108f6c7e024196a9d3",
+      "file": "2a4644e8f2781b84e41aee984e6e13ca3987a0b2b01ffb108f6c7e024196a9d3.png"
+    },
+    {
+      "region": "CN",
+      "kind": "charaGraph",
+      "group": "costume",
+      "variant": "800160",
+      "url": "https://static.atlasacademy.io/CN/CharaGraph/800160/800160a.png",
+      "api": "https://api.atlasacademy.io/nice/CN/servant/800100",
+      "sha256": "affa3b3858745ce0da6e74383e2fccb32de0e63d3f01f32339758a0a3ee3be18",
+      "file": "affa3b3858745ce0da6e74383e2fccb32de0e63d3f01f32339758a0a3ee3be18.png"
+    },
+    {
+      "region": "CN",
+      "kind": "charaGraph",
+      "group": "costume",
+      "variant": "800170",
+      "url": "https://static.atlasacademy.io/CN/CharaGraph/800170/800170a.png",
+      "api": "https://api.atlasacademy.io/nice/CN/servant/800100",
+      "sha256": "ae02264821ea4dfa8e5cc014f56882c807514db9030c00518d4552b095dfac20",
+      "file": "ae02264821ea4dfa8e5cc014f56882c807514db9030c00518d4552b095dfac20.png"
+    },
+    {
+      "region": "CN",
+      "kind": "charaGraph",
+      "group": "costume",
+      "variant": "800190",
+      "url": "https://static.atlasacademy.io/CN/CharaGraph/800190/800190a.png",
+      "api": "https://api.atlasacademy.io/nice/CN/servant/800100",
+      "sha256": "e08c8bc8cdd8bf193b0115364f7c2ea4fec0a3ecbb5547b6d86718f7d9420fa7",
+      "file": "e08c8bc8cdd8bf193b0115364f7c2ea4fec0a3ecbb5547b6d86718f7d9420fa7.png"
+    },
+    {
+      "region": "CN",
+      "kind": "charaGraph",
+      "group": "costume",
+      "variant": "800151",
+      "url": "https://static.atlasacademy.io/CN/CharaGraph/800151/800151a.png",
+      "api": "https://api.atlasacademy.io/nice/CN/servant/800100",
+      "sha256": "2a4644e8f2781b84e41aee984e6e13ca3987a0b2b01ffb108f6c7e024196a9d3",
+      "file": "2a4644e8f2781b84e41aee984e6e13ca3987a0b2b01ffb108f6c7e024196a9d3.png"
+    },
+    {
+      "region": "CN",
+      "kind": "charaGraph",
+      "group": "costume",
+      "variant": "800200",
+      "url": "https://static.atlasacademy.io/CN/CharaGraph/800200/800200a.png",
+      "api": "https://api.atlasacademy.io/nice/CN/servant/800100",
+      "sha256": "564266bb59db449cdf36d9943724f82f84642bb361a7478758af03e10fc90e53",
+      "file": "564266bb59db449cdf36d9943724f82f84642bb361a7478758af03e10fc90e53.png"
+    },
+    {
+      "region": "JP",
+      "kind": "faces",
+      "group": "ascension",
+      "variant": "1",
+      "url": "https://static.atlasacademy.io/JP/Faces/f_8001000.png",
+      "api": "https://api.atlasacademy.io/nice/JP/servant/800100",
+      "sha256": "d2564346c71278efbd9e3cb1385b87989d726074971bdf69ab96d9d1f4b49b95",
+      "file": "d2564346c71278efbd9e3cb1385b87989d726074971bdf69ab96d9d1f4b49b95.png"
+    },
+    {
+      "region": "JP",
+      "kind": "faces",
+      "group": "ascension",
+      "variant": "2",
+      "url": "https://static.atlasacademy.io/JP/Faces/f_8001001.png",
+      "api": "https://api.atlasacademy.io/nice/JP/servant/800100",
+      "sha256": "44db206bc8245f55b9e9f4374b324cbac52f6c3a7f8745eed5bc0d8ba6f6a29b",
+      "file": "44db206bc8245f55b9e9f4374b324cbac52f6c3a7f8745eed5bc0d8ba6f6a29b.png"
+    },
+    {
+      "region": "JP",
+      "kind": "faces",
+      "group": "ascension",
+      "variant": "3",
+      "url": "https://static.atlasacademy.io/JP/Faces/f_8001002.png",
+      "api": "https://api.atlasacademy.io/nice/JP/servant/800100",
+      "sha256": "fa303ef7ffd5189fbc3af9a675af6217f7a12edc387e93937d47b26adaa4d15c",
+      "file": "fa303ef7ffd5189fbc3af9a675af6217f7a12edc387e93937d47b26adaa4d15c.png"
+    },
+    {
+      "region": "JP",
+      "kind": "faces",
+      "group": "ascension",
+      "variant": "4",
+      "url": "https://static.atlasacademy.io/JP/Faces/f_8001003.png",
+      "api": "https://api.atlasacademy.io/nice/JP/servant/800100",
+      "sha256": "2db7a9e59868110a60ddc2b3d5470f037d190ca3342319a1799179878790a14f",
+      "file": "2db7a9e59868110a60ddc2b3d5470f037d190ca3342319a1799179878790a14f.png"
+    },
+    {
+      "region": "JP",
+      "kind": "faces",
+      "group": "costume",
+      "variant": "800130",
+      "url": "https://static.atlasacademy.io/JP/Faces/f_8001300.png",
+      "api": "https://api.atlasacademy.io/nice/JP/servant/800100",
+      "sha256": "61feec15a758690f1f19805cd63ba58ea63f6763f0043e8953b7c9bba54dca65",
+      "file": "61feec15a758690f1f19805cd63ba58ea63f6763f0043e8953b7c9bba54dca65.png"
+    },
+    {
+      "region": "JP",
+      "kind": "faces",
+      "group": "costume",
+      "variant": "800140",
+      "url": "https://static.atlasacademy.io/JP/Faces/f_8001400.png",
+      "api": "https://api.atlasacademy.io/nice/JP/servant/800100",
+      "sha256": "171bb1fb4db00280e2fd9e821458404f2802edf07ecb9f81fad48db92ab28e62",
+      "file": "171bb1fb4db00280e2fd9e821458404f2802edf07ecb9f81fad48db92ab28e62.png"
+    },
+    {
+      "region": "JP",
+      "kind": "faces",
+      "group": "costume",
+      "variant": "800150",
+      "url": "https://static.atlasacademy.io/JP/Faces/f_8001500.png",
+      "api": "https://api.atlasacademy.io/nice/JP/servant/800100",
+      "sha256": "f43dd0d5fb1b6da561182bd2693710126928899e5c216371f850fc8005a97195",
+      "file": "f43dd0d5fb1b6da561182bd2693710126928899e5c216371f850fc8005a97195.png"
+    },
+    {
+      "region": "JP",
+      "kind": "faces",
+      "group": "costume",
+      "variant": "800160",
+      "url": "https://static.atlasacademy.io/JP/Faces/f_8001600.png",
+      "api": "https://api.atlasacademy.io/nice/JP/servant/800100",
+      "sha256": "a0e85e183550937862d99a843448c4fb9dd933e3d3aea92cf6c0ed3111a9c3bc",
+      "file": "a0e85e183550937862d99a843448c4fb9dd933e3d3aea92cf6c0ed3111a9c3bc.png"
+    },
+    {
+      "region": "JP",
+      "kind": "faces",
+      "group": "costume",
+      "variant": "800170",
+      "url": "https://static.atlasacademy.io/JP/Faces/f_8001700.png",
+      "api": "https://api.atlasacademy.io/nice/JP/servant/800100",
+      "sha256": "f96446cde330287f2a94340e27df98c4018930a557816688603dc9139593a87e",
+      "file": "f96446cde330287f2a94340e27df98c4018930a557816688603dc9139593a87e.png"
+    },
+    {
+      "region": "JP",
+      "kind": "faces",
+      "group": "costume",
+      "variant": "800190",
+      "url": "https://static.atlasacademy.io/JP/Faces/f_8001900.png",
+      "api": "https://api.atlasacademy.io/nice/JP/servant/800100",
+      "sha256": "00bc4dbf93140ed90866231d2e9a33ba9b9c8032a1b95c101aa4703ff45b281f",
+      "file": "00bc4dbf93140ed90866231d2e9a33ba9b9c8032a1b95c101aa4703ff45b281f.png"
+    },
+    {
+      "region": "JP",
+      "kind": "faces",
+      "group": "costume",
+      "variant": "800151",
+      "url": "https://static.atlasacademy.io/JP/Faces/f_8001510.png",
+      "api": "https://api.atlasacademy.io/nice/JP/servant/800100",
+      "sha256": "56c31ede8f70ffc0668c8a1a4737d9787475d1e8ab39a526608a368f13feef34",
+      "file": "56c31ede8f70ffc0668c8a1a4737d9787475d1e8ab39a526608a368f13feef34.png"
+    },
+    {
+      "region": "JP",
+      "kind": "faces",
+      "group": "costume",
+      "variant": "800200",
+      "url": "https://static.atlasacademy.io/JP/Faces/f_8002000.png",
+      "api": "https://api.atlasacademy.io/nice/JP/servant/800100",
+      "sha256": "056578d5c59bba0c325cb19538e73be846f8b336c12bc248a447567b1de916b9",
+      "file": "056578d5c59bba0c325cb19538e73be846f8b336c12bc248a447567b1de916b9.png"
+    },
+    {
+      "region": "JP",
+      "kind": "faces",
+      "group": "costume",
+      "variant": "800210",
+      "url": "https://static.atlasacademy.io/JP/Faces/f_8002100.png",
+      "api": "https://api.atlasacademy.io/nice/JP/servant/800100",
+      "sha256": "5566811b18b1d49b4ad02327c8c76c1b3af19ae53f90602729381a23c3728f14",
+      "file": "5566811b18b1d49b4ad02327c8c76c1b3af19ae53f90602729381a23c3728f14.png"
+    },
+    {
+      "region": "JP",
+      "kind": "narrowFigure",
+      "group": "ascension",
+      "variant": "1",
+      "url": "https://static.atlasacademy.io/JP/NarrowFigure/800100/800100@0.png",
+      "api": "https://api.atlasacademy.io/nice/JP/servant/800100",
+      "sha256": "3d8d8fff2496e36d736c41cad3ba9f12bfbef738c24a8959c353bfd6d3bcc53f",
+      "file": "3d8d8fff2496e36d736c41cad3ba9f12bfbef738c24a8959c353bfd6d3bcc53f.png"
+    },
+    {
+      "region": "JP",
+      "kind": "narrowFigure",
+      "group": "ascension",
+      "variant": "2",
+      "url": "https://static.atlasacademy.io/JP/NarrowFigure/800100/800100@1.png",
+      "api": "https://api.atlasacademy.io/nice/JP/servant/800100",
+      "sha256": "21d3558a62430f64c648dd791155faca69382137381a1b980f3e3d571462ad1a",
+      "file": "21d3558a62430f64c648dd791155faca69382137381a1b980f3e3d571462ad1a.png"
+    },
+    {
+      "region": "JP",
+      "kind": "narrowFigure",
+      "group": "ascension",
+      "variant": "3",
+      "url": "https://static.atlasacademy.io/JP/NarrowFigure/800100/800100@2.png",
+      "api": "https://api.atlasacademy.io/nice/JP/servant/800100",
+      "sha256": "e6e7e3162c8aef67ea8ebbd45db785ee9b491d1a5139b2bc454d435d6239596b",
+      "file": "e6e7e3162c8aef67ea8ebbd45db785ee9b491d1a5139b2bc454d435d6239596b.png"
+    },
+    {
+      "region": "JP",
+      "kind": "narrowFigure",
+      "group": "ascension",
+      "variant": "4",
+      "url": "https://static.atlasacademy.io/JP/NarrowFigure/800100/800100_2@0.png",
+      "api": "https://api.atlasacademy.io/nice/JP/servant/800100",
+      "sha256": "0b2de8fe7971912f9c1a4adaf679cdee6e50c8d19ec20a4d48ebc43772c44e6d",
+      "file": "0b2de8fe7971912f9c1a4adaf679cdee6e50c8d19ec20a4d48ebc43772c44e6d.png"
+    },
+    {
+      "region": "JP",
+      "kind": "narrowFigure",
+      "group": "costume",
+      "variant": "800130",
+      "url": "https://static.atlasacademy.io/JP/NarrowFigure/800130/800130@0.png",
+      "api": "https://api.atlasacademy.io/nice/JP/servant/800100",
+      "sha256": "0d9051a46882007d25c32d9794a30502ccaaa09a25434c7ce8a8f43184f38428",
+      "file": "0d9051a46882007d25c32d9794a30502ccaaa09a25434c7ce8a8f43184f38428.png"
+    },
+    {
+      "region": "JP",
+      "kind": "narrowFigure",
+      "group": "costume",
+      "variant": "800140",
+      "url": "https://static.atlasacademy.io/JP/NarrowFigure/800140/800140@0.png",
+      "api": "https://api.atlasacademy.io/nice/JP/servant/800100",
+      "sha256": "6c7e8dbe2b7da562435d10b19c88ff01d2dc11b36452691ef7585ee345c20c84",
+      "file": "6c7e8dbe2b7da562435d10b19c88ff01d2dc11b36452691ef7585ee345c20c84.png"
+    },
+    {
+      "region": "JP",
+      "kind": "narrowFigure",
+      "group": "costume",
+      "variant": "800150",
+      "url": "https://static.atlasacademy.io/JP/NarrowFigure/800150/800150@0.png",
+      "api": "https://api.atlasacademy.io/nice/JP/servant/800100",
+      "sha256": "5e1b9f3ee8c0818253cc26bf0eeda34c2f50f6b163a47619908a2bc470c59237",
+      "file": "5e1b9f3ee8c0818253cc26bf0eeda34c2f50f6b163a47619908a2bc470c59237.png"
+    },
+    {
+      "region": "JP",
+      "kind": "narrowFigure",
+      "group": "costume",
+      "variant": "800160",
+      "url": "https://static.atlasacademy.io/JP/NarrowFigure/800160/800160@0.png",
+      "api": "https://api.atlasacademy.io/nice/JP/servant/800100",
+      "sha256": "ec887c6f545f802620588f320d5a97f49c29a3564a28424611f0ae323315f328",
+      "file": "ec887c6f545f802620588f320d5a97f49c29a3564a28424611f0ae323315f328.png"
+    },
+    {
+      "region": "JP",
+      "kind": "narrowFigure",
+      "group": "costume",
+      "variant": "800170",
+      "url": "https://static.atlasacademy.io/JP/NarrowFigure/800170/800170@0.png",
+      "api": "https://api.atlasacademy.io/nice/JP/servant/800100",
+      "sha256": "3d8102050f82195ca59769ee5a6f22db8f3e7f301c9a8bf8bb8add7c15bc4da3",
+      "file": "3d8102050f82195ca59769ee5a6f22db8f3e7f301c9a8bf8bb8add7c15bc4da3.png"
+    },
+    {
+      "region": "JP",
+      "kind": "narrowFigure",
+      "group": "costume",
+      "variant": "800190",
+      "url": "https://static.atlasacademy.io/JP/NarrowFigure/800190/800190@0.png",
+      "api": "https://api.atlasacademy.io/nice/JP/servant/800100",
+      "sha256": "53dccf755e31ce82294bf3d1d9fd56975f40a40bedf343026ef8138a55cc6d03",
+      "file": "53dccf755e31ce82294bf3d1d9fd56975f40a40bedf343026ef8138a55cc6d03.png"
+    },
+    {
+      "region": "JP",
+      "kind": "narrowFigure",
+      "group": "costume",
+      "variant": "800151",
+      "url": "https://static.atlasacademy.io/JP/NarrowFigure/800151/800151@0.png",
+      "api": "https://api.atlasacademy.io/nice/JP/servant/800100",
+      "sha256": "5e1b9f3ee8c0818253cc26bf0eeda34c2f50f6b163a47619908a2bc470c59237",
+      "file": "5e1b9f3ee8c0818253cc26bf0eeda34c2f50f6b163a47619908a2bc470c59237.png"
+    },
+    {
+      "region": "JP",
+      "kind": "narrowFigure",
+      "group": "costume",
+      "variant": "800200",
+      "url": "https://static.atlasacademy.io/JP/NarrowFigure/800200/800200@0.png",
+      "api": "https://api.atlasacademy.io/nice/JP/servant/800100",
+      "sha256": "38894e78f79b675e35ad2c6079fb355e49d755cb8da913791d1438e7013d9b2d",
+      "file": "38894e78f79b675e35ad2c6079fb355e49d755cb8da913791d1438e7013d9b2d.png"
+    },
+    {
+      "region": "JP",
+      "kind": "narrowFigure",
+      "group": "costume",
+      "variant": "800210",
+      "url": "https://static.atlasacademy.io/JP/NarrowFigure/800210/800210@0.png",
+      "api": "https://api.atlasacademy.io/nice/JP/servant/800100",
+      "sha256": "88eb79266d7463b0d5fd7895607a5b8cc60e22f7e7f42f7c7093c2f92320088e",
+      "file": "88eb79266d7463b0d5fd7895607a5b8cc60e22f7e7f42f7c7093c2f92320088e.png"
+    },
+    {
+      "region": "JP",
+      "kind": "charaGraph",
+      "group": "ascension",
+      "variant": "1",
+      "url": "https://static.atlasacademy.io/JP/CharaGraph/800100/800100a@1.png",
+      "api": "https://api.atlasacademy.io/nice/JP/servant/800100",
+      "sha256": "9a4caf121d22a7dcb74c2fdd7447d8fb88c1d1f167b0e87821512a2439e695fb",
+      "file": "9a4caf121d22a7dcb74c2fdd7447d8fb88c1d1f167b0e87821512a2439e695fb.png"
+    },
+    {
+      "region": "JP",
+      "kind": "charaGraph",
+      "group": "ascension",
+      "variant": "2",
+      "url": "https://static.atlasacademy.io/JP/CharaGraph/800100/800100a@2.png",
+      "api": "https://api.atlasacademy.io/nice/JP/servant/800100",
+      "sha256": "efd8e60668f58661fea5cedee0378d2892a684f074542299e1833d65e8237fbd",
+      "file": "efd8e60668f58661fea5cedee0378d2892a684f074542299e1833d65e8237fbd.png"
+    },
+    {
+      "region": "JP",
+      "kind": "charaGraph",
+      "group": "ascension",
+      "variant": "3",
+      "url": "https://static.atlasacademy.io/JP/CharaGraph/800100/800100b@1.png",
+      "api": "https://api.atlasacademy.io/nice/JP/servant/800100",
+      "sha256": "9ec64adeb84153658f765d928d1be7e52a61f386cca03f673491e1cfd43d7e42",
+      "file": "9ec64adeb84153658f765d928d1be7e52a61f386cca03f673491e1cfd43d7e42.png"
+    },
+    {
+      "region": "JP",
+      "kind": "charaGraph",
+      "group": "ascension",
+      "variant": "4",
+      "url": "https://static.atlasacademy.io/JP/CharaGraph/800100/800100b@2.png",
+      "api": "https://api.atlasacademy.io/nice/JP/servant/800100",
+      "sha256": "6268b4d29101bbfe2672aca020b33b78da32e6ea30ff8b7e27eb23f02a2ee8a8",
+      "file": "6268b4d29101bbfe2672aca020b33b78da32e6ea30ff8b7e27eb23f02a2ee8a8.png"
+    },
+    {
+      "region": "JP",
+      "kind": "charaGraph",
+      "group": "costume",
+      "variant": "800130",
+      "url": "https://static.atlasacademy.io/JP/CharaGraph/800130/800130a.png",
+      "api": "https://api.atlasacademy.io/nice/JP/servant/800100",
+      "sha256": "8596646a7276169d3d9ceda6d9bb0403946ed640d8e52c97a03292170ec153d8",
+      "file": "8596646a7276169d3d9ceda6d9bb0403946ed640d8e52c97a03292170ec153d8.png"
+    },
+    {
+      "region": "JP",
+      "kind": "charaGraph",
+      "group": "costume",
+      "variant": "800140",
+      "url": "https://static.atlasacademy.io/JP/CharaGraph/800140/800140a.png",
+      "api": "https://api.atlasacademy.io/nice/JP/servant/800100",
+      "sha256": "3296d89353e798d474cf2580d21dfce91149116f6f3d6e19c6bb189718cad4f7",
+      "file": "3296d89353e798d474cf2580d21dfce91149116f6f3d6e19c6bb189718cad4f7.png"
+    },
+    {
+      "region": "JP",
+      "kind": "charaGraph",
+      "group": "costume",
+      "variant": "800150",
+      "url": "https://static.atlasacademy.io/JP/CharaGraph/800150/800150a.png",
+      "api": "https://api.atlasacademy.io/nice/JP/servant/800100",
+      "sha256": "407c002ba1545b160274129d701630654fc6b2d16e19b8e915785d4562656335",
+      "file": "407c002ba1545b160274129d701630654fc6b2d16e19b8e915785d4562656335.png"
+    },
+    {
+      "region": "JP",
+      "kind": "charaGraph",
+      "group": "costume",
+      "variant": "800160",
+      "url": "https://static.atlasacademy.io/JP/CharaGraph/800160/800160a.png",
+      "api": "https://api.atlasacademy.io/nice/JP/servant/800100",
+      "sha256": "2dd63a6e4ae66646ccc653bb44c755cd3c53c52bbf15d78f9ce5b75bd3629c25",
+      "file": "2dd63a6e4ae66646ccc653bb44c755cd3c53c52bbf15d78f9ce5b75bd3629c25.png"
+    },
+    {
+      "region": "JP",
+      "kind": "charaGraph",
+      "group": "costume",
+      "variant": "800170",
+      "url": "https://static.atlasacademy.io/JP/CharaGraph/800170/800170a.png",
+      "api": "https://api.atlasacademy.io/nice/JP/servant/800100",
+      "sha256": "4b2b45d32da6a6b908cdab7885257a45f0efca89004e4b095996c97b00f676d7",
+      "file": "4b2b45d32da6a6b908cdab7885257a45f0efca89004e4b095996c97b00f676d7.png"
+    },
+    {
+      "region": "JP",
+      "kind": "charaGraph",
+      "group": "costume",
+      "variant": "800190",
+      "url": "https://static.atlasacademy.io/JP/CharaGraph/800190/800190a.png",
+      "api": "https://api.atlasacademy.io/nice/JP/servant/800100",
+      "sha256": "14d4ccfde874b9997add2e0968a2e32a70460fc7a15ae6c0ae619e52b5b4cb75",
+      "file": "14d4ccfde874b9997add2e0968a2e32a70460fc7a15ae6c0ae619e52b5b4cb75.png"
+    },
+    {
+      "region": "JP",
+      "kind": "charaGraph",
+      "group": "costume",
+      "variant": "800151",
+      "url": "https://static.atlasacademy.io/JP/CharaGraph/800151/800151a.png",
+      "api": "https://api.atlasacademy.io/nice/JP/servant/800100",
+      "sha256": "407c002ba1545b160274129d701630654fc6b2d16e19b8e915785d4562656335",
+      "file": "407c002ba1545b160274129d701630654fc6b2d16e19b8e915785d4562656335.png"
+    },
+    {
+      "region": "JP",
+      "kind": "charaGraph",
+      "group": "costume",
+      "variant": "800200",
+      "url": "https://static.atlasacademy.io/JP/CharaGraph/800200/800200a.png",
+      "api": "https://api.atlasacademy.io/nice/JP/servant/800100",
+      "sha256": "f1d2c43519de39f67e0591840601a4740bd3bd09c6117f4d52511c33c6ef2fdb",
+      "file": "f1d2c43519de39f67e0591840601a4740bd3bd09c6117f4d52511c33c6ef2fdb.png"
+    },
+    {
+      "region": "JP",
+      "kind": "charaGraph",
+      "group": "costume",
+      "variant": "800210",
+      "url": "https://static.atlasacademy.io/JP/CharaGraph/800210/800210a.png",
+      "api": "https://api.atlasacademy.io/nice/JP/servant/800100",
+      "sha256": "508fc2d2647040f5f84880157d039bc7cfcf2a2ef8dac091f8fc866cd8b68491",
+      "file": "508fc2d2647040f5f84880157d039bc7cfcf2a2ef8dac091f8fc866cd8b68491.png"
+    }
+  ]
+}

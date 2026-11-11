@@ -1,12 +1,17 @@
 # 御主技能规划
 
+局部不确定只跳过该技能：身份、波次、伤害或某个目标收益不完整，不要求暂停整回合。有明确收益且 ready 的其余合法技能仍可规划；没有就 skip。不能输出 Servant 技能或用暂停代替本任务已有的 skip。
+
+
 ## Hard domain boundary: Master/Mystic Code skills only
 
 This consultation has `skill_domain: master_mystic_code`. It plans only the
 selected Mystic Code's exactly three catalog skills supplied in
 `master_skill_catalog`. These belong to the Master, not to any frontline
 Servant. Never reason about, copy, or output `frontline_slot...` Servant skill
-group IDs here. Servant identities and NP values are target/context facts only.
+group IDs here. Servant skills and noble_phantasm effects in servant_knowledge
+and servant_master_planning are essential context for Master timing, targets,
+synergies and drawbacks; inspect them without outputting Servant actions.
 
 The screenshot supplied to this consultation is captured only after the runner
 has clicked the Master portrait and verified that the Master-skill panel opened.
@@ -32,9 +37,10 @@ before choosing anything. For every catalog skill:
   explicit Master-skill seal.
 
 Also inspect `panel_state.visible_texts` and the screenshot for 御主技能封印、
-无法使用御主技能、无法发动御主技能、冷却数字、灰暗图标，以及前排从者附近
+无法使用御主技能、无法发动御主技能、冷却数字，以及前排从者附近
 的异常状态文字。御主技能和从者技能一样可能被战斗状态阻止。不要把只作用于
-某个从者的普通“技能封印”误当成明确的“御主技能封印”；作用范围不清楚时跳过，
+某个从者的普通“技能封印”误当成明确的“御主技能封印”。封印范围不清楚时只放弃
+依赖该范围的方案，不能把全套御主技能一律判为禁用；单纯暗色美术不证明冷却。
 不得用试点技能的方式探测。
 
 ## When to use this advisor
@@ -56,6 +62,8 @@ Also inspect `panel_state.visible_texts` and the screenshot for 御主技能封�
 
 目标规则：
 
+所有目标先确认实际占用，并属于本次合法集合。换人须确认前后排双方实际有人，不能因后排编号 4～6 存在就假定有替补；只有前排一骑且没有后排时，跳过换人技能，不虚构另两骑或后备队友。单体技能不指向空槽，群体技能只计算实际在场者收益。
+
 - `none` / `ally_all`：不要返回 `target`。
 - `ally_single`：`target` 必须是当前前排字符串 `"1"`、`"2"` 或 `"3"`；把
   充能/增伤给真正的输出手，把无敌/净化/冷却缩减给受到相应威胁的从者。
@@ -66,8 +74,12 @@ Also inspect `panel_state.visible_texts` and the screenshot for 御主技能封�
   后排只能 4～6。执行器会选择双方并点击“决定”。资料不足时保留换人技能。
 
 御主技能在从者技能之前执行。充能、强化、净化或换人会改变随后的技能计划，
-因此只选择确实服务于本回合胜利条件的最小技能子集；不要把三个 ready 技能
-全部用掉。
+因此选择有已知有效收益且无更大明确代价的技能子集；不因三个技能都 ready
+就全放，也不为追求数量最少而漏掉有用的复合效果。
+
+按共享“战术收益与资源预算”一起比较复合效果、实际目标、多回合覆盖与保留用途。
+本阶段先于从者技能，减冷却只能计入现在已经冷却的技能，不得假设能插到未来
+从者技能之后；其他阶段的动作也不能写进 master_skills。
 
 只能返回以下 JSON 之一，不得输出坐标、按钮位置或其它字段：
 

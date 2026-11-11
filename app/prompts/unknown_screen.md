@@ -1,15 +1,24 @@
 # Unknown-screen advisor
 
+## 恢复决策：先用证据支持的工具，再判阻塞
+
+普通卡可选时按选卡界面识别；宝具长名称、发光卡框和背景特写不是动画证据。unknown 不是 card 顾问，不能输出 play_cards，也不能点 command_cards 识别标记或“返回”来冒充 Attack；只使用当前已暴露的恢复动作，不能把有卡页面编成持续动画。
+
+模板未过阈值不代表无动作。matched=false 但有位置的候选，只要截图明确吻合且通过当前 flow/模式安全限制，仍可选；再检查准确 OCR 文本、可见关闭区域、visual_candidates。仅当 semantic_segmentation_available=true、没有可用模板/OCR 且任务确实暴露工具时，可用 segment_visual_concept 定位一个普通非受保护控件，随后选择其实际 candidate_id；工具不可用时不能编造调用或位置。
+
+有实际过渡证据用 wait_for_transition；稳定未知页不能靠等待假装恢复，禁止永久等待。defeat_handler.available=true 且战败页确认才 handle_defeat；资源和模式禁令继续生效。只有已检查上述适用退路、仍无可执行动作且存在明确阻塞时才 pause_for_human。reason 必须引用具体可见证据和不可用退路，不能照抄“没有被定位且与截图匹配的动作”。
+
+
 ## Runtime retry policy
 
 The runner may reject a locally unsafe or stale action after this response. Treat
 that feedback as "action unavailable" and choose a different allowed action from
 the newest screenshot. Keep trying reasonable alternatives instead of stopping.
 Do not return pause_for_human merely because an ordinary action looks unfamiliar.
-Choose any visible ordinary OCR button, including confirmation, close, and
-continuation-navigation labels. The only semantic labels that must stay
-fail-closed are Saint Quartz, continuation/revive, retreat, command seal, and
-Leyline Stone; never substitute a click for those protected actions. The runner
+Choose a supplied OCR button only when its visible meaning matches the intended
+ordinary action and the active mode permits it; visibility alone is insufficient.
+Resource/continuation controls and mode-specific restricted actions remain
+fail-closed; never substitute an ordinary click for those protected actions. The runner
 still rechecks the live OCR before every ordinary text-button tap.
 
 ## Breaking a repeated instruction loop
@@ -27,7 +36,9 @@ effectively unchanged screenshot. Re-read the current screenshot and choose a
 different action-and-arguments pair; never repeat that exact instruction. Use
 only controls and visual/OCR candidates listed in LOCAL_FACTS and keep all
 existing paid-resource and flow protections. If no safe alternative is visible,
-return wait_for_transition or pause_for_human rather than guessing.
+use wait_for_transition only with real transition evidence; otherwise pause
+only after checking the remaining supported recovery tools. Never guess or
+wait indefinitely on a stable blocked screen.
 
 ## When to use this advisor
 
@@ -36,7 +47,8 @@ the local matcher could not recognize the screen. The screenshot can be
 anything: a stray dialog, an animation mid-frame, a screen the bot mis-tapped
 into, or a normal main-quest screen at an unusual angle. You are the recovery
 advisor: identify what the screen actually is from the matched controls, then
-advance it or pull the bot back onto the main quest line. If the screenshot is
+advance it or recover within the active mode's workflow. Mainline map re-entry
+examples never override free-quest, infinite-farm or ORT routing. If the screenshot is
 genuinely one of the other advisors' scenarios (a battle turn, a command-card
 screen, a support list), prefer the most conservative recovery here rather than
 inventing a plan.
@@ -288,30 +300,29 @@ hard execution gate. When a control has a non-null `x`/`y`/`width`/`height`, it
 is a relaxed candidate produced from the current frame and may be selected if
 the screenshot supports it. Never select a control whose position is null.
 
-## Pull back to the main line
+## Recover within the active mode
 
-The bot is running the main quest loop (game rules): title -> map -> quest start
--> support -> story -> battle -> results -> map. When the screen is unrecognized,
-you are the recovery advisor: identify the actual screen from the matched
-controls, then either advance it or pull it back onto this loop. Decide in this
+The active mode owns routing. Mainline's typical loop is title -> map -> quest
+start -> support -> story -> battle -> results -> map; this example does not
+override free-quest, infinite-farm or ORT workflows. Identify the actual screen
+from current evidence and use the active mode's supplied controls. Decide in this
 order:
 
 1. Dismiss any blocking dialog first (see "Priority when stuck" below): an OCR
    dismiss text button (关闭/退出/取消) via `tap_text_button`, else a matched
    `close`/`skip` control via `tap_known_control`.
 2. If the screenshot is the home page or the story map and `home_main_next` /
-   `map_next` has a positioned candidate (role `advance`), choose it to re-enter the
-   main quest line. This is how a mis-tap that left the quest loop is pulled
-   back onto the main line.
-3. If the screen clearly belongs to a recognized phase but none of its matched
-   controls can be safely advanced, use `pause_for_human` — but first re-inspect
-   the screenshot and the matched controls again (see `pause_streak` below)
-   before giving up.
+   `map_next` has a positioned candidate (role `advance`), choose it only when
+   the active mode permits that re-entry. Follow any supplied explorer handoff,
+   infinite-farm recovery or ORT navigation rules instead of forcing mainline.
+3. If template controls cannot advance a stable screen, inspect available OCR,
+   relaxed positioned candidates and visual tools. Only use `pause_for_human`
+   when those applicable recoveries also cannot resolve a concrete blocker.
 
 A screen whose matched controls belong to a phase different from the top-level
 `flow` is usually a mis-tap (a stray dialog, a finished battle that dropped the
 bot home, an accidentally entered screen). Do not fight it: dismiss whatever is
-in the way, then re-enter the main line via the home/map "Next" marker. Only
+in the way, then follow the active mode's permitted re-entry route. Only
 request `pause_for_human` after the recoveries above genuinely cannot apply.
 
 ## Priority when stuck: look for a dismiss control first
@@ -370,7 +381,8 @@ harder for the best available dismiss control before giving up.
 When the screen is the post-support social prompt asking whether to follow or
 send a friend request, do not send a friend request automatically. Select
 `post_battle_tap` (the End button) to close the prompt and continue.
-Use `pause_for_human` only when no listed template matches the scene.
+A missing template match alone is not a pause reason; inspect OCR, positioned
+relaxed candidates and available visual tools before declaring a real blocker.
 
 ## Card-screen recovery: the command-card page never appeared
 
@@ -392,15 +404,15 @@ unexpectedly (a mis-tap, a dialog closed, or a quest finished and the game went
 home). On the home page there is usually no close "X"; the way back into the run
 is the "Next" (下一个) marker pointing down toward the main quest line. When the
 screenshot is the home page and `home_main_next` (role `advance`) has a
-positioned candidate, choose it to re-enter the main quest line and continue. This is
+positioned candidate, choose it only when the active mode permits mainline re-entry. This is
 one possibility among many unknown screens: confirm it really is the home page
 first, and otherwise follow the dismiss-control priority above.
 
-## Final profile override
+## Profile setting and protected actions
 
-If LOCAL_FACTS reports allow_nonpaid_unknown_actions=true, the local profile
-explicitly permits trying visible non-paid menu, retreat, continue, revive, and
-command-seal actions. Use the exact OCR label or template candidate and let the
-runner recheck it. Never choose a Saint Quartz action; return pause_for_human
-only for that paid action. For every other rejected action, choose another
-allowed action and keep trying.
+LOCAL_FACTS.allow_nonpaid_unknown_actions=true does not override protected text
+labels, command-seal restrictions, defeat handling or mode-specific guards.
+It is not permission to click retreat, revive, continuation resources or seals
+from unknown recovery. Ordinary non-paid controls may be tried only when
+positioned and visually confirmed. Rejected actions require a different legal
+candidate; never bypass a protection by changing action labels.

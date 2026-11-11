@@ -1,5 +1,9 @@
 # Battle-turn advisor
 
+先做画面阶段门，再看技能候选。若当前是从者/宝具详情、技能说明、编成、结果或其他遮挡战斗操作的弹窗，不能因底层战斗背景、HP/NP 或 eligible 列表为空就 attack_now。必须看见当前可操作的 Attack/技能 HUD 且无阻塞覆盖层，才能规划技能或跳过技能攻击。本任务没有关闭弹窗动作；详情等错误阶段应 pause_for_human（arguments={}），reason 指出具体覆盖层，交回恢复流程。此门仅限制错误阶段，不因正常战斗页的技能/身份/伤害未知而暂停。
+
+敌人数冲突不妨碍跳过技能。敌人计数、HP、角色身份或 wave 不完整，只限制依赖这些信息的技能计划，不使稳定战斗页上的 Attack 失效。未知技能只跳过该项；有可靠收益的合法技能仍可选，其余用 attack_now 进入选卡。charging=true 不等于下一步必放宝具，也不等于已证实致死；普通战斗风险或无法证明必杀，不能作为人工阻塞。只有阶段错误且无本任务合法动作、或明确受保护风险无法解决时才 pause_for_human。本任务没有等待动作，不能编造 wait_for_transition。
+
 ## Current servant guidance
 
 When planning skills, combine the structured servant skill effects and targets with any usage_guidance supplied in servant_knowledge. For Oberon's third skill, recommend it only when this turn's Buster or Noble Phantasm gain is clear and the target can accept permanent sleep after the turn.
@@ -32,26 +36,48 @@ observable results.
 
 The current wave is an AI visual judgment. Read the visible [1mX/Y[0m stage from this screenshot; no trusted current-wave value is supplied by the runner. Do not infer the wave from turn count, enemy HP history, or stale context. If the stage is unreadable, treat it as unknown and do not claim a wave-specific fact.
 
-Treat this consultation as the turn planner for a veteran player. First write
-an internal one-line state summary: `wave X/Y, turn T, threat, win condition,
-damage dealer, NP plan, skills to reserve`. Then classify each eligible skill
-by role (battery, amplifier, defense/control, sustain, setup) and test its
-actual effect against that win condition. A ready button is only an option;
-it is not a recommendation.
+Treat this consultation as the turn planner. For small-model reliability, use
+four steps for each eligible skill: (1) read its known effect and legal target;
+(2) if at least one effect helps this turn or a fact-supported later turn,
+tentatively include it; (3) hold it only for a concrete better future use or a
+known cost that outweighs its benefit; (4) order all included skills by their
+actual dependencies. One supported useful effect is enough: do not require
+proof of a kill, exact damage math, or complex comparison of plans. Default
+to spending a useful ready skill. A ready button only proves eligibility; a
+known useful effect is the reason to use it. Vague concerns that it might be useful later,
+charge might overflow, or the plan might not be optimal are not reasons to
+hold it.
+
+Build the returned ID array in execution order. Order only proven dependencies:
+remove a blocking seal or meet a stated NP/target/form prerequisite first; if
+cooldown reduction targets a selected skill, activate the target skill before
+the reducer; place NP-consuming, action-sealing, or delayed-cost skills after
+selected effects that need that resource/action. Other buffs and resistance
+downs only need to be active before Attack. Multi-turn buffs may go earlier to
+start cooldown sooner and one-turn burst effects may go later for readability,
+but duration alone does not create a mandatory ordering dependency. Once hard
+dependencies are satisfied, use this tie-break order: urgent survival, this-
+turn NP/loop enabler, direct damage, future-only value. Follow explicit local
+when/priority hints within a tie; without one, choose a stable order and stop
+analyzing. Do not sort by servant slot or use a fixed charge-first recipe.
 
 Use this decision order:
 
 1. If an enemy NP is imminent or the party cannot survive the next action,
    prioritize the smallest reliable defensive/control sequence that preserves
    the damage plan.
-2. If a kill, break bar, or required NP is reachable this turn, release only
-   the buffs/debuffs/charges that materially change that result, in dependency
-   order (charge -> party/target buffs -> resistance down -> one-turn NP
-   buffs). Include the support slot when its effect is authoritative.
-3. If this is setup for a later wave, spend multi-turn buffs or batteries only
-   when their duration/refund creates a demonstrable loop; otherwise hold them.
-4. If no skill has positive expected value, return an empty `skill_group_ids`
-   list and attack. Never manufacture a servant identity from an icon.
+2. For each eligible skill, use it when at least one known effect helps this
+   turn or a fact-supported later turn and no known cost outweighs that help.
+   Do not require proof that it changes a kill or break-bar result. Include the
+   support slot when its effect is authoritative.
+3. Use multi-turn buffs early when their coverage and cooldown start help the
+   current and later actions. A plausible supported benefit is enough; an exact
+   guaranteed loop is not required. Hold a resource for a concrete later use.
+4. Prefer spending useful ready skills. Return an empty `skill_group_ids` list
+   only when every eligible skill has no known useful effect, has a concrete
+   better future use, or has a known cost that outweighs its benefit. Vague
+   concerns about future possibility or imperfect optimization are not reasons
+   to hold. Never manufacture a servant identity from an icon.
 
 For each candidate, mentally compare `use now`, `hold`, and (when relevant)
 `defend first`. Account for target restrictions, probability of control,
@@ -74,8 +100,9 @@ Decide how this turn should use the configured skill phase and go to the
 Attack command-card screen. Use the current screenshot and LOCAL_FACTS. Do not
 invent skill IDs, coordinates, taps, or card choices.
 
-`battle_context.active_slots` is the authoritative list of servants currently
-on the field, confirmed from this screenshot. Analyze and select skills only
+`battle_context.active_slots` bounds the currently permitted frontline slots.
+It is not permission to invent occupants where the screenshot shows empty space.
+Analyze and select skills only
 for those slots. Any configured slot, servant knowledge, or skill entry whose
 owner slot is not in `active_slots` is a back-line/departed servant and must be
 ignored for this turn, even if it appears elsewhere in the configuration.
@@ -84,16 +111,18 @@ do not fill in or reason about two absent servants.
 
 When `servant_knowledge.knowledge_status` is `known`, use the per-slot skill
 and Noble Phantasm effect tags as the authoritative effect reference. Prefer an
-ordered subset that creates a coherent sequence (charge first, then attack/card
-buffs, then one-turn NP damage buffs immediately before attacking) and preserve
-defensive/control skills for an actual threat. Do not return every eligible
+ordered subset that creates a coherent sequence based on costs, cooldown
+reduction, buff coverage and effect dependencies. Evaluate the whole skill
+bundle even if its charge or defensive component is unnecessary. Do not return every eligible
 skill merely because it is ready. When knowledge is `unresolved` or
 `unavailable`, state that limitation and rely only on visible/local facts.
 
 There is no fixed limit on how many skill groups may be returned. Decide the
-set from the current situation: a skill being ready is not, by itself, a reason
-to use it, but several skills may all be appropriate when their combined
-effects serve this turn. Conversely, it is valid to return an empty list. If a
+set from the current situation: readiness alone does not make every skill
+useful, but any known useful effect is sufficient when no concrete cost
+outweighs it; several skills may all be appropriate. An empty list is valid
+only when every eligible skill lacks a known use or has a concrete reason to
+hold it. If a
 servant identity or effect is unknown, do not invent its exact behavior from a
 generic icon.
 
@@ -198,38 +227,17 @@ rightmost). Each `configured_skill_groups` entry's
   `priority`, `owner_np_percent`, `owner_hp_ratio`, `when`, and
   `repeat_after_cooldown` for timing. Prefer the explicitly provided
   `servant_skill_effects` and `servant_skill_target` fields over icon guesses.
-  On an early stage, holding a buff or a charge skill for a later, harder stage
-  is usually better than using it now.
+  Early multi-turn buffs, useful partial charge and starting cooldowns can be
+  better than holding. Identify an actual later use before reserving a skill.
 
-## Skill-icon effect families
+## Skill-icon evidence
 
-FGO reuses standardized icon families. Treat the icon family as evidence for
-the PRIMARY effect, not proof of an exact skill: a named skill can add several
-secondary effects that are absent from its icon.
-
-- Red sword, burst, card, or upward-aura families usually mean Attack Up,
-  Buster/Arts/Quick performance, NP Damage Up, Critical Damage Up, or special
-  attack. Save short one-turn versions for the actual NP/damage turn; a
-  three-turn party buff may be used before a multi-wave damage sequence.
-- Blue shield, barrier, or dodging-person families usually mean Defense Up,
-  damage cut, Evade, Invincibility, or Taunt. Preserve them when enemy charge
-  is low; prioritize them when an enemy NP is imminent or party HP is unsafe.
-- Gold gauge/light families usually mean immediate NP charge; a clock/gauge
-  variant usually means NP per turn. Star-shaped families usually mean stars,
-  star gather, star generation, or critical damage. Never spend direct charge
-  on an owner already at 100% unless the same skill's other effects justify it.
-- Green heart, cross, or restorative-light families usually mean healing,
-  regeneration, maximum-HP support, cleanse, or debuff resistance. Do not
-  waste healing at full HP unless cleanse/resistance is presently valuable.
-- Purple/dark downward-aura or enemy-silhouette families usually mean enemy
-  Attack/Defense/Card Resistance Down, charge reduction, stun, charm, seal,
-  poison, curse, or burn. Use hard control against an imminent enemy action;
-  use damage debuffs immediately before the party's damage turn.
-- A unique character-specific icon can still represent a common family. Use
-  exact effects only from the dynamically injected local servant record when
-  the current portrait is reliably resolved; otherwise use only the broad
-  family and LOCAL_FACTS. Never infer an exact percentage, target, or hidden
-  secondary effect from a similar-looking icon.
+Icons locate and distinguish buttons; their color or artwork alone cannot
+establish a skill's effects, target, costs, duration or identity. Use explicit
+current-slot structured effects or clearly readable effect text. An explicitly
+supplied broad role may support a qualitative use, but is not a numeric effect
+or proof of unlisted secondary effects. Skip only the unsupported skill and
+continue with useful known skills or attack_now.
 
 ## Dynamic servant data only
 
@@ -244,9 +252,9 @@ skill IDs, effects, targets, and NP behavior:
 - `servant_knowledge.knowledge_status=known`: local offline database data is
   authoritative for the visible slot; follow its supplied skill records.
 - `unresolved` or `unavailable`: do not guess a name, skill, percentage,
-  target, or NP effect from a familiar portrait or icon. Use broad icon-family
-  evidence only when it is enough to make a safe decision, otherwise hold the
-  skill or attack.
+  target, or NP effect from a familiar portrait or icon. Use only explicit
+  supplied effects/roles or readable current text; otherwise hold that skill
+  and continue with the remaining plan or attack.
 - Ignore stale configured lineup or knowledge for slots absent from
   `battle_context.active_slots`. After a replacement, trust only refreshed
   current-slot facts.
@@ -260,8 +268,15 @@ Prefer `use_skill_groups` with a precise subset whenever you can see the
 buttons. Use `attack_now` to skip skills when the bar is too ambiguous to plan;
 use `pause_for_human` only when proceeding is genuinely unsafe.
 
-Example with an interleaved release order (not grouped by servant):
+Apply the shared 战术收益与资源预算 policy to compare 不放技能, 最小有效组合
+and 爆发/循环组合. Count 充能部分 separately from the rest of each 复合技能,
+including NP 获得量 and 多回合 effects. 减冷却 ordering must respect skills
+already on cooldown and the current eligible set. Attack 前不知道本轮五张卡;
+do not invent visible crit cards to justify a crit-only skill. In reason, state
+the objective, useful selected effects and recipients, dependency, and 保留用途.
+
+Example of dependency ordering (use only when the supplied effects establish it):
 
 ```json
-{"action":"use_skill_groups","arguments":{"skill_group_ids":["frontline_slot2_skill1","frontline_slot1_skill2","frontline_slot3_skill1"]},"confidence":0.9,"reason":"charge first, then damage buffs, then support"}
+{"action":"use_skill_groups","arguments":{"skill_group_ids":["frontline_slot1_skill1","frontline_slot2_skill1"],"skill_targets":{"frontline_slot2_skill1":1}},"confidence":0.9,"reason":"先开启1位长效增益并启动冷却，再由2位技能给1位减冷却；保留纯防御应对后续威胁"}
 ```

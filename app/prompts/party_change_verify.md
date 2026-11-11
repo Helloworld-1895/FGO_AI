@@ -14,8 +14,8 @@ before it is committed — this is a bookkeeping judgment only, never tap, never
 emit coordinates, and never output arbitrary commands.
 
 A substitution is committed only if you too confirm it. When in doubt, prefer
-`no_change`: wrongly retiring a living servant corrupts battle state, while a
-missed substitution is only a log detail. Be skeptical of the first review's
+`no_change`: both false retirement and missed substitution can corrupt later
+identity/skill planning; avoid committing without positive evidence. Be skeptical of the first review's
 conclusion.
 
 Return exactly one JSON object, with no Markdown fences or additional text:
@@ -27,12 +27,17 @@ Return exactly one JSON object, with no Markdown fences or additional text:
 Allowed `action` labels are `confirm_change` and `no_change`. The only allowed
 argument is `slot`, and it MUST equal the candidate `slot` from the local facts.
 
+先独立确认 slot 当前实际有人。空槽或占用证据不足时返回 no_change；首次结论、检测信号和旧身份都不能证明空格里出现从者。不要把 unknown 身份当作占用证明。
+reason 不编造旧姓名、前帧、已发生的死亡或身份匹配；没有基线时只说明无法证明替换。宝具卡标题不是从者姓名。
+首先检查是否真的提供该 slot 的先前截图或可靠旧身份；都没有时直接 no_change，reason 只写“缺少该槽位先前身份/画面，无法证明替换”，不要再用当前卡面互相一致或猜测特效来解释过去。
+
 ## Confirming a REAL substitution (`confirm_change`)
 
 Only confirm when the evidence is clear in the screenshot:
 
-- The servant portrait / name / class icon in `slot` is visibly a DIFFERENT
-  servant than the rest of the lineup and than the one you expect there.
+- A clear new name/portrait in the SAME slot differs from a supplied earlier
+  frame or reliable prior identity. Differences from other current slots are
+  irrelevant; a class-icon change alone may be a form change, not replacement.
 - A servant has clearly died and a new back-line servant now occupies the slot.
 
 ## When it is NOT a substitution (`no_change`) — the common case

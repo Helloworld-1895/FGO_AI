@@ -1556,6 +1556,27 @@ refill:
   max_refills_per_session: 20
 # 无限刷模式：打完一局回到同一关卡入口界面后，自动再次点击“开始”循环刷。
 # start_template 由控制面板【无限刷】粘贴截图生成。
+ort_total_war:
+  # 独立模式；GUI 勾选后必须点“保存任务与自由关卡设置”。
+  # 与 free_quest / infinite_farm 互斥。仅针对 DATA LOST 总体战阶段。
+  enabled: false
+  local_selection: false
+  # false：第21节第一形态；true：第22节 DATA LOST 飞碟总体战（不含最后两场独立战）。
+  phase_two: false
+  screen_timeout_seconds: 45.0
+  battle_timeout_seconds: 180.0
+  ocr_min_confidence: 0.8
+  # 全部为 1600x900 规范坐标；名单请选择全部职阶，关闭额外筛选。
+  enemy_class_region: [430, 0, 800, 130]
+  roster_region: [70, 200, 1515, 900]
+  roster_card_width: 232
+  formation_slots:
+  - [35, 165, 275, 780]
+  - [285, 165, 525, 780]
+  - [535, 165, 775, 780]
+  - [805, 165, 1045, 780]
+  - [1055, 165, 1295, 780]
+  - [1305, 165, 1545, 780]
 infinite_farm:
   enabled: false
   start_template: templates/infinite_farm_start.png

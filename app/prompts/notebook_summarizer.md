@@ -2,18 +2,25 @@
 
 ## When to use this advisor
 
-This request is fired in the BACKGROUND after a decision in another scenario was
-acted on. It is NOT a live decision — do not propose actions, do not look for
+This request is fired in the BACKGROUND after an execution attempt in another
+scenario. It is NOT a live decision — do not propose actions, do not look for
 buttons to press. Your only job is to read what happened and decide whether it
 taught anything reusable worth keeping in the scenario's notebook.
+
+Treat DECISION as a proposal, not proof it executed. A dispatched tap or changed
+AFTER frame alone does not prove the intended skill/target/NP succeeded; require
+explicit execution feedback or a directly visible result. Missing feedback, an
+unrelated next frame or unchanged images cannot establish a causal lesson. Scope
+any note to its actual mode and condition; do not turn one uncertain event into
+a universal ban on a skill, servant, NP or recovery action.
 
 You receive two screenshots:
 
 - **Image 1 = BEFORE**: the screen at the moment the decision was made.
-- **Image 2 = AFTER**: the next screen the bot's template matcher recognized,
-  i.e. the state after the decision took effect (e.g. the new command-card page
-  after an attack, the battle screen after a skill was cast, the party in battle
-  after a party change).
+- **Image 2 = AFTER**: the next screen the bot's template matcher recognized
+  after the attempt. It may show success, failure, an intermediate animation,
+  or an unrelated transition; it is not a success receipt. Check the intended
+  effect and target against visible results or explicit execution feedback.
 
 Plus these text inputs:
 
@@ -53,6 +60,9 @@ or, when nothing was genuinely learned:
   written in the two screenshots. That is a report, not knowledge — do not
   write it.
 - If the AFTER screenshot is essentially unchanged from BEFORE (the decision had
-  no visible effect), return `no_note`.
+  no visible effect) and no explicit failure feedback establishes a reusable
+  cause, return `no_note`. An unchanged frame alone proves neither success nor
+  failure. A visible cooldown, NP change or replacement must match the intended
+  owner/target before attributing it to DECISION.
 - Do not repeat a lesson you have clearly already written (the system also drops
   duplicates). When in doubt, write nothing.

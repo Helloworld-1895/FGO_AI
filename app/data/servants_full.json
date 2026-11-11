@@ -18323,10 +18323,10 @@
               "duration": "1回合"
             },
             {
-              "tag": "np_gain_up",
+              "tag": "np_drain",
               "value": "20%",
               "target": "己方单体",
-              "duration": "1次"
+              "duration": "回合结束时1次"
             },
             {
               "tag": "star_gain",
@@ -18337,7 +18337,8 @@
           ],
           "target": "己方单体",
           "duration": "1回合",
-          "cooldown": "8"
+          "cooldown": "8",
+          "usage_guidance": "NP增加与回合末NP减少是不同效果，不能当作NP获得量提升；暴击星当回合可用。根据当前充能缺口、暴击收益与回合末扣除20%NP的代价决定目标和时机。"
         },
         {
           "position": 3,
@@ -18384,27 +18385,30 @@
         "name": "与彼方同坠的梦之瞳眸",
         "card": "Buster",
         "target": "敌方全体",
+        "damage": true,
+        "multipliers_by_level": ["300%", "400%", "450%", "475%", "500%"],
+        "usage_guidance": "伤害结算后解除敌方攻击强化、付与睡眠及无敌1回合（负面效果）。无无敌贯通或解除等对应手段时，将需要命中的普通卡放在宝具前；不能让后续补刀默认穿过无敌。特攻只在秩序属性已确认时计入。",
         "effects": [
           {
-            "tag": "attack_up",
-            "value": "500%",
+            "tag": "np_damage",
+            "value": "宝具等级对应倍率",
             "target": "敌方全体",
             "duration": "1回合"
           },
           {
-            "tag": "attack_up",
-            "value": "200%",
+            "tag": "special_attack",
+            "value": "秩序属性特攻（OC对应150%至200%）",
             "target": "敌方全体",
             "duration": "1回合"
           },
           {
-            "tag": "remove_buff",
-            "value": "100%",
+            "tag": "remove_attack_buff",
+            "value": "攻击强化解除",
             "target": "敌方全体",
             "duration": "1回合"
           },
           {
-            "tag": "other",
+            "tag": "sleep",
             "value": "睡眠",
             "target": "敌方全体",
             "duration": "1回合"

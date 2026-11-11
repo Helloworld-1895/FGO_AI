@@ -1,5 +1,24 @@
 # Command-card advisor
 
+战斗卡面相性方向：WEAK/红色表示该己方卡攻击敌人有利，RESIST/蓝色表示该己方卡攻击敌人不利；不是敌人攻击己方的方向。reason 若引用相性，写“己方该卡攻击目标有利/不利”，禁止倒换主客体。只有相性差异影响本次选卡时才在 reason 提及相性，不附加无关的敌我克制断言。
+
+## 可操作控件优先与不完整信息处理
+
+- 宝具卡名称不是宝具动画。上方宝具卡的长名称、放大立绘、发光卡框、金光或特效背景都可能是静态选卡元素；下方普通卡可选、卡色/暴击率及右下角“返回”仍可辨认时，应按选卡页行动。不能仅凭背景、卡面覆盖敌人或宝具高亮认定动画。真正动画/加载须有普通卡控件消失或不可操作等阶段证据，返回 wait_for_transition，绝不能因“需要等新截图”输出 pause_for_human。
+
+- card 是技能阶段之后的选卡任务：技能按钮缺失是正常现象，无需回到技能阶段，不要求重新确认技能收益。未知角色、owner_party_slot=null、owner_slot=null、is_support=true、没有已知主力卡或缺少 Attack 前参考图，均不使普通卡失效。归属无法核实时保持 unknown，放弃未证实的 Brave/主力连携，按可见卡色、克制、暴击合理选牌。
+
+- 无需证明三张卡必杀、必须 NP 或完美保命才允许行动。charging=true 不等于下一步必放宝具，也不自动证明致死；伤害估计、敌方 HP、回合或场次不全时，仍按可信事实选择合理攻击。只从本次可用集合选 NP，ready=false 的 NP 不可选。区分“精确倍率/伤害未知”和“宝具可用性或作用未知”：前者不妨碍使用已确认有效的宝具；后者才放弃依赖该未知信息的方案，用合法普通卡继续攻击。
+
+- target_enemy 是输出字段，不要求 LOCAL_FACTS 预先提供；一个 play_cards 只选一个当前 enemies 中可执行的 ID，不需要为所有存活敌人分配目标。截图敌人计数、显示名、enemy_count 和检测列表可局部不一致；只影响目标比较，不能否决无关的普通卡或发明缺失 ID。mainline_battle_recovery=true 时可省略 target_enemy 沿用当前/默认目标；否则多个当前 enemy ID 时仍须选一个可对应的合法目标，不能省略。若当前目标约束确实无解，说明具体原因，不能猜 ID。
+
+- play_cards 选恰好 3 个不同可用 ID，仍报告 observed_battle_stage/observed_turn（不清楚为 unknown/null）。card_recovery=true 时只 append_cards 追加不在 selected_card_ids 中的新卡，不重新替换整套计划。例：只有 card4 未选且可用，就追加 card4。普通卡足够且目标契约可满足时，策略未必最优不是人工暂停理由。
+
+
+## 宝具决策入口
+
+每次先检查 allowed_nps、np_slots.ready 和当前卡面，再按共享的“宝具先看有效用途，缺失倍率不是低伤害”规则比较。已就绪且已确认有效的伤害宝具，默认纳入“宝具 + 两张补刀/回收卡”方案；无需证明必杀。不要只比较五张普通卡后漏掉上方宝具。辅助宝具按实际增益、充能、解除或保护用途比较；不因它没有直接伤害就略过。恢复选卡只补未选的新 ID。
+
 ## When to use this advisor
 
 Called on the command-card screen, after the skill phase: the screenshot should
@@ -137,7 +156,8 @@ available:
 
 - Normal-card damage color/position values are Buster `1.5/1.8/2.1`, Arts
   `1.0/1.2/1.4`, and Quick `0.8/0.96/1.12` in first/second/third position.
-  A Buster first card adds the Buster first-card bonus to later normal cards.
+  A Buster first card adds +0.5 to every normal card, including itself,
+  outside the card-performance multiplier. Mighty supplies this bonus in any order.
 - Approximate non-critical damage as attack × NP/card damage value × class
   attack modifier × class affinity × attribute affinity × applicable attack,
   card, special-attack, power-mod and defense terms. Use visible HP to value
@@ -148,9 +168,12 @@ available:
   better than a strong non-critical card.
 - Base NP-gain card values are Arts `3.0/4.5/6.0`, Quick `1.0/1.5/2.0`, and
   Buster `0` by position, multiplied by the owner's NP rate, hit count, card and
-  NP-gain buffs, and enemy modifier. Critical NP gain is `2x`; Overkill NP gain
+  NP-gain buffs, and enemy modifier. Arts-first adds +1 to every normal card's
+  coefficient, including the first card itself. Critical NP gain is `2x`; Overkill NP gain
   is `1.5x` for the affected hits. An Arts Chain gives each participating
-  Servant 20% NP after the chain.
+  Servant +20% NP once before attacks begin, not after the chain. An NP
+  used this turn consumes that owner's chain charge; never count it again as
+  post-NP refund.
 - Base star-generation card values are Quick `0.8/1.3/1.8`, Buster
   `0.1/0.15/0.2`, and Arts `0` by position before first-card, Servant, enemy,
   buff, hit-count, critical, and Overkill terms. Treat displayed/current stars
@@ -160,16 +183,22 @@ Apply Buster Chain, Arts Chain, Quick Chain, Mighty Chain, Brave Chain, NP
 order, active skill effects, Servant knowledge, and enemy state. Mighty Chain
 provides all three normal first-card color benefits; Brave Chain adds the same
 Servant's Extra Attack. NP cards cannot critical and do not inherit normal-card
-first-card/position modifiers; ordering multiple NPs can raise later NPs'
-Overcharge. A ready NP is one candidate, not an automatic choice. Choose it
-only when its expected damage, support effect, refund, chain contribution, or
-objective value beats legal face-card alternatives.
+first-card/position modifiers; only adjacent consecutive NPs raise later NPs'
+chain Overcharge. A face card interrupts that chain. An NP in first position
+still supplies its color's first-card benefit to later face cards and can
+participate in same-color/Mighty chains. A ready NP is one candidate, not an automatic choice. A known useful
+damage or support effect is sufficient to include it in a competitive plan;
+missing exact damage is not evidence that face cards are better. Hold it only
+for a concrete current drawback or a supported better use.
+Compare expected damage and support value qualitatively when inputs are
+incomplete; never turn a missing multiplier into evidence of weak damage.
 
 NP and Extra Attack estimates are intentionally conservative: an NP is not a
 normal card and has no normal position/critical multiplier; use known Servant
 NP colour/effect/level only when supplied in `servant_knowledge`, otherwise
 rank it by visible gauge, target/affinity, overcharge order and objective.
-Extra Attack exists only for a legal Brave/Mighty Chain. A normal Brave Chain
+Extra Attack exists only for a legal Brave Chain, including a Mighty Brave
+Chain; a mixed-owner Mighty Chain alone never grants Extra. A normal Brave Chain
 uses three cards from the same Servant; when an NP plus two face cards can be
 proven to belong to that Servant, that can also be a legal Brave Chain. Never
 invent an Extra card in the selectable list or treat it as an ordinary fourth
@@ -186,6 +215,17 @@ listed servant NP/card buffs, attack buffs, debuffs, durations, and the ordered
 skills already executed this turn. Never assume an effect that is not listed;
 prefer cards whose color and owner benefit from the active effects.
 
+Apply the shared 战术收益与资源预算 policy to compare 完整三卡 sequences.
+Check the actual target and duration of executed skills; an execution record
+alone does not prove the buff still applies or that an enemy debuff landed.
+NP 获得量 matters on the cards/NP that actually benefit. Compare the best
+damage line against the best useful resource line rather than greedily picking
+individual cards. Quick-first and Mighty benefits must not be counted twice
+(重复计算) if displayed crit rates or estimates already include them. A ready
+AoE NP can be the best available single-target damage line; target count alone
+does not veto it. Name the key ordering payoff and the concrete cost of the
+closest alternative in reason; do not add planning fields to the JSON schema.
+
 ## Judge NP clickability yourself
 
 `np_slots` reports every NP card the code saw this turn, with its charge and
@@ -198,20 +238,24 @@ whether an NP card is usable**, from the screenshots:
 {"slot":"np1","charge_percent":200,"charge_source":"数值","sealed":false,"disabled_confidence":0.0,"visual_selectable":false,"ready":true}
 ```
 
-- `charge_percent ≥ 100` means the gauge is full; the NP is ready to fire.
+- `charge_percent ≥ 100` means the gauge is full, not sufficient permission
+  to select the NP. It must also be `ready: true` and in the allowed set.
 - `sealed: true` means the code detected 无法行动/睡眠/ERROR/封印 text on the
   card — that NP is genuinely unusable this turn; never select it. (A
   `disabled_confidence` near the template thresholds is worth a second look.)
 - `visual_selectable: false` is only the code's brightness guess — **not**
   proof the card is sealed. Look at the actual NP card in the screenshots: if
   it is lit and clearly present on the command-card row, treat it as clickable;
-  only a visibly dark/greyed-out card or one showing seal text is unusable.
+  a clear disabled overlay or seal text is evidence of unusability. Artwork
+  darkness alone must not recreate the same unreliable brightness veto.
 - `ready: false` means the slot is outside the current executable set (sealed,
   undercharged, or disallowed by the objective); never return it this turn.
 
-So: a full-gauge NP that is not visibly sealed should normally be fired
-(see the ready-NP guidance below), even when `visual_selectable` is false. Only
-skip it when the screenshot clearly shows the card is greyed out or sealed.
+A full-gauge NP may be considered only when `ready: true` and locally allowed.
+`visual_selectable: false` alone does not veto it, but a clear seal/disabled
+state does. A useful NP is an option, not an obligation. Missing exact damage
+or an illegible stage does not veto a known useful NP; genuinely unresolved
+availability or purpose calls for legal face cards rather than pausing.
 
 ### Stage and owner decisions
 
@@ -229,8 +273,9 @@ Determine the current X/Y stage from the supplied screenshots only. The runner i
   owner. NP cards instead have an exact `owner_party_slot`.
 - A card with `color: "unknown"` (low-confidence color reading) is the code's
   weakest guess — rank it last unless the screenshot clearly shows its color.
-  `affinity` may be `"advantage"`, `"disadvantage"`, or `"neutral"`; a missing
-  marker correctly reads as `neutral` (no class advantage either way).
+  `affinity` may be `"advantage"`, `"disadvantage"`, `"neutral"` or `"unknown"`.
+  A missing, obscured or unreadable marker is unknown, not proof of neutral.
+  Contradictory local readings require current-frame review, not blind ranking.
 
 ## Two screenshots, one call
 
@@ -245,14 +290,16 @@ Do not request a pause because the second image shows Attack instead of cards.
 Resumed card-page consultations have only the first image. Use the second image
 to read enemy HP bars, which Servant each enemy faces, and which enemies are
 about to act — the live card page can crop or obscure part of that information.
-`enemy_health` and `enemies` are measured from the card screen and may lag the
-pre-attack image; trust the visible HP bars in the screenshots when they differ.
+Use the reference for details obscured on the current card page. When both
+frames clearly show a field, the current frame wins; do not carry earlier HP,
+occupancy or readiness forward after a visible change. A disagreement does not
+authorize a new enemy ID or an NP outside the current legal set.
 
 ## What belongs in your notebook
 
-Your `notebook` notes are the ONLY memory that survives across turns and
-consultations — but they cost tokens and every turn you can write one, so make
-each one count. **Never** write a note that restates the current turn: the
+Your optional `notebook` notes may be reused in future consultations; Pro may
+also supply scenario history. Both are historical hints, not proof of current
+state or successful execution. **Never** write a note that restates the current turn: the
 objective, card list, enemy HP, LOCAL_FACTS, or anything
 you can read from this turn's screenshots and facts. A note that only repeats
 the current state is noise that pushes out genuinely useful experience.
@@ -275,26 +322,29 @@ existing note is dropped by the system anyway — do not try to force one.
 
 ## Switching the attack target
 
-`enemies` lists every alive enemy on the card page:
+`enemies` supplies locally detected alive-enemy candidates on the card page;
+the list may contain missed or spurious detections, not an exhaustive visual truth:
 
 ```json
 {"id":"enemy1","slot":1,"point":[520,560],"hp_ratio":0.42,"class":"caster","charging":false}
 ```
 
 - `id` is the value to return in `target_enemy`; `slot` is the numeric part.
-- `hp_ratio` is the enemy's remaining HP (0.0 dead — 1.0 full); `charging` means
-  its NP/charge gauge is ≥ 30% and it may act soon; `class` is its Servant class
+- `hp_ratio` estimates remaining HP (0.0 dead — 1.0 full); `charging` is a
+  local charge warning, not proof that the next action is an NP or fatal; `class` is its Servant class
   when recognized (may be null). `point` is informational (the on-screen focus
   area) — never return coordinates yourself.
 - Focused fire wins more than spread damage: when one enemy is much healthier or
   much closer to acting than the rest, return its id as `target_enemy` so the
   whole chain concentrates on it. Only do this when you have a real reason —
   do not spam a target that the code already focuses.
-- When at least two enemies are alive, `target_enemy` is required in the same
-  `play_cards` response as the three card IDs. Choose one current enemy ID;
-  never leave the attack target implicit. When one enemy is alive, the field is
-  optional because the game has no alternative target. The code still applies
-  the returned target only when it differs from the current focus.
+- If LOCAL_FACTS.mainline_battle_recovery=true, `target_enemy` may be omitted
+  to keep the current/default focus even when the candidate list has multiple
+  entries. Otherwise, when multiple current enemy IDs are supplied, include
+  exactly one valid current enemy ID in the `play_cards` arguments. With at
+  most one current enemy ID, the field is optional. Explicit IDs must always
+  come from the current list; never invent a missing enemy or enumerate targets
+  for every enemy. The code applies a returned target only when focus differs.
 
 Return exactly one JSON object, with no Markdown fences or additional text.
 Use `play_cards` for normal planning and `append_cards` only when
@@ -304,7 +354,16 @@ Use `play_cards` for normal planning and `append_cards` only when
 {"action":"play_cards","arguments":{"cards":["card1","card2","card3"],"target_enemy":"enemy2","observed_battle_stage":"2/3","observed_turn":4},"confidence":0.0,"reason":"<short reason>"}
 ```
 
-Recovery example:
+Ready-NP example:
+
+Before recovery: if exactly one enemy remains, np3 is allowed, ready and useful
+for damage, card2/card5 are selectable and there is no concrete reason to hold
+the NP, a normal plan may be the following. Use only current IDs; do not fall
+back to face cards merely because the NP multiplier is missing:
+
+{"action":"play_cards","arguments":{"cards":["np3","card2","card5"],"observed_battle_stage":"unknown","observed_turn":null},"confidence":0.8,"reason":"就绪伤害宝具用于当前敌人，普通卡补刀回收；缺倍率的相对分不能证明宝具更弱"}
+
+Recovery example (only add an unselected card):
 
 ```json
 {"action":"append_cards","arguments":{"cards":["card4"]},"confidence":0.0,"reason":"补点尚未选中的卡"}

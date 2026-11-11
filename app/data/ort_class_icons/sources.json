@@ -1,0 +1,132 @@
+{
+  "retrieved": "2026-11-06",
+  "source": "Atlas Academy game asset mirror; FGO class icons, no external code copied",
+  "icons": {
+    "saber": {
+      "url": "https://static.atlasacademy.io/JP/ClassIcons/class1_1.png",
+      "shape": [
+        80,
+        80,
+        4
+      ],
+      "bytes": 6321
+    },
+    "archer": {
+      "url": "https://static.atlasacademy.io/JP/ClassIcons/class1_2.png",
+      "shape": [
+        80,
+        80,
+        4
+      ],
+      "bytes": 6860
+    },
+    "lancer": {
+      "url": "https://static.atlasacademy.io/JP/ClassIcons/class1_3.png",
+      "shape": [
+        80,
+        80,
+        4
+      ],
+      "bytes": 6748
+    },
+    "rider": {
+      "url": "https://static.atlasacademy.io/JP/ClassIcons/class1_4.png",
+      "shape": [
+        80,
+        80,
+        4
+      ],
+      "bytes": 7292
+    },
+    "caster": {
+      "url": "https://static.atlasacademy.io/JP/ClassIcons/class1_5.png",
+      "shape": [
+        80,
+        80,
+        4
+      ],
+      "bytes": 6746
+    },
+    "assassin": {
+      "url": "https://static.atlasacademy.io/JP/ClassIcons/class1_6.png",
+      "shape": [
+        80,
+        80,
+        4
+      ],
+      "bytes": 6461
+    },
+    "berserker": {
+      "url": "https://static.atlasacademy.io/JP/ClassIcons/class1_7.png",
+      "shape": [
+        80,
+        80,
+        4
+      ],
+      "bytes": 6629
+    },
+    "shielder": {
+      "url": "https://static.atlasacademy.io/JP/ClassIcons/class1_8.png",
+      "shape": [
+        80,
+        80,
+        4
+      ],
+      "bytes": 6738
+    },
+    "ruler": {
+      "url": "https://static.atlasacademy.io/JP/ClassIcons/class1_9.png",
+      "shape": [
+        80,
+        80,
+        4
+      ],
+      "bytes": 6854
+    },
+    "alter_ego": {
+      "url": "https://static.atlasacademy.io/JP/ClassIcons/class1_10.png",
+      "shape": [
+        80,
+        80,
+        4
+      ],
+      "bytes": 7696
+    },
+    "avenger": {
+      "url": "https://static.atlasacademy.io/JP/ClassIcons/class1_11.png",
+      "shape": [
+        80,
+        80,
+        4
+      ],
+      "bytes": 6892
+    },
+    "moon_cancer": {
+      "url": "https://static.atlasacademy.io/JP/ClassIcons/class1_23.png",
+      "shape": [
+        80,
+        80,
+        4
+      ],
+      "bytes": 6894
+    },
+    "foreigner": {
+      "url": "https://static.atlasacademy.io/JP/ClassIcons/class1_25.png",
+      "shape": [
+        80,
+        80,
+        4
+      ],
+      "bytes": 7937
+    },
+    "pretender": {
+      "url": "https://static.atlasacademy.io/JP/ClassIcons/class1_28.png",
+      "shape": [
+        80,
+        80,
+        4
+      ],
+      "bytes": 7652
+    }
+  }
+}

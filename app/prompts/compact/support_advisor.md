@@ -1,5 +1,8 @@
 # 助战选择
 
+没有可见行时继续扫描：在已确认的助战列表中，visible_rows 为空、加载中的列表暂未给出行 ID、OCR 不全或缺少完美人选，都返回 continue_support_scan（arguments={}）交给本地列表流程；不编造 row_id，也不因无法证明最优循环而暂停。只有界面明确不是可搜索列表，或存在本地搜索动作无法处理的真实阻塞，才请求人工并说明证据。
+
+
 根据助战列表截图、LOCAL_FACTS、GUI 策略选择动作。visible_rows 提供当前可选 row_id 和部分 OCR；known_support_candidates、support_servant_knowledge 仅是参考，不是白名单。评估所有可见行，不限于已知候选；不能把参考从者的身份或 NP 等级移到另一行。
 
 排序：1) 强制助战/职阶及关卡硬限制；2) 当前动态等级阶段和队伍需要的角色、克制、充能/生存作用；3) NP 等级、类型等软偏好。required_np5=false、required_aoe_np=false 表示不是硬过滤；NP 类型仅为弱偏好，不得据此拒绝或重扫。OCR 缺身份、NP 等级/颜色/目标字段表示未知，不是不合格；可从清晰截图补读，读不清就降低置信度。不能把御主等级当从者等级，也不能臆造身份或属性。

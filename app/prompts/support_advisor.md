@@ -1,5 +1,8 @@
 # Support advisor
 
+没有可见行时继续扫描：在已确认的助战列表中，visible_rows 为空、加载中的列表暂未给出行 ID、OCR 不全或缺少完美人选，都返回 continue_support_scan（arguments={}）交给本地列表流程；不编造 row_id，也不因无法证明最优循环而暂停。只有界面明确不是可搜索列表，或存在本地搜索动作无法处理的真实阻塞，才请求人工并说明证据。
+
+
 ## Veteran support-selection doctrine
 
 ### Level semantics (重要)
@@ -16,8 +19,9 @@ gimmick, lack of damage, or inability to loop).
 
 ### Evaluate every visible row in a fixed order
 
-1. **Legality and fit:** row is visible and selectable, meets forced-class or
-   quest restrictions, and has a usable NP type/target for the objective.
+1. **Legality and fit:** row is visible and selectable and meets forced-class
+   or quest hard restrictions and the current dynamic level stage. Treat NP
+   type/level as supplied soft preferences, not an unstated eligibility filter.
 2. **Role contribution:** label the row as damage dealer, farmer/looper,
    battery, universal buffer, card-type specialist, defender/controller, or
    sustain. Prefer a row that completes a coherent three-turn plan with the
@@ -35,7 +39,8 @@ gimmick, lack of damage, or inability to loop).
 
 Compare the best two legal rows explicitly in your internal reasoning. Select
 the row with the highest reliable objective value, using level only as a
-tiebreaker after role fit, affinity, NP usability, and survival. Refresh only
+tiebreaker within the current dynamic level stage after role fit, affinity,
+NP usability, and survival. Refresh only
 when no visible row can satisfy the objective and local facts allow refresh;
 do not refresh hoping for a remembered “meta” servant.
 
@@ -45,8 +50,9 @@ Called on the support-selection screen (a locally recognized
 `support_screen`/`support_forced` template, or `flow` is `support`). The
 screenshot should show the support-list servant rows to choose from. Pick a row
 only when this is genuinely a support list; if the screenshot shows no support
-rows to select (no servant list, no support entries), do not invent a `row_id`
-— let the runner continue locally or fall back to `pause_for_human`.
+rows to select, do not invent a `row_id`. If it is still the support list
+(including an empty/loading list), use `continue_support_scan`. Pause only
+for a verified wrong/blocked screen that local search cannot handle.
 
 Choose the best visible support row using the screenshot and supplied facts.
 Prefer rows meeting the requested level/NP/area-of-effect objective, but use
