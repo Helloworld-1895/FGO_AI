@@ -2,7 +2,7 @@
 
 Windows x64 上运行的《命运-冠位指定》MuMu/ADB 屏幕自动化工具。
 
-当前版本：**1.1.3**。新增 AI 接口总开关，改善无 AI 本地恢复并修复战斗画面误暂停。更新内容见 [v1.1.3 发布说明](docs/RELEASE_NOTES_v1.1.3.md)。
+当前版本：**1.1.4**。增加 ORT 模式、更新 UI。更新内容见 [v1.1.4 发布说明](docs/RELEASE_NOTES_v1.1.4.md)。
 
 程序通过 ADB 获取模拟器画面，使用 OpenCV 模板匹配、OCR 和可选的模型服务识别界面，再按照本地规则执行受保护的点击与滑动操作。它不读取游戏进程内存、不注入游戏进程，也不修改游戏文件。
 
@@ -34,8 +34,8 @@ Windows x64 上运行的《命运-冠位指定》MuMu/ADB 屏幕自动化工具�
 
 当前 Windows 发布包（按硬件选择其一）：
 
-- [FGO_AI-v1.1.3-Windows-CPU.zip](https://github.com/Helloworld-1895/FGO_AI/releases/tag/v1.1.3)
-- [FGO_AI-v1.1.3-Windows-CUDA.zip](https://github.com/Helloworld-1895/FGO_AI/releases/tag/v1.1.3)：内置 CUDA OpenCV 和模板匹配所需运行库，体积较大，需要兼容的 NVIDIA 显卡与驱动
+- [FGO_AI-v1.1.4-Windows-CPU.zip](https://github.com/Helloworld-1895/FGO_AI/releases/tag/v1.1.4)
+- [FGO_AI-v1.1.4-Windows-CUDA.zip](https://github.com/Helloworld-1895/FGO_AI/releases/tag/v1.1.4)：内置 CUDA OpenCV 和模板匹配所需运行库，体积较大，需要兼容的 NVIDIA 显卡与驱动
 - 同一 Release 中的 SHA-256 校验文件
 - 仓库中的 [release-manifest.json](release-manifest.json)
 
