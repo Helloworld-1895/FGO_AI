@@ -70,7 +70,7 @@ FGO_AI-v1.1.6-Windows-CPU/（CUDA 包对应 Windows-CUDA）
 
 CPU 发布包自带独立运行时和 CPU 依赖，正常启动不需要预装 Python。首次运行会在本地生成用户配置和运行日志；这些文件不应上传到 Issue 或公开仓库。
 
-CUDA 包也不需要安装 Python 或 Conda；随包提供模板匹配需要的 CUDA DLL。两个包初始均选择混合匹配及 OpenCV CUDA；CPU 包自动回退 CPU，CUDA 包在兼容设备上使用 GPU。切换后保存并重启自动化。请通过 `启动FGO_AI.bat --self-test-cuda` 验证 GPU 实际匹配能力；详见 [CUDA 运行要求与自检](docs/GPU_SETUP.md)。请将两个包分别解压，不要互相覆盖。
+CUDA 包也不需要安装 Python 或 Conda；随包提供模板匹配需要的 CUDA DLL。CPU 包默认 CPU；CUDA 包默认混合匹配及 OpenCV CUDA，在兼容设备上使用 GPU。切换后保存并重启自动化。请通过 `启动FGO_AI.bat --self-test-cuda` 验证 GPU 实际匹配能力；详见 [CUDA 运行要求与自检](docs/GPU_SETUP.md)。请将两个包分别解压，不要互相覆盖。
 
 ## 运行要求
 
