@@ -1,17 +1,17 @@
 # GPU 配置（高级、自行维护）
 
-`FGO_AI-v1.1.5-Windows-CPU.zip` 使用 CPU OpenCV。即使电脑装有 NVIDIA 显卡、驱动和 CUDA Toolkit，这个 CPU 编译包也不会自动获得 CUDA 模板匹配能力；在 GUI 选择 GPU 时会回退 CPU。
+`FGO_AI-v1.1.6-Windows-CPU.zip` 使用 CPU OpenCV。即使电脑装有 NVIDIA 显卡、驱动和 CUDA Toolkit，这个 CPU 编译包也不会自动获得 CUDA 模板匹配能力；在 GUI 选择 GPU 时会回退 CPU。
 
-v1.1.5 同时提供 **`FGO_AI-v1.1.5-Windows-CUDA.zip`**，使用带 CUDA 的 OpenCV，随包提供模板匹配所需的 CUDA/cuDNN DLL。用户不需要安装 Python、Conda 或 CUDA Toolkit，仍需兼容的 NVIDIA GPU 和驱动。不能仅凭“有 NVIDIA 显卡”保证所有机器可用。
+v1.1.6 同时提供 **`FGO_AI-v1.1.6-Windows-CUDA.zip`**，使用带 CUDA 的 OpenCV，随包提供模板匹配所需的 CUDA/cuDNN DLL。用户不需要安装 Python、Conda 或 CUDA Toolkit，仍需兼容的 NVIDIA GPU 和驱动。不能仅凭“有 NVIDIA 显卡”保证所有机器可用。
 
 本页先解释编译包边界，再给出源码 GPU 环境的高级配置。CPU ZIP 不读取外部 Conda 环境，不会自动安装驱动。
 
-## v1.1.5 CUDA 包使用方法
+## v1.1.6 CUDA 包使用方法
 
 1. 下载 CUDA ZIP 和同名 `.sha256`，校验后解压到独立目录，勿覆盖 CPU 包或旧版目录。
 2. 使用 NVIDIA 官方驱动，建议 Windows 驱动版本不低于 `570.65`，更新后再自检。此包 OpenCV 4.11 构建信息为 CUDA 12.8，携带的是已经实际匹配验证的 CUDA 12.6 系列数学运行库；不需要用户另装 Toolkit。低于建议版本的兼容模式不作为本发布包承诺。
 3. 打开解压得到的总文件夹，再进入内层 `FGO_AI/` 软件目录，在这里打开命令提示符并运行 `启动FGO_AI.bat --self-test-cuda`。成功必须同时出现 `SELF_TEST_OK` 和 `CUDA_SELF_TEST_OK`，退出代码为 0。该测试实际执行 GPU 模板匹配，并将结果与 CPU 对比，然后验证 CPU OCR 与自由关卡模板。
-4. 双击启动器打开控制面板，在匹配设置选择“GPU”或“混合”，确认“OpenCV CUDA”启用，保存后重启自动化。两个包的初始配置都为 CPU，避免首次启动直接改变匹配策略。
+4. 双击启动器打开控制面板，在匹配设置选择“GPU”或“混合”，确认“OpenCV CUDA”启用，保存后重启自动化。两个包初始勾选混合匹配与 OpenCV CUDA；CPU 包自动回退 CPU。
 5. 查看日志中的“OpenCV CUDA 匹配已生效”；仅看到 GPU 选项不代表已成功启用。失败时选回 CPU；如 `cv2` 导入就失败，请改用独立 CPU 包。
 
 当前 CUDA OpenCV 构建覆盖 SM 50/52/60/61/70/75/80/86/89/90，并带 compute_90 PTX。这不是逐型号兼容承诺；新旧显卡均应以自检为准。已在 RTX 4060 Laptop（SM 8.9）上验证；不代表所有 NVIDIA 显卡或驱动组合均经过实机测试。

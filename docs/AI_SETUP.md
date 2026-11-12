@@ -11,7 +11,7 @@
 ## 支持方式
 
 - **Ollama**：适合希望数据留在本机的用户。请安装支持视觉输入的模型，并确认模型许可证和硬件资源满足要求。
-- **OpenAI-compatible 接口**：可使用自托管服务或第三方服务。接口地址、模型名称和认证方式由服务商决定。
+- **多协议模型接口**：可使用自托管服务或第三方服务。程序按 Endpoint 的完整路径自动识别 OpenAI Chat Completions（通常为 `chat/completions`）、OpenAI Responses（`responses`）、Anthropic Messages（`messages`）以及 DashScope 原生文本/多模态 generation 地址；接口地址、模型名称和认证方式由服务商决定。
 
 项目不绑定商业服务商，不提供 API key、模型权重或使用额度。价格、速率限制和数据保留规则以服务商当前文档为准。
 
@@ -19,8 +19,10 @@
 
 1. 复制本地示例配置到被 Git 忽略的用户配置或 secrets/ 目录。
 2. 填写 endpoint、model 和 api_key；本机接口通常不需要 key。
-3. 先运行模型检查或观察模式，确认响应格式后再启用自动决策。
+3. 先完成启动接口检查，并短时试跑确认图片和结构化响应可用。
 4. 不要把 key 写入默认配置、日志、截图或 Issue。
+
+Endpoint 必须填写服务商提供的完整接口地址，不能只填写域名或基础 URL。Responses、Anthropic Messages 和 DashScope 原生接口会由程序转换现有的文本、图片、工具调用与结果；服务商不支持的工具或图片格式会在请求前报告错误。普通 OpenAI-compatible 服务仍使用 `chat/completions`。
 
 ## 动作边界
 

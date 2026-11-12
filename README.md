@@ -2,7 +2,7 @@
 
 Windows x64 上运行的《命运-冠位指定》MuMu/ADB 屏幕自动化工具。
 
-当前版本：**1.1.5**。发布包采用总文件夹内“Word 指南 + 软件文件夹”的结构，更新从者资料与控制面板。更新内容见 [v1.1.5 发布说明](docs/RELEASE_NOTES_v1.1.5.md)。
+当前版本：**1.1.6**。新增战败直接续关开关，启动自动推进前检查模型 API 可用性。更新内容见 [v1.1.6 发布说明](docs/RELEASE_NOTES_v1.1.6.md)。
 
 程序通过 ADB 获取模拟器画面，使用 OpenCV 模板匹配、OCR 和可选的模型服务识别界面，再按照本地规则执行受保护的点击与滑动操作。它不读取游戏进程内存、不注入游戏进程，也不修改游戏文件。
 
@@ -33,6 +33,7 @@ Windows x64 上运行的《命运-冠位指定》MuMu/ADB 屏幕自动化工具�
 ## 操作指南
 
 完整的安装、设备连接、界面说明、四种模式、任务与补体力、战斗/助战策略、AI 配置、日志排障与版本更新，见 [FGO AI 操作指南（Word）](docs/FGO_AI操作指南.docx)。
+指南已补充“战败直接续关”、启动时模型 API 检查、多协议接口、缓存用量与超时排查，以及己方眩晕、敌方无敌等宝具副作用的释放时机说明；本版 CPU/CUDA 软件已包含对应修正。
 
 ZIP 解压后，操作指南放在总文件夹内，与 `FGO_AI/` 软件文件夹并列；软件的 `docs/` 内保留同一文档，方便通过本 README 离线打开。
 
@@ -40,15 +41,15 @@ ZIP 解压后，操作指南放在总文件夹内，与 `FGO_AI/` 软件文件�
 
 当前 Windows 发布包（按硬件选择其一）：
 
-- [FGO_AI-v1.1.5-Windows-CPU.zip](https://github.com/Helloworld-1895/FGO_AI/releases/tag/v1.1.5)
-- [FGO_AI-v1.1.5-Windows-CUDA.zip](https://github.com/Helloworld-1895/FGO_AI/releases/tag/v1.1.5)：内置 CUDA OpenCV 和模板匹配所需运行库，体积较大，需要兼容的 NVIDIA 显卡与驱动
+- [FGO_AI-v1.1.6-Windows-CPU.zip](https://github.com/Helloworld-1895/FGO_AI/releases/tag/v1.1.6)
+- [FGO_AI-v1.1.6-Windows-CUDA.zip](https://github.com/Helloworld-1895/FGO_AI/releases/tag/v1.1.6)：内置 CUDA OpenCV 和模板匹配所需运行库，体积较大，需要兼容的 NVIDIA 显卡与驱动
 - 同一 Release 中的 SHA-256 校验文件
 - 仓库中的 [release-manifest.json](release-manifest.json)
 
 下载后完整解压到可写目录，打开总文件夹，先阅读 Word 指南，再进入 `FGO_AI/` 双击 `启动FGO_AI.bat`。不要直接在 ZIP 内运行，也不要使用未通过 SHA-256 校验的旧副本。
 
 ```text
-FGO_AI-v1.1.5-Windows-CPU/（CUDA 包对应 Windows-CUDA）
+FGO_AI-v1.1.6-Windows-CPU/（CUDA 包对应 Windows-CUDA）
 ├─ FGO_AI操作指南.docx
 └─ FGO_AI/
    ├─ 启动FGO_AI.bat
@@ -63,13 +64,13 @@ FGO_AI-v1.1.5-Windows-CPU/（CUDA 包对应 Windows-CUDA）
 
 1. 安装并启动 MuMu Windows 版，在模拟器中打开游戏。
 2. 将发布包完整解压到普通目录，例如 `D:\FGO_AI`。
-3. 打开解压得到的 `FGO_AI-v1.1.5-Windows-CPU/`（或 CUDA），再进入 `FGO_AI/`，双击 `启动FGO_AI.bat`。
+3. 打开解压得到的 `FGO_AI-v1.1.6-Windows-CPU/`（或 CUDA），再进入 `FGO_AI/`，双击 `启动FGO_AI.bat`。
 4. 在控制面板中连接 MuMu，确认游戏画面为 `1600x900`。
 5. 先使用观察或低风险流程确认识别结果，再开启自动推进。
 
 CPU 发布包自带独立运行时和 CPU 依赖，正常启动不需要预装 Python。首次运行会在本地生成用户配置和运行日志；这些文件不应上传到 Issue 或公开仓库。
 
-CUDA 包也不需要安装 Python 或 Conda；随包提供模板匹配需要的 CUDA DLL。两个包首次启动均默认使用 CPU，CUDA 包用户可在控制面板切换“GPU”或“混合”匹配并保存，重启自动化后生效。请通过 `启动FGO_AI.bat --self-test-cuda` 验证 GPU 实际匹配能力；详见 [CUDA 运行要求与自检](docs/GPU_SETUP.md)。请将两个包分别解压，不要互相覆盖。
+CUDA 包也不需要安装 Python 或 Conda；随包提供模板匹配需要的 CUDA DLL。两个包初始均选择混合匹配及 OpenCV CUDA；CPU 包自动回退 CPU，CUDA 包在兼容设备上使用 GPU。切换后保存并重启自动化。请通过 `启动FGO_AI.bat --self-test-cuda` 验证 GPU 实际匹配能力；详见 [CUDA 运行要求与自检](docs/GPU_SETUP.md)。请将两个包分别解压，不要互相覆盖。
 
 ## 运行要求
 
@@ -94,6 +95,8 @@ device:
 `serial` 留空时会自动使用在线设备；需要固定设备时填写 `adb devices -l` 显示的序列号。
 
 模型顾问配置见 [docs/AI_SETUP.md](docs/AI_SETUP.md)。GPU 和本地模型运行时见 [docs/GPU_SETUP.md](docs/GPU_SETUP.md)。
+
+接口兼容、Pro 运行上下文、知识笔记隔离与模式开关联动的修订说明见 [操作指南](docs/FGO_AI操作指南.docx) 第 7、8、11、12 章；第 11.4 节也说明响应接收上限已放宽到 16 MiB，输出 Token 配额不变。本版 CPU/CUDA 软件已包含对应改动。
 
 ## 自由关卡清除
 
