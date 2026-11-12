@@ -1,17 +1,17 @@
 ﻿{
-    "version": "1.1.4",
-    "variant": "CPU",
-    "entry_point": "FGO_AI.exe",
-    "archive_url": "https://github.com/Helloworld-1895/FGO_AI/releases/download/v1.1.4/FGO_AI-v1.1.4-Windows-CPU.zip",
-    "archive_sha256": "07405ea1acd98fed4f7ca35c9aba865662e23ac187357b78bc5c60fb5d461245",
-    "required_files": [
-        {
-            "path": "FGO_AI.exe",
-            "sha256": "71beb24173e743a11fa4b4ca0dbd7a876b7bb619d6401999a292ac693e3dd5a7"
-        },
-        {
-            "path": "profiles\\fgo_cn_1600x900.yaml",
-            "sha256": "255c8c7713ed0915e47f633aa197e92879d7bd17dc2cf1ce443ab894c7fe861e"
-        }
-    ]
+    "version":  "1.1.5",
+    "variant":  "CPU",
+    "entry_point":  "FGO_AI.exe",
+    "archive_url":  "https://github.com/Helloworld-1895/FGO_AI/releases/download/v1.1.5/FGO_AI-v1.1.5-Windows-CPU.zip",
+    "archive_sha256":  "943178f41458d49840613ad98775dbfc52cd06f9a25fc7c5eccc8e28bbee7310",
+    "required_files":  [
+                           {
+                               "path":  "FGO_AI.exe",
+                               "sha256":  "3ec7b0300ca00ac13a131cbf032d7b8fb860a7f5c28f25032a7d967bce1e035e"
+                           },
+                           {
+                               "path":  "profiles\\fgo_cn_1600x900.yaml",
+                               "sha256":  "255c8c7713ed0915e47f633aa197e92879d7bd17dc2cf1ce443ab894c7fe861e"
+                           }
+                       ]
 }

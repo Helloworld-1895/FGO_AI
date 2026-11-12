@@ -2,7 +2,7 @@
 
 Windows x64 上运行的《命运-冠位指定》MuMu/ADB 屏幕自动化工具。
 
-当前版本：**1.1.4**。增加 ORT 模式、更新 UI。更新内容见 [v1.1.4 发布说明](docs/RELEASE_NOTES_v1.1.4.md)。
+当前版本：**1.1.5**。发布包采用总文件夹内“Word 指南 + 软件文件夹”的结构，更新从者资料与控制面板。更新内容见 [v1.1.5 发布说明](docs/RELEASE_NOTES_v1.1.5.md)。
 
 程序通过 ADB 获取模拟器画面，使用 OpenCV 模板匹配、OCR 和可选的模型服务识别界面，再按照本地规则执行受保护的点击与滑动操作。它不读取游戏进程内存、不注入游戏进程，也不修改游戏文件。
 
@@ -34,24 +34,36 @@ Windows x64 上运行的《命运-冠位指定》MuMu/ADB 屏幕自动化工具�
 
 完整的安装、设备连接、界面说明、四种模式、任务与补体力、战斗/助战策略、AI 配置、日志排障与版本更新，见 [FGO AI 操作指南（Word）](docs/FGO_AI操作指南.docx)。
 
-该文档是公开包的一部分。功能、界面、默认值、配置字段或模式行为变化时，必须在同一改动中同步修订；每次更新 `FGO_AI_Public`、重新打包、提交或上传 GitHub 都必须携带该文档。
+ZIP 解压后，操作指南放在总文件夹内，与 `FGO_AI/` 软件文件夹并列；软件的 `docs/` 内保留同一文档，方便通过本 README 离线打开。
 
 ## 下载
 
 当前 Windows 发布包（按硬件选择其一）：
 
-- [FGO_AI-v1.1.4-Windows-CPU.zip](https://github.com/Helloworld-1895/FGO_AI/releases/tag/v1.1.4)
-- [FGO_AI-v1.1.4-Windows-CUDA.zip](https://github.com/Helloworld-1895/FGO_AI/releases/tag/v1.1.4)：内置 CUDA OpenCV 和模板匹配所需运行库，体积较大，需要兼容的 NVIDIA 显卡与驱动
+- [FGO_AI-v1.1.5-Windows-CPU.zip](https://github.com/Helloworld-1895/FGO_AI/releases/tag/v1.1.5)
+- [FGO_AI-v1.1.5-Windows-CUDA.zip](https://github.com/Helloworld-1895/FGO_AI/releases/tag/v1.1.5)：内置 CUDA OpenCV 和模板匹配所需运行库，体积较大，需要兼容的 NVIDIA 显卡与驱动
 - 同一 Release 中的 SHA-256 校验文件
 - 仓库中的 [release-manifest.json](release-manifest.json)
 
-下载后请完整解压到可写目录，再运行 `启动FGO_AI.bat`。不要直接在 ZIP 内运行，也不要使用未通过 SHA-256 校验的旧副本。
+下载后完整解压到可写目录，打开总文件夹，先阅读 Word 指南，再进入 `FGO_AI/` 双击 `启动FGO_AI.bat`。不要直接在 ZIP 内运行，也不要使用未通过 SHA-256 校验的旧副本。
+
+```text
+FGO_AI-v1.1.5-Windows-CPU/（CUDA 包对应 Windows-CUDA）
+├─ FGO_AI操作指南.docx
+└─ FGO_AI/
+   ├─ 启动FGO_AI.bat
+   ├─ app/FGO_AI.exe
+   ├─ scripts/bootstrap.ps1
+   └─ docs/、README.md、VERSION 等
+```
+
+本 README 和其余说明中的 `app/`、`logs/` 等相对路径均从内层 `FGO_AI/` 软件目录算起。
 
 ## 快速开始
 
 1. 安装并启动 MuMu Windows 版，在模拟器中打开游戏。
 2. 将发布包完整解压到普通目录，例如 `D:\FGO_AI`。
-3. 双击 `启动FGO_AI.bat`。
+3. 打开解压得到的 `FGO_AI-v1.1.5-Windows-CPU/`（或 CUDA），再进入 `FGO_AI/`，双击 `启动FGO_AI.bat`。
 4. 在控制面板中连接 MuMu，确认游戏画面为 `1600x900`。
 5. 先使用观察或低风险流程确认识别结果，再开启自动推进。
 
