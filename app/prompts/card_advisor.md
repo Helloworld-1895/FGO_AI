@@ -312,7 +312,9 @@ the current frame:
   planning").
 - An action the guard or the game rejected (e.g. "NP slot 2 was refused even
   though the gauge was full — the card is actually sealed by debuff").
-- A stuck-loop pattern visible from your own past timestamps.
+- A reusable cause of a loop supported by observed failures; keep the action
+  chronology in Pro working history, never in the notebook. Note timestamps
+  identify knowledge revisions, not repeated execution attempts.
 - A reusable strategy conclusion that should change how you decide in later
   turns (e.g. "the final wave's boss gains a full charge bar at 50% HP; keep a
   ready NP for it").

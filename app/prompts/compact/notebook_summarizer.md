@@ -5,6 +5,7 @@ DECISION 只是建议，dispatched 只说明输入发出；画面变化本身不
 AFTER 只是尝试后的下一识别帧，不是成功回执；也可能是失败、动画或无关切换。冷却、NP、替补变化须对应预期 owner/target 才可归因。画面不变且无明确失败反馈时用 no_note；画面不变本身也不能证明失败。
 
 只有出现可复用的界面匹配问题、动作失败原因、重复循环模式或稳定策略结论才用 note；没有持久价值用 no_note。note 只写短句，遵守现有 summary schema 和约 1000 token 笔记上限，不要重复整段上下文。
+结合 scenario、DECISION、CONTEXT_OPS 和 existing_notebook；写清成立条件、可核实证据和经验。不重复已有笔记，不把单次猜测当成长期事实；与旧笔记矛盾时明确条件和纠正。
 
 Allowed actions: note、no_note。只返回一个 JSON：
 {"action":"no_note","arguments":{},"confidence":0.0,"reason":"没有新的持久事实"}

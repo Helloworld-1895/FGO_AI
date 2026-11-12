@@ -26,9 +26,11 @@ Plus these text inputs:
 
 - `DECISION`: the action that was actually chosen this time, its arguments and
   the model's reason.
-- `CONTEXT_OPS`: operations that led up to the decision (e.g. which skills were
-  released this turn).
+- `CONTEXT_OPS`: preceding operations and input feedback after the proposal,
+  labelled dispatched, dispatch_failed or dry_run. Sent input is not success.
 - `LOCAL_FACTS`: the facts the decision was based on.
+- `scenario` and `existing_notebook`: scope and already retained lessons.
+  Consult them before writing; do not repeat a lesson in different words.
 
 ## What to write
 
@@ -48,6 +50,11 @@ or, when nothing was genuinely learned:
   future **`<mode>`** consultations. Write at most one short note (2-4
   sentences, in Chinese if it reads naturally). It must be a lesson that will
   help a FUTURE `<mode>` decision, not a report of this one.
+- State the applicable condition, observed evidence and reusable lesson.
+  Label uncertainty explicitly. Do not store current HP, turn counters,
+  coordinates, API credentials or a current objective as long-term knowledge.
+  When new evidence contradicts an old note, identify the old condition and
+  correction explicitly instead of silently treating both as universal rules.
 - A note is worth writing when you can see a reusable pattern, e.g.:
   - the AFTER screen shows the decision clearly backfired (a wrong target got
     hit, an NP was wasted on a nearly-dead enemy, a skill landed on the wrong

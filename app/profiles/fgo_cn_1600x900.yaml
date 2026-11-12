@@ -15,7 +15,7 @@
   auto_launch_emulator: true
   launch_package: com.bilibili.fatego
   # 可选：MuMu 桌面快捷方式路径；留 null 时从 MuMuManager 同目录派生 MuMuNxMain.exe。
-  launch_shortcut: "C:\\Users\\TX-4\\Desktop\\命运-冠位指定-MuMu安卓设备.lnk"
+  launch_shortcut: null
 screen:
   base_width: 1600
   base_height: 900
@@ -163,18 +163,18 @@ behavior:
   restricted_party_filled_min_edge_ratio: 0.025
 support:
   strategy_options:
-    preferred_start_level: '120'
-    preferred_np_level: '5'
+    preferred_start_level: '90'
+    preferred_np_level: 'any'
     preferred_np_type: aoe
     use_forced_support: true
     exclude_guest_support: true
-    use_system_recommended_list: false
-    use_berserker_fallback: true
+    use_system_recommended_list: true
+    use_berserker_fallback: false
     prefer_class_advantage: true
     prefer_registered_candidates: true
     scroll_support_list: true
     refresh_support_list: true
-    auto_send_friend_request: true
+    auto_send_friend_request: false
   enemy_class_threshold: 0.86
   candidate_threshold: 0.84
   min_servant_level: 120
@@ -560,7 +560,8 @@ support:
 servant_database: ../data/servants_full.json
 battle:
   defeat_policy:
-    enabled: false
+    enabled: true
+    direct_continue: false
     allowed_resources: []
     priority: [command_seal, leyline_stone, saint_quartz]
     max_uses:
@@ -586,22 +587,22 @@ battle:
     confirm_skill_use: true
     accelerate_skill_animations: true
     accelerate_np_animations: true
-    use_charge_skills: true
-    prioritize_charge_for_main: true
-    use_attack_buffs: true
-    use_evasion_skills: true
-    use_guts_skills: true
-    use_support_skills: true
-    use_replacement_skills: true
+    use_charge_skills: false
+    prioritize_charge_for_main: false
+    use_attack_buffs: false
+    use_evasion_skills: false
+    use_guts_skills: false
+    use_support_skills: false
+    use_replacement_skills: false
     prefer_primary_output_cards: true
     prefer_damage_role_over_class: true
     prefer_card_class_advantage: true
-    prefer_same_servant_chain: true
+    prefer_same_servant_chain: false
     prefer_same_color_chain: true
     prefer_arts_chain: false
     prefer_high_critical_cards: true
-    prefer_mighty_chain: true
-    prefer_np_charge_cards: true
+    prefer_mighty_chain: false
+    prefer_np_charge_cards: false
     continue_with_replacement: true
   total_waves: 3
   # 按面(波次)追踪：配置后每回合对 stage_count_region ROI 拍快照（镜像 FGA
@@ -621,7 +622,8 @@ battle:
   # 指令卡颜色低置信度时降级为 unknown 继续出卡（不中断战斗，FGA 教训），
   # 关闭则恢复原来的抛错重试。
   card_unknown_on_low_confidence: true
-  # 首次战败始终免费撤退重打；第二次战败仅在 defeat_policy 有授权资源时续关，
+  # 默认首次战败免费撤退重打；direct_continue 开启且有授权资源时直接续关。
+  # 第二次战败仅在 defeat_policy 有授权资源时续关，
   # 否则安全暂停。以下两个点击点用于首次撤退（按 1600x900 校准）。
   # 下方坐标源自 FGA 源码 Locations.kt（2560x1440 基准换算 1600x900，×0.625），
   # 撤退按钮取 withdrawRegion 区域中心、确认按钮取 withdrawAcceptClick；
@@ -1423,6 +1425,11 @@ battle:
     - 675
   turns: {}
 model_advisor:
+  auto_release_on_reject_streak: true
+  compact_prompt_enabled: true
+  defeat_enabled: true
+  enabled: true
+  pro_mode_enabled: false
   support_preferences: ''
   unknown_enabled: true
   support_enabled: true
@@ -1432,7 +1439,6 @@ model_advisor:
   servant_identify_enabled: true
   pause_consensus_count: 5
   repeated_instruction_threshold: 5
-  observation_only: false
   unknown_after_seconds: 3.0
   cooldown_seconds: 8.0
   # 兼容旧配置字段；AI 关闭动作不再按模型置信度硬拒绝，执行层只检查
@@ -1452,7 +1458,7 @@ model_advisor:
   # 英文语义描述，再从本地掩码候选中选择 ID；AI 不提供坐标。GPU 默认 FP16，
   # provider 可改 cpu（CPU 自动使用 FP32）。backend 改为 yolox 可继续使用旧后端。
   visual_detector:
-    enabled: false
+    enabled: true
     backend: sam3
     runtime: efficientsam3
     runtime_path: runtime/efficientsam3
@@ -1499,12 +1505,11 @@ model_advisor:
   # 超限压缩不受此限制。0 = 不限（其它模式默认）。
   notebook_card_append_cooldown_seconds: 30
   # 后台总结：决策落定后把 before/after 截图 + 决策 + 回合内操作交给独立线程
-  # 提炼一条笔记写入该场景自己的笔记本。正常不阻塞主进程；仅当同场景下一次
-  # AI 咨询到达且该场景总结未完成时才等待。单次总结超时后放弃该次。
-  notebook_summary_enabled: false
-  notebook_summary_max_tokens: 32768
+  # 提炼一条笔记写入该场景自己的笔记本。下一次 AI 咨询前等待总结队列完成，
+  # 以免共享顾问并发；排队超时的事件跳过，已发出的请求按模型网络超时返回。
+  # 输出预算自动管理；旧 notebook_summary_max_tokens 不再生效。
+  notebook_summary_enabled: true
   notebook_summary_timeout_seconds: 180
-  notebook_summary_wait_timeout_seconds: 180
 # AP 苹果管理（refill）：镜像 FGA 的苹果降级链。默认关闭 —— 关闭时
 # ap_refill 规则仍按"暂停"处理，不消耗任何苹果/圣晶石。开启后需补录
 # templates/ap_refill.png 激活规则；各点击点已填入 FGA 换算坐标（见下）。
@@ -1598,9 +1603,10 @@ infinite_farm:
 
 # 自由关卡识别开关；启用后由控制面板将 bundled 模板规则加入匹配器。
 free_quest:
+  non_target_retreat: true
   enabled: false
   start_chapter: fuyuki
-  model_assist: false
+  model_assist: true
   explorer:
     enabled: true
     chapter_scroll_distance: 170
