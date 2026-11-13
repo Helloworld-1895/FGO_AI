@@ -2,7 +2,7 @@
 
 Windows x64 上运行的《命运-冠位指定》MuMu/ADB 屏幕自动化工具。
 
-当前版本：**1.1.8**。修复换人后的从者资料保留，补强当前 HP、暴击率与多宝具选择依据。更新内容见 [v1.1.8 发布说明](docs/RELEASE_NOTES_v1.1.8.md)。
+当前版本：**1.1.9**。新增按接口保存的思考模式，改善启动诊断与输出预算，并修复笔记压缩恢复和连续御主技能释放。更新内容见 [v1.1.9 发布说明](docs/RELEASE_NOTES_v1.1.9.md)。
 
 程序通过 ADB 获取模拟器画面，使用 OpenCV 模板匹配、OCR 和可选的模型服务识别界面，再按照本地规则执行受保护的点击与滑动操作。它不读取游戏进程内存、不注入游戏进程，也不修改游戏文件。
 
@@ -33,7 +33,7 @@ Windows x64 上运行的《命运-冠位指定》MuMu/ADB 屏幕自动化工具�
 ## 操作指南
 
 完整的安装、设备连接、界面说明、四种模式、任务与补体力、战斗/助战策略、AI 配置、日志排障与版本更新，见 [FGO AI 操作指南（Word）](docs/FGO_AI操作指南.docx)。
-第 9 章已同步换人后的资料保留、当前画面证据与多宝具比较说明；v1.1.8 的 CPU/CUDA 软件均包含这些修正。
+第 9、11 章已同步连续御主技能释放、接口思考模式、超时、输出预算及笔记恢复说明；v1.1.9 的 CPU/CUDA 软件均包含这些更新。
 指南已补充“战败直接续关”、启动时模型 API 检查、多协议接口、缓存用量与超时排查，以及己方眩晕、敌方无敌等宝具副作用的释放时机说明；本版 CPU/CUDA 软件已包含对应修正。
 
 指南第 9.3 节已补充续关页反复提示无法定位已授权按钮的排查；需使用包含现场续关界面修正的软件，既有发布 ZIP 不会随文档更新。
@@ -44,15 +44,15 @@ ZIP 解压后，操作指南放在总文件夹内，与 `FGO_AI/` 软件文件�
 
 当前 Windows 发布包（按硬件选择其一）：
 
-- [FGO_AI-v1.1.8-Windows-CPU.zip](https://github.com/Helloworld-1895/FGO_AI/releases/tag/v1.1.8)
-- [FGO_AI-v1.1.8-Windows-CUDA.zip](https://github.com/Helloworld-1895/FGO_AI/releases/tag/v1.1.8)：内置 CUDA OpenCV 和模板匹配所需运行库，体积较大，需要兼容的 NVIDIA 显卡与驱动
+- [FGO_AI-v1.1.9-Windows-CPU.zip](https://github.com/Helloworld-1895/FGO_AI/releases/tag/v1.1.9)
+- [FGO_AI-v1.1.9-Windows-CUDA.zip](https://github.com/Helloworld-1895/FGO_AI/releases/tag/v1.1.9)：内置 CUDA OpenCV 和模板匹配所需运行库，体积较大，需要兼容的 NVIDIA 显卡与驱动
 - 同一 Release 中的 SHA-256 校验文件
 - 仓库中的 [release-manifest.json](release-manifest.json)
 
 下载后完整解压到可写目录，打开总文件夹，先阅读 Word 指南，再进入 `FGO_AI/` 双击 `启动FGO_AI.bat`。不要直接在 ZIP 内运行，也不要使用未通过 SHA-256 校验的旧副本。
 
 ```text
-FGO_AI-v1.1.8-Windows-CPU/（CUDA 包对应 Windows-CUDA）
+FGO_AI-v1.1.9-Windows-CPU/（CUDA 包对应 Windows-CUDA）
 ├─ FGO_AI操作指南.docx
 └─ FGO_AI/
    ├─ 启动FGO_AI.bat
@@ -67,7 +67,7 @@ FGO_AI-v1.1.8-Windows-CPU/（CUDA 包对应 Windows-CUDA）
 
 1. 安装并启动 MuMu Windows 版，在模拟器中打开游戏。
 2. 将发布包完整解压到普通目录，例如 `D:\FGO_AI`。
-3. 打开解压得到的 `FGO_AI-v1.1.8-Windows-CPU/`（或 CUDA），再进入 `FGO_AI/`，双击 `启动FGO_AI.bat`。
+3. 打开解压得到的 `FGO_AI-v1.1.9-Windows-CPU/`（或 CUDA），再进入 `FGO_AI/`，双击 `启动FGO_AI.bat`。
 4. 在控制面板中连接 MuMu，确认游戏画面为 `1600x900`。
 5. 先使用观察或低风险流程确认识别结果，再开启自动推进。
 
