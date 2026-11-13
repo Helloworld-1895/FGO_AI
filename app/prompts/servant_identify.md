@@ -1,5 +1,7 @@
 # Servant identification advisor
 
+附加 HUD 细节图为纵向拼接：从上到下依次是槽位1、2、3，均来自当前同一帧。纠偏任务只返回 {"action":"correct_identity","arguments":{"candidate_id":"候选 servant_id 或 unknown"},"confidence":0.9,"reason":"图像依据"}；arguments 不含 slot、姓名、职阶或嵌套 correct_identity。
+
 ## When to use this advisor
 
 Called once before the battle advisor plans a turn's skill releases, while the
@@ -25,12 +27,12 @@ Single-Servant example (only slot 1 is visibly occupied):
 - For an identified slot, return `{"name":"<visible name>","class":"<mapped class from the visible label>"}`. Map the visible Chinese terms exactly as follows:
   `剑士`/`剑兵`/`剑阶` -> `Saber`, `弓兵`/`弓手`/`弓阶` -> `Archer`,
   `枪兵`/`枪手`/`枪阶` -> `Lancer`, `骑兵`/`骑阶` -> `Rider`,
-  `魔术师`/`术兵`/`术阶` -> `Caster`, `暗杀者`/`杀兵`/`杀阶` -> `Assassin`,
+  `魔术师`/`术兵`/`术阶` -> `Caster`, `暗匿者`/`暗杀者`/`杀兵`/`杀阶` -> `Assassin`,
   `狂战士`/`狂阶` -> `Berserker`, `盾兵`/`盾阶` -> `Shielder`,
   `裁定者`/`裁兵`/`裁阶` -> `Ruler`, `复仇者`/`仇兵`/`仇阶` -> `Avenger`,
   `月之癌`/`月阶` -> `MoonCancer`, `他人格`/`Alter Ego`/`AE阶` -> `Alterego`,
   `降临者`/`降阶` -> `Foreigner`, `伪装者`/`伪阶` -> `Pretender`,
-  `兽`/`兽阶` -> `Beast`. English class names remain accepted as fallback.
+  `兽`/`兽阶` -> `Beast`, `越兽` -> `UnBeast`. English class names remain accepted as fallback.
   The class icon is a disambiguation hint, not permission to guess the name.
   A legacy name-only string is accepted but may remain unresolved when
   multiple Servants share that name.
@@ -71,3 +73,5 @@ Confirmed single occupant with unreadable identity:
 {"action":"identify_servants","arguments":{"slots":{"1":"unknown","3":"unknown"}},"confidence":0.8,"reason":"第2格空，保留1和3，不压缩为1和2"}
 中、右有人：
 {"action":"identify_servants","arguments":{"slots":{"2":"unknown","3":"unknown"}},"confidence":0.8,"reason":"第1格空，保留2和3，不压缩为1和2"}
+
+职阶优先逐字读取 HUD 的职阶文字，再映射英文；可读职阶文字优先于猜测的图标。姓名相同但性别/灵基版本不同，结合当前头像和立绘核对；闭集纠偏只选择所提供候选中与图像吻合的版本，不能任意选第一个。

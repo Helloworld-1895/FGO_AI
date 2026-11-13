@@ -17,7 +17,11 @@
 
 ## 宝具决策入口
 
-每次先检查 allowed_nps、np_slots.ready 和当前卡面，再按共享的“宝具先看有效用途，缺失倍率不是低伤害”规则比较。已就绪且已确认有效的伤害宝具，默认纳入“宝具 + 两张补刀/回收卡”方案；无需证明必杀。不要只比较五张普通卡后漏掉上方宝具。辅助宝具按实际增益、充能、解除或保护用途比较；不因它没有直接伤害就略过。恢复选卡只补未选的新 ID。
+不同从者、不同卡色的宝具倍率不能直接比大小：还要考虑卡色基础系数、ATK、职阶相性和实际增益；较低倍率不证明它不如替代普通卡。先比较包含所有合法有效宝具的完整三卡方案，再判断少放一个具体换来了什么。只说另一个宝具更强、此宝具无后续增益或普通卡可回收，不足以放弃它的当前伤害；须有同槽位替代收益的依据，未知伤害不能当确定过量。
+
+每次先检查 allowed_nps、np_slots.ready 和当前卡面，再按共享的“宝具先看有效用途，缺失倍率不是低伤害”规则比较。已就绪且已确认有效的伤害宝具，默认纳入完整三卡方案，比较 0～3 个宝具与剩余普通卡的组合；无需证明必杀。不要只比较五张普通卡后漏掉上方宝具。辅助宝具按实际增益、充能、解除或保护用途比较；不因它没有直接伤害就略过。恢复选卡只补未选的新 ID。
+
+`allowed_nps` 是运行时已核验可点击的宝具集合。对当前仍需造成有效伤害的敌人，除非有具体战术理由，至少比较每个已确认伤害宝具的方案与普通卡方案。多个伤害宝具同时 ready 且 allowed 时，比较一宝具与多宝具组合对当前敌人的有效输出和后续波次资源机会成本；没有明确保留依据时，不得因“主力NP更强”跳过另一个可用宝具。截图为最终波（如 1/1）时，不得声称把资源留给后续波次；只有卡槽数、NP用途/对象、确定过量伤害或截图支持的具体后续威胁足以支持时才少放。缺少倍率、角色细节或普通卡归属不能单独作为跳过理由。若少放，reason 必须说明当前截图支持的机会成本，不要仅说“无威胁”“不确定收益”。
 
 ## When to use this advisor
 
@@ -370,6 +374,14 @@ Recovery example (only add an unselected card):
 ```json
 {"action":"append_cards","arguments":{"cards":["card4"]},"confidence":0.0,"reason":"补点尚未选中的卡"}
 ```
+
+Use the complete conditions and source order in `np_effect_sequences` to review
+NP ordering; source order alone is not verified execution timing. An all-NP
+chain receives no Buster first-card damage bonus. Compare early enemy defense
+reduction benefiting later attacks against the actual OC effect forgone, and
+briefly state that tradeoff in reason instead of merely claiming higher OC.
+
+输出前逐个核对未选的合法伤害宝具：应比较它与占用该卡槽的普通卡，而不是与已经选中的更强宝具比较。另一宝具更强不妨碍两者一起使用；不得仅凭跨从者倍率差、缺后续增益或普通卡有暴击就少放。没有证据证明替代普通卡的收益更高、有效伤害已足够或该宝具有具体代价时，将它纳入三张卡，并用普通卡补足剩余位置；超过三个合法宝具时才比较取舍。reason 简述真实的顺序收益和最近备选的代价，不编造确定击杀。
 
 Allowed `action` labels are `play_cards`, `append_cards`, `wait_for_transition`, and
 `pause_for_human`. `play_cards` requires exactly three unique IDs.

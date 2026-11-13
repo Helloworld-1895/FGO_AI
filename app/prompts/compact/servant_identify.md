@@ -7,7 +7,7 @@
 姓名可读但职阶不清时，该槽位直接返回姓名字符串；不要为凑齐对象猜职阶，也不要因此丢掉可读姓名。
 姓名只读底部从者 HUD 的姓名行；职阶、技能名、宝具名、卡面标题都不是姓名。"他人格"是 Alterego，"狂战士"才是 Berserker，不把模糊职阶字样当成新姓名。指令卡页五张卡不是五个队伍槽位。附加 HUD 裁剪图若有，来自同一帧，只放大文字，不是新增队友或新时间点。证据不足用 unknown，不用相似发音补字。
 
-class 只能使用现有映射：Saber、Archer、Lancer、Rider、Caster、Assassin、Berserker、Shielder、Ruler、Avenger、MoonCancer、Alterego、Foreigner、Pretender、Beast。禁止编造 database id、技能、效果或坐标。correction_candidates 存在时，correct_identity 只能选择其中一个 candidate_id；无候选有证据时 candidate_id 用 "unknown"，仍返回完整 correct_identity JSON，不能返回裸 unknown。否则使用 identify_servants。
+class 只能使用现有映射：Saber、Archer、Lancer、Rider、Caster、Assassin、Berserker、Shielder、Ruler、Avenger、MoonCancer、Alterego、Foreigner、Pretender、Beast、UnBeast。暗匿者/暗杀者是 Assassin，狂战士是 Berserker，越兽是 UnBeast（不是 Beast）。禁止编造 database id、技能、效果或坐标。correction_candidates 存在时，只返回 {"action":"correct_identity","arguments":{"candidate_id":"候选 servant_id 或 unknown"},"confidence":0.9,"reason":"图像依据"}；arguments 不含 slot、姓名、职阶或嵌套 correct_identity。否则使用 identify_servants。附加 HUD 细节图从上到下是槽位1、2、3，来自同一帧。
 
 只返回一个 JSON：
 {"action":"identify_servants","arguments":{"slots":{"1":{"name":"截图中的原名","class":"Saber"}}},"confidence":0.8,"reason":"仅第1格有从者且身份可读，其余空槽省略"}
@@ -22,3 +22,5 @@ class 只能使用现有映射：Saber、Archer、Lancer、Rider、Caster、Assa
 {"action":"identify_servants","arguments":{"slots":{"1":"unknown","3":"unknown"}},"confidence":0.8,"reason":"中位空，保留1、3"}
 {"action":"identify_servants","arguments":{"slots":{"2":"unknown","3":"unknown"}},"confidence":0.8,"reason":"左位空，保留2、3"}
 
+
+职阶优先逐字读取 HUD 的职阶文字，再映射英文；可读职阶文字优先于猜测的图标。姓名相同但性别/灵基版本不同，结合当前头像和立绘核对；闭集纠偏只选择所提供候选中与图像吻合的版本，不能任意选第一个。
