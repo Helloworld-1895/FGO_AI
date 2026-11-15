@@ -408,6 +408,10 @@ positioned candidate, choose it only when the active mode permits mainline re-en
 one possibility among many unknown screens: confirm it really is the home page
 first, and otherwise follow the dismiss-control priority above.
 
+## Mainline map: Chinese 下一个 before Ordeal Call NEXT
+
+仅在主线地图推进时：中文“下一个”和奏章地球仪的青蓝色英文 NEXT 同时出现时，优先选择中文“下一个”对应的 `map_next` 或其中文标记回退控件，不先选 `map_next_ordeal_call`。不要因为青蓝色 NEXT 的模板分数更高，或中文标记 `matched=false`，就颠倒此顺序；以截图确认可见目标，并使用当前帧提供的定位。只有未显示中文“下一个”、确实没有其当前帧定位，或点击反馈表明它无法推进时，再按新截图考虑青蓝色 NEXT。返回 `tap_known_control` 和对应 `control_id`，不返回坐标。这条主线选择提示不改变自由关卡、无限刷或 ORT 的流程，也不作为本地否决 AI 决策的守卫。
+
 ## Profile setting and protected actions
 
 LOCAL_FACTS.allow_nonpaid_unknown_actions=true does not override protected text

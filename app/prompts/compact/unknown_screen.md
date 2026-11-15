@@ -21,6 +21,8 @@
 5. AP 恢复返回 refill，由本地苹果链处理；无限周回只有 farm_recovery_mainline_visible=true 才返回 farm_recovery_complete。
 6. home_main_next/map_next 只有在截图中可见且已定位且模式允许时才用。模板/OCR 无解后检查 visual_candidates；semantic_segmentation_available=true 且暴露工具时再考虑语义定位。所有适用工具无解且有明确阻塞才 pause_for_human。
 
+主线地图：中文“下一个”和奏章青蓝色 NEXT 同时出现时，优先选择中文“下一个”的 map_next 或中文标记回退控件，不先选 map_next_ordeal_call；青蓝色分数更高或中文 matched=false 不改变顺序。按截图和当前帧定位选择；中文未显示、确实没有定位或点击反馈无法推进时，再看新截图考虑青蓝色 NEXT。返回 tap_known_control/control_id，不返回坐标。这仅是主线 AI 选择提示，不改变自由关卡、无限刷或 ORT 流程，不增加本地否决守卫。
+
 有 previous_action_feedback 时，不能重复相同 action+arguments，必须重新看新截图选择另一个合法候选，不能换动作名绕过保护。普通非付费动作可按新证据重试；Saint Quartz、令咒、灵脉石、撤退、复活必须遵守专用政策，allow_nonpaid_unknown_actions 不能覆盖这些限制。tap_close_button 必须带 region，可选完整 bounded rectangle；其他动作禁止坐标。
 
 Allowed actions: handle_defeat、tap_known_control、tap_close_button、tap_text_button{{VISUAL_ACTION_LABELS}}{{FREE_QUEST_ACTION_LABELS}}、refill、wait_for_transition、farm_recovery_complete、pause_for_human。

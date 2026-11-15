@@ -163,6 +163,7 @@ behavior:
   restricted_party_filled_min_edge_ratio: 0.025
 support:
   strategy_options:
+    required_class: any
     preferred_start_level: '90'
     preferred_np_level: 'any'
     preferred_np_type: aoe
@@ -228,6 +229,9 @@ support:
     - 160
   system_recommended_filter_point:
   - 31
+  - 160
+  extra_class_filter_point:
+  - 790
   - 160
   selected_filter_hsv_lower:
   - 85
@@ -1800,6 +1804,22 @@ rules:
   action: tap_match
   cooldown: 5
   reset_battle: true
+- name: map_next_ordeal_call
+  description: 奏章地球仪地图上的青蓝色英文 NEXT 与双层向下箭头，点击其下方节点。
+  template: templates/map_next_ordeal_call.png
+  template_crop: [8, 2, 86, 22]
+  threshold: 0.82
+  stable_frames: 1
+  match_mode: gray
+  hsv_lower: [80, 50, 160]
+  hsv_upper: [110, 255, 255]
+  search_roi: [200, 100, 1400, 780]
+  template_scales: [0.8, 0.9, 0.95, 1.0, 1.05, 1.1, 1.2]
+  action: tap_match
+  offset: [0, 55]
+  cooldown: 4
+  reset_battle: true
+  reset_quest: true
 - name: home_main_next
   description: 该控件包含“下一个”三个汉字，字体为黄色并带有黑色描边，下方配有一个指向下方的黄色V形箭头，整体位于蓝色背景之上。
   template: templates/map_next.png
