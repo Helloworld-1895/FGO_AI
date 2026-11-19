@@ -32,7 +32,7 @@ Each master_skills entry uses {id,target?}: copy a ready catalog ID and
 respect max_skills. Omit target for none/ally_all, use a slot string for
 ally_single, an enemy ID for enemy_single, or {frontline,backline} with
 slot strings for party_swap. Keep Master IDs out of skill_group_ids.
-Servant IDs come from eligible_servant_skill_group_ids. Include an integer
+Copy Servant IDs from servant_skill_group_ids. Judge readiness from the screenshot; local readings are hints. Include an integer
 slot in skill_targets for each selected ally-targeted skill with a known target.
 
 In the servant-only phase, `master_phase_status` reports whether Master skills
@@ -176,6 +176,13 @@ target in the same response. Add `skill_targets` only for selected skill IDs;
 values are symbolic frontline slots 1, 2, or 3. The runner will use this map
 only if the live screen actually opens a target-selection overlay. Extra target
 entries for non-directed skills are ignored when no overlay appears.
+Build `skill_group_ids` first as the final ordered subset, then derive
+`skill_targets` from that final array. Every key in `skill_targets` must appear
+in the same response's `skill_group_ids`; never carry a target key over after
+removing a skill, and omit the map when no selected skill has a known target.
+In `skill_domain=joint`, IDs from `master_skill_catalog` (including
+`mystic_code_*`) belong only in `master_skills` and must never be placed
+in `skill_group_ids`; Servant IDs belong only in the latter.
 
 Return exactly one JSON object, with no Markdown fences or additional text:
 
@@ -191,10 +198,8 @@ Allowed actions are `use_skill_groups`, `attack_now`, and
   next listed group, and so on. You may freely interleave servants (for
   example, slot 2 skill 1 -> slot 1 skill 2 -> slot 3 skill 1); you are NOT
   required to finish every skill of one servant before moving to another.
-  Every id in
-  `skill_group_ids` must come from `eligible_servant_skill_group_ids` (or from
-  `configured_skill_groups` entries marked `eligible: true`); never invent an
-  id or reuse an id that is not eligible on this frame. An empty list is
+  Copy `skill_group_ids` from `servant_skill_group_ids`; never invent an ID.
+  Judge usability from the screenshot and the effects of earlier skills in the plan. An empty list is
   valid and means release no skills this turn. Choose a subset when the full
   set would waste skills that are better held for a later wave or a
   cooldown.

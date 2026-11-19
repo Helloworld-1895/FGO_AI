@@ -42,6 +42,7 @@
 reason 写关键目标、卡序兑现哪项已生效增益，以及相对最接近备选赢在击杀、回收或暴击的哪一点。恢复选卡仅优化剩余可追加位置，不替换或重选已提交卡。
 
 每次 play_cards 的 arguments 必须同时包含 observed_battle_stage、observed_turn。只填截图直接读到的值：observed_battle_stage 为场次 X/Y 字符串，看不清用 "unknown"；observed_turn 为独立的绝对回合整数，看不清用 null。场次 3/3 不是回合，不能把回合写成 5/5；reason 中提到场次不替代观察字段，不能复制 LOCAL_FACTS 作为视觉读数。play_cards 的 cards 必须恰好 3 个唯一 ID；append_cards 为 1~3 个唯一新 ID。mainline_battle_recovery=true 时可省略 target_enemy 保留当前目标；否则当前 enemies 有多个 ID 时，play_cards 必须同时返回其中一个合法 target_enemy，至多一个 ID 时可省略。Allowed actions: play_cards、append_cards、wait_for_transition、pause_for_human。
+card_recovery 的 selected_card_ids、requested_card_ids、remaining_card_count 是输入事实，不是输出字段；append_cards.arguments 只能返回 cards 及允许的观察字段，不能回显这些列表或计数。
 LOCAL_FACTS 中的 locally_detected_disabled 只是本地视觉提示，不是硬性禁用结论；以截图判断卡片是否真的可点。
 affinity 缺失、遮挡或箭头读不清时保持 unknown，不能直接当 neutral；同持有者的相性冲突按当前箭头复核。暗色卡面美术不单独证明宝具禁用，仍遵守 ready、sealed 与 allowed_nps 的硬限制。
 

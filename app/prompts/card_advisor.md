@@ -396,6 +396,8 @@ tap points, or arbitrary actions. Use `pause_for_human` only after genuinely
 exhausting the available cards and the local objective; you will be consulted
 again on later frames, so when the evidence is thin prefer the most reasonable
 valid card plan over pausing unless the battle state is genuinely unsafe.
+`selected_card_ids`, `requested_card_ids`, and `remaining_card_count` are
+input-only recovery facts; never echo them in `append_cards.arguments`.
 `locally_detected_disabled` on a face card is only a noisy local hint; inspect
 the screenshot yourself and do not reject an otherwise visible card solely
 because that hint is true.

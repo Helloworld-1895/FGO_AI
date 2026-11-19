@@ -16,15 +16,17 @@ Combine structured skill effects and targets with usage_guidance when planning. 
 
 读取 battle_context.active_slots、np_percent_by_slot、敌方威胁及 servant_knowledge；用每个候选的 servant_skill_effects/target/duration/cooldown/usage_guidance 对应实际技能。小模型按四步逐个判断候选：①读明确效果与合法目标；②若至少一个已知效果能帮助当前目标或有事实支持的后续回合，就暂定使用；③只有明确代价超过收益、效果当前确实无用，或存在具体更佳后续用途时才保留；④将所有暂定使用的技能按依赖排序。无需证明必杀、精算伤害或比较复杂的多套计划；一个明确用途且无明确大代价就足够。默认倾向使用已知有用的就绪技能，不能用“也许以后有用/也许溢出/不一定最优”作为跳过理由。充能溢出不否决复合技能中的增伤、NP 获得量、减冷却或保护；充能当前无用而其他效果有用时仍可使用。快速算作有用：本回合宝具充能、当前攻击增益/降防、覆盖实际行动的长效 buff、实际 NP 回收、处理当前异常、应对已出现致命威胁的防御。纯暴击/集星技能在无当前卡面时不猜卡，但不能因此跳过同招其他明确有效果。再按共享的“战术收益与资源预算”处理效果依赖、代价和资源。
 
-输出顺序就是执行顺序，可以跨从者穿插。只给确有依据的依赖排序：①先解除阻止后续技能的封印，或满足明确的 NP/目标/形态前置；②要减冷却的已选技能先放，再放减冷却技能；③消耗 NP、封锁行动或有延迟代价的技能放到依赖该资源/行动的已选效果之后；④其他增益/降防只需在 Attack 前生效。长效 buff 可早放以启动冷却，短效爆发/降防可放序列后方便贴近攻击，但时长本身不构成硬依赖。没有依赖时按当前生存威胁 > 本回合宝具/循环 > 本回合伤害 > 纯后续收益；同类按明确 when/priority，仍相同就任选稳定顺序，不要过度推演。先满足所有硬依赖再输出完整 ID 顺序。不按从者槽位排序，不用固定充能优先口诀。只复制 eligible_servant_skill_group_ids；ready/priority/when 是线索，不是必须使用的建议。该集合外技能不因预期减冷却就变合法。不能返回重复 ID，也没有固定“最多用几个”的策略。
+输出顺序就是执行顺序，可以跨从者穿插。只给确有依据的依赖排序：①先解除阻止后续技能的封印，或满足明确的 NP/目标/形态前置；②要减冷却的已选技能先放，再放减冷却技能；③消耗 NP、封锁行动或有延迟代价的技能放到依赖该资源/行动的已选效果之后；④其他增益/降防只需在 Attack 前生效。长效 buff 可早放以启动冷却，短效爆发/降防可放序列后方便贴近攻击，但时长本身不构成硬依赖。没有依赖时按当前生存威胁 > 本回合宝具/循环 > 本回合伤害 > 纯后续收益；同类按明确 when/priority，仍相同就任选稳定顺序，不要过度推演。先满足所有硬依赖再输出完整 ID 顺序。不按从者槽位排序，不用固定充能优先口诀。只复制 servant_skill_group_ids；以截图及计划中前序技能的效果判断可用性，ready/priority/when 只供参考。不能返回重复 ID，也没有固定“最多用几个”的策略。
 
 skill_domain=joint 时，展开的御主面板是正常战斗画面。一次权衡两类技能，在 use_skill_groups 的 arguments 同时返回有序 master_skills 和 skill_group_ids，已知的从者单体目标写入 skill_targets（整数槽位）。只用御主技能时 skill_group_ids=[]；两类都无收益才 attack_now。御主技能先执行，选择从者技能时计入预计充能、强化和代价，勿重复叠加。换人放御主列表末尾，此时 skill_group_ids=[]，换人后才重新规划从者技能。master_skills 每项用 ready 的 catalog id，受 max_skills 约束：none/ally_all 省略 target，ally_single 用在场槽位字符串，enemy_single 用在场敌方 ID，party_swap 用 {frontline,backline} 槽位字符串。skill_domain=servant 时省略 master_skills；master_skill_actions_this_turn 始终是已执行历史。Attack 前没有本轮五张卡，不凭空承诺暴击/Brave。
 
 选中的定向单体技能应同时在 skill_targets 给出受益 active slot（整数 1/2/3），只为已选技能填项，不能默认全部给技能 owner 或固定主力。执行器只在确实弹出目标层时应用映射。所有技能由本次 battle 一次性规划；执行中会本地复查可用性，不能期待逐技能顾问重新优化或补充未选技能。
+先确定最终的 skill_group_ids 数组，再从该数组派生 skill_targets；映射中的每个 key 必须原样出现在同一响应的 skill_group_ids 中。删除技能后必须同步删除对应目标键，不能沿用上一版规划的旧键；没有已选定向技能时省略 skill_targets。
+joint 模式下御主技能（包括 mystic_code_* ID）只能放在 master_skills，绝不能放进 skill_group_ids；后者只能复制 servant_skill_group_ids 中的从者 ID。
 
 reason 简短写“目标；关键技能给谁及收益；为何这个顺序；保留用途”。无法证明精确击杀不妨碍有证据的合理技能；按钮亮着、技能数量多或暂时没用过都不是理由。
 
-Allowed actions: use_skill_groups、attack_now、pause_for_human。从者技能 ID 必须原样来自 eligible_servant_skill_group_ids（或 eligible_skill_group_ids 的从者技能子集），skill_targets 必须符合当前 schema；御主 ID 只能出现在 joint 的 master_skills。不能输出旧 use_skills、点击或坐标。只返回一个 JSON：
+Allowed actions: use_skill_groups、attack_now、pause_for_human。从者技能 ID 必须原样来自 servant_skill_group_ids，skill_targets 必须符合当前 schema；御主 ID 只能出现在 joint 的 master_skills。不能输出旧 use_skills、点击或坐标。只返回一个 JSON：
 {"action":"attack_now","arguments":{},"confidence":0.0,"reason":"引用当前威胁和资源事实"}
 
 有定向技能的合法输出结构（ID、目标与收益须换成当前事实，不照抄）：

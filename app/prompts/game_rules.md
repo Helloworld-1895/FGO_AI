@@ -303,7 +303,7 @@ the other.
 | Execution order | After Master casts | Before Servant casts |
 
 The consultation's `skill_domain` controls the candidates. In `joint`, plan both catalogs together but keep their IDs in separate fields. In `servant`, only copy
-IDs from `eligible_servant_skill_group_ids`; prior Master actions are context
+IDs from `servant_skill_group_ids`; local readiness is a hint, and prior Master actions are context
 only. In `master_mystic_code`, only copy IDs from `master_skill_catalog`; the
 frontline Servants' buttons are context only. If a requested effect exists only
 in the other domain, do not fabricate it in the current domain.
