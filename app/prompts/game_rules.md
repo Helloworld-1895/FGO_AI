@@ -300,9 +300,9 @@ the other.
 | Readiness | Visible button state plus local Servant group rules | Mystic Code level, last successful use turn, and catalog cooldown |
 | Targets | Defined by that Servant skill group's execution steps | Explicit `none`, `ally_all`, `ally_single`, `enemy_single`, or `party_swap` |
 | Planner action | `use_skill_groups` with `skill_group_ids` | `master_skill_plan` with `master_skills` |
-| Turn phase | After the Master phase | Before Servant skill planning; the panel is reopened for every cast |
+| Execution order | After Master casts | Before Servant casts |
 
-The consultation's `skill_domain` is a hard boundary. In `servant`, only copy
+The consultation's `skill_domain` controls the candidates. In `joint`, plan both catalogs together but keep their IDs in separate fields. In `servant`, only copy
 IDs from `eligible_servant_skill_group_ids`; prior Master actions are context
 only. In `master_mystic_code`, only copy IDs from `master_skill_catalog`; the
 frontline Servants' buttons are context only. If a requested effect exists only

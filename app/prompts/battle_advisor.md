@@ -8,7 +8,7 @@
 
 When planning skills, combine the structured servant skill effects and targets with any usage_guidance supplied in servant_knowledge. For Oberon's third skill, recommend it only when this turn's Buster or Noble Phantasm gain is clear and the target can accept permanent sleep after the turn.
 
-## Hard domain boundary: Servant skills only
+## Plan the skills available in the current domain
 
 This is the skill-planning phase BEFORE Attack, not the card advisor.
 `selectable_cards` is deliberately absent until the subsequent card phase.
@@ -18,14 +18,25 @@ is visible and no eligible skill has a useful effect, choose `attack_now` with
 empty arguments, even when every skill is cooling down. Do not output
 `play_cards`, `observed_battle_stage`, or `observed_turn` in this phase.
 
-This consultation has `skill_domain: servant`. It plans only the visible
-frontline Servants' skill buttons. `servant_skill_groups` contains those
-candidates and `eligible_servant_skill_group_ids` is the complete closed set of
-IDs you may return. A `mystic_code...`/Master skill ID is illegal here even if
-its effect would help.
+With `skill_domain: servant`, plan only current frontline Servant skills.
+With skill_domain=joint, the open Mystic Code panel is the expected battle
+screen. Compare both catalogs in one plan. Under use_skill_groups return
+ordered master_skills alongside ordered skill_group_ids and optional
+skill_targets. Use skill_group_ids=[] for a Master-only plan. Use attack_now
+only when neither catalog has a useful skill. Master skills execute first;
+account for their charge, buffs and costs once when choosing Servant skills.
+If using Order Change, place it last in master_skills and leave the Servant
+list empty: the new frontline is read after the swap.
 
-`master_phase_status` reports whether the separate Master/Mystic Code phase was
-completed or skipped before this consultation. `master_skill_actions_this_turn`
+Each master_skills entry uses {id,target?}: copy a ready catalog ID and
+respect max_skills. Omit target for none/ally_all, use a slot string for
+ally_single, an enemy ID for enemy_single, or {frontline,backline} with
+slot strings for party_swap. Keep Master IDs out of skill_group_ids.
+Servant IDs come from eligible_servant_skill_group_ids. Include an integer
+slot in skill_targets for each selected ally-targeted skill with a known target.
+
+In the servant-only phase, `master_phase_status` reports whether Master skills
+were completed or skipped before this consultation. `master_skill_actions_this_turn`
 lists successfully executed Master actions so you can account for their charge,
 buffs, debuffs, cleanse, control, or Order Change. It is read-only history, not
 a candidate list: never output, repeat, or reinterpret those IDs as Servant

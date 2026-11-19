@@ -1565,6 +1565,12 @@ refill:
   max_refills_per_session: 20
 # 无限刷模式：打完一局回到同一关卡入口界面后，自动再次点击“开始”循环刷。
 # start_template 由控制面板【无限刷】粘贴截图生成。
+interlude:
+  enabled: false
+strengthening_quest:
+  enabled: false
+advanced_quest:
+  enabled: false
 ort_total_war:
   # 独立模式；GUI 勾选后必须点“保存任务与自由关卡设置”。
   # 与 free_quest / infinite_farm 互斥。仅针对 DATA LOST 总体战阶段。

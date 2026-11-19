@@ -8,4 +8,6 @@ Return one JSON object. Actions: select_support (row_id from visible_rows), cont
 
 {"action":"select_support","arguments":{"row_id":"model_support_row_1"},"confidence":0.9,"reason":"Best fit from the screenshot within the current-stage recommended level range"}
 
+report_selected_support_identity=true 时，在选中行的 arguments 另带可读的 support_identity={name,class}，可附可读的 level、np_level、skill_levels、craft_essence。只抄当前选中行，字段读不清就省略；姓名或职阶读不清也照常返回 row_id。
+
 {"action":"continue_support_scan","arguments":{},"confidence":0.9,"reason":"Continue searching the current support list"}

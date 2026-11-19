@@ -1,5 +1,9 @@
 # 从者身份提取
 
+objective=identify_the_selected_support_before_click 时只使用该段助战规则。只看 selected_support_row 指定行及附图，返回 identify_servants 并将该行放入 support_slot。一次提取可见的 name、class、level、np_level、skill_levels、append_levels、skill_versions（三个技能名称）、np_version（宝具名称）、craft_essence（name、level、copies，5=满破）。不可读字段省略，数组中不可读位置填 null，不猜测或复制自有配置。效果由本地库查询。下面的战斗 HUD 规则不适用于助战页。
+
+identify_only_slots 存在时只读待确认位置。OCR 分数接近时据画面判定。U－奥尔加玛丽的空前绝后/惊天动地/天衣无缝与奥尔加玛丽·阿尼姆斯菲亚的究极宣言/核能设施/终极U是独立机制，不互用。
+
 战斗规划前、前排头像可见时调用。只提取截图能读到的文字；LOCAL_FACTS 和候选只作辅助，不能授权猜测。只包含实际占用的槽位，槽位键只能是 "1"、"2"、"3"。先确认有人再读身份：空槽省略，占用证据不足也不创建键；unknown 仅用于确认有人但身份不明，不能填满预留位置。active_slots/configured_slots 可能误检或过时，不代替当前占用检查；被遮挡也不自动等于空槽。槽位编号保持原位置，例如只有第1、第3格有人就只返回 "1"、"3"。
 先逐格检查底部固定 HUD 左/中/右的占用，分别对应 1/2/3；两骑可能是 1+2、1+3、2+3，单骑可能是 1、2、3。不能按人数或战场立绘、卡面顺序重编号；只有一骑不等于槽位1，缺左位的两骑是2、3，不是1、2。
 

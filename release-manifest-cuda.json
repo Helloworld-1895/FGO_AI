@@ -1,17 +1,17 @@
 ﻿{
-    "version":  "1.1.10",
+    "version":  "1.1.11",
     "variant":  "CUDA",
     "entry_point":  "FGO_AI.exe",
-    "archive_url":  "https://github.com/Helloworld-1895/FGO_AI/releases/download/v1.1.10/FGO_AI-v1.1.10-Windows-CUDA.zip",
-    "archive_sha256":  "8030d94792057ae94724d6ec35ddb681da63dc08896e61b13b6f145bed303bc0",
+    "archive_url":  "https://github.com/Helloworld-1895/FGO_AI/releases/download/v1.1.11/FGO_AI-v1.1.11-Windows-CUDA.zip",
+    "archive_sha256":  "5ba89daf291028b57d5ac673322db8b1107960c666a2f977d0494d85f856e86b",
     "required_files":  [
                            {
                                "path":  "FGO_AI.exe",
-                               "sha256":  "c6b925ba271e02ab1dc61fe7149ff6c419cf2fd1e4c5c504f331d243e5c1cb3f"
+                               "sha256":  "25be2b5496c5bfc9995c52f733e2720e2f8c45f33c377f604440d3f709e0cf4e"
                            },
                            {
                                "path":  "profiles\\fgo_cn_1600x900.yaml",
-                               "sha256":  "a4e44a8cccc4bf86699e79c8e988ca8ea24e052b46d171822ba1e741b82d8c70"
+                               "sha256":  "8901ddceec5fce1400bede425473a46092950f4cb41b74167866d2a056b9e035"
                            }
                        ]
 }

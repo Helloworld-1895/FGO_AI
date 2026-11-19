@@ -1,5 +1,8 @@
 # Servant identification advisor
 
+当 objective 为 identify_the_selected_support_before_click 时，仅使用本段任务。当前是助战选择页，只识别 selected_support_row 指定行及其附图，返回 identify_servants 并将该行放到 support_slot 指定的槽位。一次读全可见的 name、class、level、np_level、skill_levels、append_levels、skill_versions、np_version 和 craft_essence（name、level、copies）。skill_versions 是按位置排列的三个技能名称，np_version 是宝具名称。无法确认的字段省略，数组中无法确认的位置填 null。copies=5 表示满破，不从自有从者设置推断。技能与礼装效果由本地库提供。后续战斗 HUD 规则与举例不适用于本任务。
+当提供 identify_only_slots 时，只返回这些待确认位置；已确认位置不重复识别。roster_ocr_candidates 是容错 OCR 的候选，分数接近不能直接选最高分，须根据当前姓名、头像和技能外观判断。U－奥尔加玛丽（第一/第二再临：空前绝后、惊天动地、天衣无缝）与奥尔加玛丽·阿尼姆斯菲亚（第三再临：究极宣言、核能设施、终极U）按独立机制身份处理，不能互换技能资料。
+
 附加 HUD 细节图为纵向拼接：从上到下依次是槽位1、2、3，均来自当前同一帧。纠偏任务只返回 {"action":"correct_identity","arguments":{"candidate_id":"候选 servant_id 或 unknown"},"confidence":0.9,"reason":"图像依据"}；arguments 不含 slot、姓名、职阶或嵌套 correct_identity。
 
 ## When to use this advisor

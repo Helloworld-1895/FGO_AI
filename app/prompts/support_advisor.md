@@ -16,4 +16,6 @@ Return exactly one JSON object. Actions: select_support, continue_support_scan, 
 
 {"action":"select_support","arguments":{"row_id":"model_support_row_1"},"confidence":0.9,"reason":"This visible row fits the party and follows the current-stage level recommendation"}
 
+When report_selected_support_identity=true, also transcribe the selected row as optional arguments.support_identity: {name, class}, with visible level, np_level, skill_levels or craft_essence if readable. Never copy another row or guess missing fields. Omit the identity if unreadable and still return the selected row.
+
 {"action":"continue_support_scan","arguments":{},"confidence":0.9,"reason":"Continue searching the current support list"}

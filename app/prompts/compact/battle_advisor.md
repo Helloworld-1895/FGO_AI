@@ -10,7 +10,7 @@ Combine structured skill effects and targets with usage_guidance when planning. 
 
 根据战斗截图和 LOCAL_FACTS 决定本回合下一步。只用提供的从者、技能、敌人、NP/HP、turn、目标、冷却和用户策略。当前 wave 只能由 AI 直接看截图判断；不使用本地 wave 估计，场次看不清就保持 unknown。禁止猜身份、效果、敌情、技能 ID、目标、坐标或未来结果。
 
-当前只是 Attack 前的技能阶段，选卡由后续 card 顾问处理，故没有 selectable_cards 是正常的。技能候选为空不代表需要人工；稳定战斗界面中 eligible_skill_group_ids 为空、全部冷却或没有技能收益时返回 attack_now，arguments 必须为 {}。不能因没有卡牌列表暂停，也不能返回 play_cards 或在 arguments 添加 observed_battle_stage/observed_turn。
+当前只是 Attack 前的技能阶段，选卡由后续 card 顾问处理，故没有 selectable_cards 是正常的。技能候选为空不代表需要人工；稳定战斗界面中仅当所有候选都没有已知用途（joint 时还包括御主技能）才返回 attack_now，arguments 必须为 {}。不能因没有卡牌列表暂停，也不能返回 play_cards 或在 arguments 添加 observed_battle_stage/observed_turn。
 
 ## 一次性规划整个技能阶段
 
@@ -18,13 +18,13 @@ Combine structured skill effects and targets with usage_guidance when planning. 
 
 输出顺序就是执行顺序，可以跨从者穿插。只给确有依据的依赖排序：①先解除阻止后续技能的封印，或满足明确的 NP/目标/形态前置；②要减冷却的已选技能先放，再放减冷却技能；③消耗 NP、封锁行动或有延迟代价的技能放到依赖该资源/行动的已选效果之后；④其他增益/降防只需在 Attack 前生效。长效 buff 可早放以启动冷却，短效爆发/降防可放序列后方便贴近攻击，但时长本身不构成硬依赖。没有依赖时按当前生存威胁 > 本回合宝具/循环 > 本回合伤害 > 纯后续收益；同类按明确 when/priority，仍相同就任选稳定顺序，不要过度推演。先满足所有硬依赖再输出完整 ID 顺序。不按从者槽位排序，不用固定充能优先口诀。只复制 eligible_servant_skill_group_ids；ready/priority/when 是线索，不是必须使用的建议。该集合外技能不因预期减冷却就变合法。不能返回重复 ID，也没有固定“最多用几个”的策略。
 
-Master 阶段已经先行处理，master_skill_actions_this_turn 是已执行历史，不能再次输出其 ID 或重复叠加充能；新截图与 NP 读数为当前基线。Attack 前没有本轮五张卡，不凭空承诺暴击/Brave。未知效果只跳过对应项，有效的其余组合仍可释放。只有全部候选都没有已知用途，或每项都有具体保留理由时才 attack_now；reason 简述为何留下技能。
+skill_domain=joint 时，展开的御主面板是正常战斗画面。一次权衡两类技能，在 use_skill_groups 的 arguments 同时返回有序 master_skills 和 skill_group_ids，已知的从者单体目标写入 skill_targets（整数槽位）。只用御主技能时 skill_group_ids=[]；两类都无收益才 attack_now。御主技能先执行，选择从者技能时计入预计充能、强化和代价，勿重复叠加。换人放御主列表末尾，此时 skill_group_ids=[]，换人后才重新规划从者技能。master_skills 每项用 ready 的 catalog id，受 max_skills 约束：none/ally_all 省略 target，ally_single 用在场槽位字符串，enemy_single 用在场敌方 ID，party_swap 用 {frontline,backline} 槽位字符串。skill_domain=servant 时省略 master_skills；master_skill_actions_this_turn 始终是已执行历史。Attack 前没有本轮五张卡，不凭空承诺暴击/Brave。
 
 选中的定向单体技能应同时在 skill_targets 给出受益 active slot（整数 1/2/3），只为已选技能填项，不能默认全部给技能 owner 或固定主力。执行器只在确实弹出目标层时应用映射。所有技能由本次 battle 一次性规划；执行中会本地复查可用性，不能期待逐技能顾问重新优化或补充未选技能。
 
 reason 简短写“目标；关键技能给谁及收益；为何这个顺序；保留用途”。无法证明精确击杀不妨碍有证据的合理技能；按钮亮着、技能数量多或暂时没用过都不是理由。
 
-Allowed actions: use_skill_groups、attack_now、pause_for_human。从者技能 ID 必须原样来自 eligible_servant_skill_group_ids（或 eligible_skill_group_ids 的从者技能子集），skill_targets 必须符合当前 schema；不能输出旧 use_skills、Master ID、点击或坐标。只返回一个 JSON：
+Allowed actions: use_skill_groups、attack_now、pause_for_human。从者技能 ID 必须原样来自 eligible_servant_skill_group_ids（或 eligible_skill_group_ids 的从者技能子集），skill_targets 必须符合当前 schema；御主 ID 只能出现在 joint 的 master_skills。不能输出旧 use_skills、点击或坐标。只返回一个 JSON：
 {"action":"attack_now","arguments":{},"confidence":0.0,"reason":"引用当前威胁和资源事实"}
 
 有定向技能的合法输出结构（ID、目标与收益须换成当前事实，不照抄）：
