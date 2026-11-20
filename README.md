@@ -1,8 +1,8 @@
 # FGO AI
 
-Windows x64 上运行的《命运-冠位指定》MuMu/ADB 屏幕自动化工具。
+Windows x64 和 Apple Silicon Mac 上运行的《命运-冠位指定》MuMu/ADB 屏幕自动化工具。
 
-当前版本：**1.1.13**。新增 Token 用量预算与缓存用量显示。详见 [v1.1.13 发布说明](docs/RELEASE_NOTES_v1.1.13.md)。
+当前版本：**1.1.13**。新增 Token 用量预算与缓存用量显示，并提供 Apple Silicon Mac 独立运行包。详见 [v1.1.13 发布说明](docs/RELEASE_NOTES_v1.1.13.md)。
 
 程序通过 ADB 获取模拟器画面，使用 OpenCV 模板匹配、OCR 和可选的模型服务识别界面，再按照本地规则执行受保护的点击与滑动操作。它不读取游戏进程内存、不注入游戏进程，也不修改游戏文件。
 
@@ -36,14 +36,15 @@ Windows x64 上运行的《命运-冠位指定》MuMu/ADB 屏幕自动化工具�
 
 ## 下载
 
-当前 Windows 发布包（按硬件选择其一）：
+当前发布包（按系统和硬件选择）：
 
 - [FGO_AI-v1.1.13-Windows-CPU.zip](https://github.com/Helloworld-1895/FGO_AI/releases/tag/v1.1.13)
 - [FGO_AI-v1.1.13-Windows-CUDA.zip](https://github.com/Helloworld-1895/FGO_AI/releases/tag/v1.1.13)：内置 CUDA OpenCV 和模板匹配所需运行库，体积较大，需要兼容的 NVIDIA 显卡与驱动
-- 同一 Release 中的 SHA-256 校验文件
+- [FGO_AI-v1.1.13-macOS-arm64.zip](https://github.com/Helloworld-1895/FGO_AI/releases/download/v1.1.13/FGO_AI-v1.1.13-macOS-arm64.zip)：适用于 macOS 15 或更新版本和 Apple M 系列芯片。自带 ARM64 运行时，默认使用原生 CPU 做模板匹配与 OCR，可按指南试用 Core ML；使用 MuMu 时须安装 Android Platform Tools。
+- 每个 ZIP 对应的 SHA-256 校验文件。后续版本在同一个 Release 同时提供 Windows CPU、Windows CUDA 和 macOS arm64 三个包。
 - 仓库中的 [release-manifest.json](release-manifest.json)
 
-下载后完整解压到可写目录，打开总文件夹，先阅读 Word 指南，再进入 `FGO_AI/` 双击 `启动FGO_AI.bat`。不要直接在 ZIP 内运行，也不要使用未通过 SHA-256 校验的旧副本。
+下载后完整解压到可写目录，打开总文件夹，先阅读 Word 指南，再进入 `FGO_AI/` 启动软件：Windows 双击 `启动FGO_AI.bat`，Mac 双击 `启动FGO_AI.command`。不要直接在 ZIP 内运行，也不要使用未通过 SHA-256 校验的旧副本。
 
 ```text
 FGO_AI-v1.1.13-Windows-CPU/（CUDA 包对应 Windows-CUDA）
@@ -57,7 +58,7 @@ FGO_AI-v1.1.13-Windows-CPU/（CUDA 包对应 Windows-CUDA）
 
 本 README 和其余说明中的 `app/`、`logs/` 等相对路径均从内层 `FGO_AI/` 软件目录算起。
 
-## 快速开始
+## Windows 快速开始
 
 1. 安装并启动 MuMu Windows 版，在模拟器中打开游戏。
 2. 将发布包完整解压到普通目录，例如 `D:\FGO_AI`。
@@ -69,10 +70,12 @@ CPU 发布包自带独立运行时和 CPU 依赖，正常启动不需要预装 P
 
 CUDA 包也不需要安装 Python 或 Conda；随包提供模板匹配需要的 CUDA DLL。CPU 包默认 CPU；CUDA 包默认混合匹配及 OpenCV CUDA，在兼容设备上使用 GPU。切换后保存并重启自动化。请通过 `启动FGO_AI.bat --self-test-cuda` 验证 GPU 实际匹配能力；详见 [CUDA 运行要求与自检](docs/GPU_SETUP.md)。请将两个包分别解压，不要互相覆盖。
 
+Mac 用户请按 [操作指南第 2、3 章](docs/FGO_AI操作指南.docx) 安装和连接。先启动 MuMu 和游戏，再从 [MuMu 菜单“工具 → 打开 ADB”](https://mumu.163.com/mac/tutorials/connect-adb.html) 查看实例端口。
+
 ## 运行要求
 
-- Windows 10/11 x64
-- MuMu Windows 版或兼容的 ADB 设备
+- Windows 10/11 x64 或 macOS 15+（Apple Silicon）
+- 对应平台的 MuMu 或兼容的 ADB 设备
 - 推荐游戏画面分辨率：`1600x900`
 - 模拟器窗口保持 100% 缩放，不裁剪、不遮挡
 
