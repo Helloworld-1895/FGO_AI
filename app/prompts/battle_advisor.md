@@ -226,7 +226,7 @@ the appropriate subset and its situation-dependent execution order via
 `use_skill_groups`. The skill buttons are the square
 icons in the row near the bottom of the screenshot, arranged in contiguous
 groups from left to right — one group per Servant (slot 1 leftmost, slot 3
-rightmost). Each `configured_skill_groups` entry's
+rightmost). Each `servant_skill_groups` entry's
 `skill_tap_points_1600x900` is that skill button's preset position, and
 `skill_position` is its number within its Servant (1 = leftmost).
 
