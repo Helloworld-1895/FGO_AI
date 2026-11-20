@@ -2,7 +2,7 @@
 
 Windows x64 上运行的《命运-冠位指定》MuMu/ADB 屏幕自动化工具。
 
-当前版本：**1.1.12**。改进战斗技能规划、从者资料同步和出战编队。详见 [v1.1.12 发布说明](docs/RELEASE_NOTES_v1.1.12.md)。
+当前版本：**1.1.13**。新增 Token 用量预算与缓存用量显示。详见 [v1.1.13 发布说明](docs/RELEASE_NOTES_v1.1.13.md)。
 
 程序通过 ADB 获取模拟器画面，使用 OpenCV 模板匹配、OCR 和可选的模型服务识别界面，再按照本地规则执行受保护的点击与滑动操作。它不读取游戏进程内存、不注入游戏进程，也不修改游戏文件。
 
@@ -38,15 +38,15 @@ Windows x64 上运行的《命运-冠位指定》MuMu/ADB 屏幕自动化工具�
 
 当前 Windows 发布包（按硬件选择其一）：
 
-- [FGO_AI-v1.1.12-Windows-CPU.zip](https://github.com/Helloworld-1895/FGO_AI/releases/tag/v1.1.12)
-- [FGO_AI-v1.1.12-Windows-CUDA.zip](https://github.com/Helloworld-1895/FGO_AI/releases/tag/v1.1.12)：内置 CUDA OpenCV 和模板匹配所需运行库，体积较大，需要兼容的 NVIDIA 显卡与驱动
+- [FGO_AI-v1.1.13-Windows-CPU.zip](https://github.com/Helloworld-1895/FGO_AI/releases/tag/v1.1.13)
+- [FGO_AI-v1.1.13-Windows-CUDA.zip](https://github.com/Helloworld-1895/FGO_AI/releases/tag/v1.1.13)：内置 CUDA OpenCV 和模板匹配所需运行库，体积较大，需要兼容的 NVIDIA 显卡与驱动
 - 同一 Release 中的 SHA-256 校验文件
 - 仓库中的 [release-manifest.json](release-manifest.json)
 
 下载后完整解压到可写目录，打开总文件夹，先阅读 Word 指南，再进入 `FGO_AI/` 双击 `启动FGO_AI.bat`。不要直接在 ZIP 内运行，也不要使用未通过 SHA-256 校验的旧副本。
 
 ```text
-FGO_AI-v1.1.12-Windows-CPU/（CUDA 包对应 Windows-CUDA）
+FGO_AI-v1.1.13-Windows-CPU/（CUDA 包对应 Windows-CUDA）
 ├─ FGO_AI操作指南.docx
 └─ FGO_AI/
    ├─ 启动FGO_AI.bat
@@ -61,7 +61,7 @@ FGO_AI-v1.1.12-Windows-CPU/（CUDA 包对应 Windows-CUDA）
 
 1. 安装并启动 MuMu Windows 版，在模拟器中打开游戏。
 2. 将发布包完整解压到普通目录，例如 `D:\FGO_AI`。
-3. 打开解压得到的 `FGO_AI-v1.1.12-Windows-CPU/`（或 CUDA），再进入 `FGO_AI/`，双击 `启动FGO_AI.bat`。
+3. 打开解压得到的 `FGO_AI-v1.1.13-Windows-CPU/`（或 CUDA），再进入 `FGO_AI/`，双击 `启动FGO_AI.bat`。
 4. 在控制面板中连接 MuMu，确认游戏画面为 `1600x900`。
 5. 先使用观察或低风险流程确认识别结果，再开启自动推进。
 
