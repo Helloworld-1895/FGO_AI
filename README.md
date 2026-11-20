@@ -40,7 +40,7 @@ Windows x64 和 Apple Silicon Mac 上运行的《命运-冠位指定》MuMu/ADB 
 
 - [FGO_AI-v1.1.13-Windows-CPU.zip](https://github.com/Helloworld-1895/FGO_AI/releases/tag/v1.1.13)
 - [FGO_AI-v1.1.13-Windows-CUDA.zip](https://github.com/Helloworld-1895/FGO_AI/releases/tag/v1.1.13)：内置 CUDA OpenCV 和模板匹配所需运行库，体积较大，需要兼容的 NVIDIA 显卡与驱动
-- [FGO_AI-v1.1.13-macOS-arm64.zip](https://github.com/Helloworld-1895/FGO_AI/releases/download/v1.1.13/FGO_AI-v1.1.13-macOS-arm64.zip)：适用于 macOS 15 或更新版本和 Apple M 系列芯片。自带 ARM64 运行时，默认使用原生 CPU 做模板匹配与 OCR，可按指南试用 Core ML；使用 MuMu 时须安装 Android Platform Tools。
+- [FGO_AI-v1.1.13-macOS-arm64.zip](https://github.com/Helloworld-1895/FGO_AI/releases/download/v1.1.13/FGO_AI-v1.1.13-macOS-arm64.zip)：适用于 macOS 15 或更新版本和 Apple M 系列芯片。自带 ARM64 运行时和官方 Android Platform Tools（ADB），默认使用原生 CPU 做模板匹配与 OCR，可按指南试用 Core ML；无需另装 Homebrew 或 Python。
 - 每个 ZIP 对应的 SHA-256 校验文件。后续版本在同一个 Release 同时提供 Windows CPU、Windows CUDA 和 macOS arm64 三个包。
 - 仓库中的 [release-manifest.json](release-manifest.json)
 
@@ -70,7 +70,7 @@ CPU 发布包自带独立运行时和 CPU 依赖，正常启动不需要预装 P
 
 CUDA 包也不需要安装 Python 或 Conda；随包提供模板匹配需要的 CUDA DLL。CPU 包默认 CPU；CUDA 包默认混合匹配及 OpenCV CUDA，在兼容设备上使用 GPU。切换后保存并重启自动化。请通过 `启动FGO_AI.bat --self-test-cuda` 验证 GPU 实际匹配能力；详见 [CUDA 运行要求与自检](docs/GPU_SETUP.md)。请将两个包分别解压，不要互相覆盖。
 
-Mac 用户请按 [操作指南第 2、3 章](docs/FGO_AI操作指南.docx) 安装和连接。先启动 MuMu 和游戏，再从 [MuMu 菜单“工具 → 打开 ADB”](https://mumu.163.com/mac/tutorials/connect-adb.html) 查看实例端口。
+Mac 版自带 ADB。先启动 MuMu 实例和游戏，再在 FGO AI 点“搜索 ADB”，选择“通用 ADB”，从搜索结果选中实例并点“保存并连接”。若未搜到，可以从 [MuMu 菜单“工具 → 打开 ADB（设备端口号）”](https://mumu.163.com/mac/tutorials/connect-adb.html) 查看端口，在“设备地址 / 序列号”填写 `127.0.0.1:端口`，ADB 路径留空即可。平时无需打开终端；手动排查方法见 [操作指南第 3 章](docs/FGO_AI操作指南.docx)。
 
 ## 运行要求
 
