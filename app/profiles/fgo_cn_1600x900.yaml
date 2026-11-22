@@ -1511,6 +1511,7 @@ model_advisor:
   # 后台总结：决策落定后把 before/after 截图 + 决策 + 回合内操作交给独立线程
   # 提炼一条笔记写入该场景自己的笔记本。下一次 AI 咨询前等待总结队列完成，
   # 以免共享顾问并发；排队超时的事件跳过，已发出的请求按模型网络超时返回。
+  # 关闭时也不向 AI 发送历史笔记或请求整本压缩，本地笔记保留。
   # 输出预算自动管理；旧 notebook_summary_max_tokens 不再生效。
   notebook_summary_enabled: true
   notebook_summary_timeout_seconds: 180

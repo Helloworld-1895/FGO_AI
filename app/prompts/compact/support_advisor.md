@@ -8,6 +8,8 @@ LOCAL_FACTS.visible_row_count counts clickable rows on this screenshot, not the 
 
 Return one JSON object. Actions: select_support (row_id from visible_rows), continue_support_scan (arguments={}), refresh_support, auto_formation, pause_for_human. Continue scanning for loading or when you choose to search further; pause only for an actual blocker needing a human. Refresh and formation remain your decision based on the screenshot.
 
+从者等级只读每行最左侧头像上沿、职阶图标旁的「等级 120/120」，取斜线左侧。玩家名一栏靠右、紧邻「最后登录」的「等级 190」是御主账号等级；蓝色「宝具」栏是宝具等级。两者都不能用于筛选从者等级或填写 support_identity.level。头像等级看不清就省略。confidence 为顶层 0 到 1 的 JSON 数字，不加引号或百分号。
+
 {"action":"select_support","arguments":{"row_id":"model_support_row_1"},"confidence":0.9,"reason":"Best fit from the screenshot within the current-stage recommended level range"}
 
 report_selected_support_identity=true 时，在选中行的 arguments 另带可读的 support_identity={name,class}，可附可读的 level、np_level、skill_levels、craft_essence。只抄当前选中行，字段读不清就省略；姓名或职阶读不清也照常返回 row_id。

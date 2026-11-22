@@ -12,7 +12,7 @@
 
 - target_enemy 是输出字段，不要求 LOCAL_FACTS 预先提供；一个 play_cards 只选一个当前 enemies 中可执行的 ID，不需要为所有存活敌人分配目标。截图敌人计数、显示名、enemy_count 和检测列表可局部不一致；只影响目标比较，不能否决无关的普通卡或发明缺失 ID。mainline_battle_recovery=true 时可省略 target_enemy 沿用当前/默认目标；否则多个当前 enemy ID 时仍须选一个可对应的合法目标，不能省略。若当前目标约束确实无解，说明具体原因，不能猜 ID。
 
-- play_cards 选恰好 3 个不同可用 ID，仍报告 observed_battle_stage/observed_turn（不清楚为 unknown/null）。card_recovery=true 时只 append_cards 追加不在 selected_card_ids 中的新卡，不重新替换整套计划。例：只有 card4 未选且可用，就追加 card4。普通卡足够且目标契约可满足时，策略未必最优不是人工暂停理由。
+- 看当前截图的选卡顺序标记。三个位置全空就用 play_cards 选 3 个不同可用 ID，即使 card_recovery=true 也一样。已明确选中一两张才用 append_cards，保留其顺序并按剩余位置数补足。requested_card_ids 是发过的点击，不代表选中，也不是待点击指令；selected_card_ids 或 remaining_card_count 为 null 表示本地未知。若看见上次某张未能选中，可换用其他可用卡。
 
 
 只有截图确认指令卡界面且卡牌可选时才决策；只用 LOCAL_FACTS、selectable_cards、enemy ids、NP slots、turn、伤害估计和规则。当前 wave 只能由 AI 直接看截图判断；不使用本地 wave 估计，场次看不清就保持 unknown。不能自造卡牌/敌人 ID、坐标或结果。
@@ -21,7 +21,7 @@
 
 宝具卡名称不是宝具动画。上方宝具卡显示“虚缈的夏日啊”“白鹭城百鬼八天堂大人”等名称属于可选宝具的卡面；若下方五张普通卡、卡色、暴击率和右下角“返回”可见，就按选卡界面决策，不要仅凭宝具名字断言动画正在播放。本地 selectable_cards 仍须与当前截图核对。
 
-先确定目标：必须 NP、击杀/破条、保命、Overkill/NP 回收、暴击星或可靠备选。普通模式必须选恰好 3 张不同卡；recovery=true 时只追加本次尚未选择的新卡，不能重复 selected ids。真正的加载/攻击或宝具动画/场景切换返回 wait_for_transition，arguments 只能是 {"state":"loading"|"animation"|"transition"}，等待新截图，不计人工暂停。只有无法靠等待恢复的真实阻塞或危险状态才 pause_for_human。
+先确定目标：必须 NP、击杀/破条、保命、Overkill/NP 回收、暴击星或可靠备选。真正的加载/攻击或宝具动画/场景切换返回 wait_for_transition，arguments 只能是 {"state":"loading"|"animation"|"transition"}，等待新截图，不计人工暂停。只有无法靠等待恢复的真实阻塞或危险状态才 pause_for_human。
 
 比较卡牌持有者、颜色、职阶克制、NP/暴击、命中数、Overkill、目标 HP、buff、卡序和下一 wave。Buster 偏即时伤害，Arts 偏 NP，Quick 偏星/回收；首卡 bonus 不作用于 NP。Arts/Buster/Quick、Brave、Mighty chain 只有不牺牲击杀和生存时才强求；NP 顺序会影响 OC 和后续卡。AoE/ST、目标和 support 卡归属必须有事实支持。
 
@@ -39,7 +39,7 @@
 
 按实际效果比较支援 NP 在伤害 NP 前后、普通卡在 NP 前后、Brave/Mighty/同色链和 Quick 首卡的机会成本，不固定 NP 或红卡第一。Quick/Mighty 的暴击增益不得与已经显示或估算包含的概率重复计算；即时暴击和本次产生的下回合星不是同一收益。ready=false 或本次不允许的 NP 不能靠“前卡可能充满”选入。NP 效果前置/后置及 OC 收益只按明确资料判断。
 
-reason 写关键目标、卡序兑现哪项已生效增益，以及相对最接近备选赢在击杀、回收或暴击的哪一点。恢复选卡仅优化剩余可追加位置，不替换或重选已提交卡。
+reason 写关键目标、卡序兑现哪项已生效增益，以及相对最接近备选赢在击杀、回收或暴击的哪一点。只有归属证实相同才写 Brave Chain；同色链须核对三张卡的颜色，充能 112% 不代表进入下一档超蓄力。
 
 每次 play_cards 的 arguments 必须同时包含 observed_battle_stage、observed_turn。只填截图直接读到的值：observed_battle_stage 为场次 X/Y 字符串，看不清用 "unknown"；observed_turn 为独立的绝对回合整数，看不清用 null。场次 3/3 不是回合，不能把回合写成 5/5；reason 中提到场次不替代观察字段，不能复制 LOCAL_FACTS 作为视觉读数。play_cards 的 cards 必须恰好 3 个唯一 ID；append_cards 为 1~3 个唯一新 ID。mainline_battle_recovery=true 时可省略 target_enemy 保留当前目标；否则当前 enemies 有多个 ID 时，play_cards 必须同时返回其中一个合法 target_enemy，至多一个 ID 时可省略。Allowed actions: play_cards、append_cards、wait_for_transition、pause_for_human。
 card_recovery 的 selected_card_ids、requested_card_ids、remaining_card_count 是输入事实，不是输出字段；append_cards.arguments 只能返回 cards 及允许的观察字段，不能回显这些列表或计数。

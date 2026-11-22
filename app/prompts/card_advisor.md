@@ -12,14 +12,14 @@
 
 - target_enemy 是输出字段，不要求 LOCAL_FACTS 预先提供；一个 play_cards 只选一个当前 enemies 中可执行的 ID，不需要为所有存活敌人分配目标。截图敌人计数、显示名、enemy_count 和检测列表可局部不一致；只影响目标比较，不能否决无关的普通卡或发明缺失 ID。mainline_battle_recovery=true 时可省略 target_enemy 沿用当前/默认目标；否则多个当前 enemy ID 时仍须选一个可对应的合法目标，不能省略。若当前目标约束确实无解，说明具体原因，不能猜 ID。
 
-- play_cards 选恰好 3 个不同可用 ID，仍报告 observed_battle_stage/observed_turn（不清楚为 unknown/null）。card_recovery=true 时只 append_cards 追加不在 selected_card_ids 中的新卡，不重新替换整套计划。例：只有 card4 未选且可用，就追加 card4。普通卡足够且目标契约可满足时，策略未必最优不是人工暂停理由。
+- 看当前截图的选卡顺序标记再决定动作。没有卡被选中、还有三个位置时返回 play_cards，选恰好 3 个不同可用 ID；即使 card_recovery=true 也一样。只在截图确认已有一两张选中时用 append_cards，按剩余位置数补足（例如已选两张才只补一张）。play_cards 仍须报告 observed_battle_stage/observed_turn（不清楚为 unknown/null）。普通卡足够且目标契约可满足时，策略未必最优不是人工暂停理由。
 
 
 ## 宝具决策入口
 
 不同从者、不同卡色的宝具倍率不能直接比大小：还要考虑卡色基础系数、ATK、职阶相性和实际增益；较低倍率不证明它不如替代普通卡。先比较包含所有合法有效宝具的完整三卡方案，再判断少放一个具体换来了什么。只说另一个宝具更强、此宝具无后续增益或普通卡可回收，不足以放弃它的当前伤害；须有同槽位替代收益的依据，未知伤害不能当确定过量。
 
-每次先检查 allowed_nps、np_slots.ready 和当前卡面，再按共享的“宝具先看有效用途，缺失倍率不是低伤害”规则比较。已就绪且已确认有效的伤害宝具，默认纳入完整三卡方案，比较 0～3 个宝具与剩余普通卡的组合；无需证明必杀。不要只比较五张普通卡后漏掉上方宝具。辅助宝具按实际增益、充能、解除或保护用途比较；不因它没有直接伤害就略过。恢复选卡只补未选的新 ID。
+每次先检查 allowed_nps、np_slots.ready 和当前卡面，再按共享的“宝具先看有效用途，缺失倍率不是低伤害”规则比较。已就绪且已确认有效的伤害宝具，默认纳入完整三卡方案，比较 0～3 个宝具与剩余普通卡的组合；无需证明必杀。不要只比较五张普通卡后漏掉上方宝具。辅助宝具按实际增益、充能、解除或保护用途比较；不因它没有直接伤害就略过。
 
 `allowed_nps` 是运行时已核验可点击的宝具集合。对当前仍需造成有效伤害的敌人，除非有具体战术理由，至少比较每个已确认伤害宝具的方案与普通卡方案。多个伤害宝具同时 ready 且 allowed 时，比较一宝具与多宝具组合对当前敌人的有效输出和后续波次资源机会成本；没有明确保留依据时，不得因“主力NP更强”跳过另一个可用宝具。截图为最终波（如 1/1）时，不得声称把资源留给后续波次；只有卡槽数、NP用途/对象、确定过量伤害或截图支持的具体后续威胁足以支持时才少放。缺少倍率、角色细节或普通卡归属不能单独作为跳过理由。若少放，reason 必须说明当前截图支持的机会成本，不要仅说“无威胁”“不确定收益”。
 
@@ -41,12 +41,14 @@ and the bottom-right return button, that is a command-card selection page.
 Plan cards from that page; do not declare an NP animation just because NP names
 are visible above the five-card row. LOCAL_FACTS alone do not prove the page.
 
-On a normal command-card screen, plan exactly three cards and return their IDs
-in play order. During a recovery consultation, LOCAL_FACTS contains
-`card_recovery: true` and `selected_card_ids`. In that case return the action
-`append_cards` with one to three additional IDs only; never repeat a selected
-ID and never return a complete replacement three-card plan. The runner has
-already attempted the selected cards and will tap only the returned additions.
+On a command-card screen, count the visible selections before choosing the
+action. `card_recovery: true` only means taps were previously sent this turn.
+`requested_card_ids` lists those taps in order, not selected cards or a request
+to tap them again. `selected_card_ids: null` and `remaining_card_count: null`
+mean local progress is unknown. With three empty positions, return a complete
+`play_cards` plan. With one or two cards visibly selected, preserve their
+order and `append_cards` only enough unselected IDs to fill the empty positions.
+If the previous attempt visibly failed, pick a different usable candidate.
 
 ## Keep a real primary damage dealer model
 
@@ -353,8 +355,8 @@ the list may contain missed or spurious detections, not an exhaustive visual tru
   for every enemy. The code applies a returned target only when focus differs.
 
 Return exactly one JSON object, with no Markdown fences or additional text.
-Use `play_cards` for normal planning and `append_cards` only when
-`card_recovery` is true:
+Use `play_cards` when all three positions are empty, including on recovery.
+Use `append_cards` on recovery when the current screenshot shows a partial selection:
 
 ```json
 {"action":"play_cards","arguments":{"cards":["card1","card2","card3"],"target_enemy":"enemy2","observed_battle_stage":"2/3","observed_turn":4},"confidence":0.0,"reason":"<short reason>"}
@@ -369,7 +371,7 @@ back to face cards merely because the NP multiplier is missing:
 
 {"action":"play_cards","arguments":{"cards":["np3","card2","card5"],"observed_battle_stage":"unknown","observed_turn":null},"confidence":0.8,"reason":"就绪伤害宝具用于当前敌人，普通卡补刀回收；缺倍率的相对分不能证明宝具更弱"}
 
-Recovery example (only add an unselected card):
+Recovery example (two cards visibly selected, one position remains):
 
 ```json
 {"action":"append_cards","arguments":{"cards":["card4"]},"confidence":0.0,"reason":"补点尚未选中的卡"}

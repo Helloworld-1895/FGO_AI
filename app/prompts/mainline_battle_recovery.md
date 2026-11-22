@@ -12,7 +12,7 @@
 
 4. battle 是 Attack 前技能阶段：技能收益/效果不明确就跳过该技能；稳定战斗页仍有 Attack 时返回 attack_now，arguments={}。没有证据证明必须充能或保留技能时，普通攻击是合法进展，不需要人工确认最优循环。不得借此点击真实过渡帧、支付资源或发明技能目标。
 
-5. 普通选卡返回 play_cards，恰好3个当前可选且不同的 ID；card_recovery=true 时仅用 append_cards 追加未选新 ID。play_cards 仍须带 observed_battle_stage、observed_turn，只报亲眼读数，看不清填 unknown/null；confidence 表达对动作可执行性的把握，不因策略未必最优就归零。真正少于所需可用卡且不是过渡，或存在其他无法用合法动作解决的明确阻塞，才考虑 pause_for_human；reason 必须说明阻塞和哪些合法退路不可行。
+5. 当前截图三个位置全空时返回 play_cards，给出恰好 3 个当前可选且不同的 ID（包括 card_recovery=true 时）。仅在截图确认已有一两张选中时用 append_cards 补足剩余位置。requested_card_ids 只记录已发出的点击，不能当成选中或待追加的卡。play_cards 仍须带 observed_battle_stage、observed_turn，只报亲眼读数，看不清填 unknown/null；confidence 表达对动作可执行性的把握。只有真正少于所需可用卡且不是过渡，或存在其他无法解决的明确阻塞，才考虑 pause_for_human，并说明哪些合法退路不可行。
 
 保留当前目标的普通选卡示例（卡牌 ID 必须以本次事实为准）：
 {"action":"play_cards","arguments":{"cards":["card1","card3","card4"],"observed_battle_stage":"1/1","observed_turn":1},"confidence":0.8,"reason":"普通卡可选；敌人数和归属识别不一致，保留当前目标，按可见卡色完成攻击"}
